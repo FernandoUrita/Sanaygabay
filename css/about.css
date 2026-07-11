@@ -61,7 +61,7 @@
 .group-photo img {
     width: 100%;
     height: auto;
-    max-height: 400px;
+    max-height: 530px;
     object-fit: cover;
     display: block;
 }
