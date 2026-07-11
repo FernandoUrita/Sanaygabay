@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sanaysay Learning System 2026</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+    <!-- Background Image Overlay -->
+    <div class="bg-overlay"></div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="header-top">
+                <div class="header-badge">
+                    <span class="badge">📚 2026 Edition</span>
+                </div>
+                <a href="about.html" class="about-header-btn">
+                    <i class="fas fa-users"></i> Tungkol sa Amin
+                </a>
+            </div>
+            <h1>📝 Sanaysay Learning System</h1>
+            <p>Mula sa kahulugan hanggang sa makabagong pagsulat ng sanaysay</p>
+            
+            <div class="header-group-photo">
+                <img src="assets/group-photo.jpg" alt="Group Photo ng mga Mananaliksik" />
+            </div>
+
+            <div class="header-stats">
+                <div class="stat-item">
+                    <span class="stat-number">10+</span>
+                    <span class="stat-label">Mga Aralin</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Hakbang sa Pagsulat</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">7</span>
+                    <span class="stat-label">Sangkap</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#" class="active" data-section="intro"><i class="fas fa-home"></i> Panimula</a></li>
+            <li><a href="#" data-section="definition"><i class="fas fa-book"></i> Kahulugan</a></li>
+            <li><a href="#" data-section="types"><i class="fas fa-layer-group"></i> Uri</a></li>
+            <li><a href="#" data-section="elements"><i class="fas fa-puzzle-piece"></i> Sangkap</a></li>
+            <li><a href="#" data-section="structure"><i class="fas fa-sitemap"></i> Istruktura</a></li>
+            <li><a href="#" data-section="forms"><i class="fas fa-pen-fancy"></i> Anyo</a></li>
+            <li><a href="#" data-section="text-types"><i class="fas fa-file-alt"></i> Teksto</a></li>
+            <li><a href="#" data-section="steps"><i class="fas fa-list-ol"></i> Hakbang</a></li>
+            <li><a href="#" data-section="quiz"><i class="fas fa-pencil-alt"></i> Pagsusulit</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- ===== PANIMULA SECTION ===== -->
+        <section id="intro" class="section active">
+            <div class="section-header">
+                <h2><i class="fas fa-home"></i> Maligayang Pagdating!</h2>
+                <div class="section-actions">
+                    <button class="action-btn" onclick="window.print()"><i class="fas fa-print"></i> I-print</button>
+                    <button class="action-btn" id="darkModeToggle"><i class="fas fa-moon"></i> Dark Mode</button>
+                </div>
+            </div>
+            <div class="book-page">
+                <div class="page-left">
+                    <h3>Ano ang Sanaysay?</h3>
+                    <p>Ang sanaysay ay binubuo ng pamagat at magkaugnay na talata na tumatalakay sa isang paksa o tema. Layunin nitong maglahad, magbigay ng impormasyon, manghikayat o magbigay ng sariling kuro-kuro.</p>
+                    <div class="fun-fact">
+                        <div class="fun-fact-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="fun-fact-content">
+                            <h4>📌 Alam mo ba?</h4>
+                            <p>Ang lumikha ng sanaysay ay walang iba kundi si <strong>Alejandro G. Abadilla</strong>!</p>
+                            <div class="highlight-tag">
+                                <span class="tag">💡 "Pasalaysay" + "Sanay" = SANAYSAY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <h3>Kahalagahan ng Sanaysay</h3>
+                    <p>Ang sanaysay ay mahalaga sapagkat ito ay:</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Nagpapahayag ng sariling opinyon at kaisipan</li>
+                        <li><i class="fas fa-check-circle"></i> Nagsisilbing tala ng mga karanasan</li>
+                        <li><i class="fas fa-check-circle"></i> Nagbibigay ng impormasyon sa mambabasa</li>
+                        <li><i class="fas fa-check-circle"></i> Nagpapakita ng husay sa pagsulat</li>
+                    </ul>
+                    <div class="highlight">
+                        <p><strong>Ayon kay Alejandro G. Abadilla:</strong> "Pagsasalaysay ng isang sanay o nakasulat na karanasan ng isang sanay sa pagsasalaysay."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== KAHULUGAN SECTION ===== -->
+        <section id="definition" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-book"></i> Kahulugan ng Sanaysay</h2>
+            </div>
+            <div class="book-page">
+                <div class="page-left">
+                    <h3>Ano nga ba ang Sanaysay?</h3>
+                    <p>Ang sanaysay ay isang anyo ng panitikan na naglalahad ng mga kaisipan, damdamin, at opinyon ng isang manunulat tungkol sa isang paksa.</p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> <strong>Maikli</strong> - hindi kasinghaba ng nobela</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Personal</strong> - nagpapahayag ng sariling pananaw</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Organisado</strong> - may maayos na daloy ng mga ideya</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Mapanuri</strong> - nagbibigay ng kritikal na pagtingin</li>
+                    </ul>
+                </div>
+                <div class="page-right">
+                    <h3>Mga Katangian ng Sanaysay</h3>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> <strong>Tiyak na Paksa</strong> - may malinaw na pokus</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Organisado</strong> - maayos na pagkakasunod-sunod</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Personal na Pananaw</strong> - sariling opinyon ng manunulat</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Mapanuring Pag-iisip</strong> - kritikal na pagsusuri</li>
+                    </ul>
+                    <div class="highlight">
+                        <p><strong>📖 Tandaan:</strong> Ang sanaysay ay isang <em>"maikling komposisyon na nagpapahayag ng personal na pananaw, opinyon, o karanasan ng may-akda tungkol sa isang partikular na paksa."</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== URI NG SANAYSAY SECTION ===== -->
+        <section id="types" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-layer-group"></i> Dalawang Uri ng Sanaysay</h2>
+            </div>
+            <div class="book-page">
+                <div class="page-left">
+                    <div class="type-page">
+                        <div class="type-header">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h3>Pormal na Sanaysay</h3>
+                        </div>
+                        <p>Ito ay maingat na pagpili ng mga salita. Sa madaling salita dapat ito ay <strong>maayos at mabisang paglalahad ng kaisipan</strong>.</p>
+                        <div class="type-details">
+                            <h4>Mga Katangian:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Pormal at seryosong tono</li>
+                                <li><i class="fas fa-check"></i> Maingat na pinipili ang mga salita</li>
+                                <li><i class="fas fa-check"></i> Karaniwang ginagamit sa akademya</li>
+                                <li><i class="fas fa-check"></i> May malinaw na istruktura</li>
+                            </ul>
+                        </div>
+                        <button class="modal-trigger" data-modal="pormalModal">
+                            <i class="fas fa-eye"></i> Tingnan ang Halimbawa
+                        </button>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="type-page">
+                        <div class="type-header">
+                            <i class="fas fa-comment"></i>
+                            <h3>Di-pormal na Sanaysay</h3>
+                        </div>
+                        <p>Ang mga pananalita ay karaniwan at hindi na nangangailangan ng masusing pag-aaral upang makasulat ng ganitong uri ng sanaysay.</p>
+                        <div class="type-details">
+                            <h4>Mga Katangian:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Impormal at personal na tono</li>
+                                <li><i class="fas fa-check"></i> Gumagamit ng pang-araw-araw na wika</li>
+                                <li><i class="fas fa-check"></i> Mas malaya ang anyo</li>
+                                <li><i class="fas fa-check"></i> Nagpapahayag ng personal na karanasan</li>
+                            </ul>
+                        </div>
+                        <button class="modal-trigger" data-modal="diPormalModal">
+                            <i class="fas fa-eye"></i> Tingnan ang Halimbawa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SANGKAP SECTION ===== -->
+        <section id="elements" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-puzzle-piece"></i> Sangkap ng Sanaysay</h2>
+            </div>
+            <div class="book-page">
+                <div class="page-left">
+                    <h3>Mga Sangkap ng Sanaysay</h3>
+                    <div class="elements-grid">
+                        <div class="element-item">
+                            <i class="fas fa-bullseye"></i>
+                            <div>
+                                <h4>Tema at Nilalaman</h4>
+                                <p>Anuman ang nilalaman ng isang sanaysay ay itinuturing na paksa.</p>
+                            </div>
+                        </div>
+                        <div class="element-item">
+                            <i class="fas fa-sitemap"></i>
+                            <div>
+                                <h4>Anyo at Istruktura</h4>
+                                <p>Maayos at lohikal na pagkakasunod-sunod ng mga ideya.</p>
+                            </div>
+                        </div>
+                        <div class="element-item">
+                            <i class="fas fa-pen-nib"></i>
+                            <div>
+                                <h4>Wika at Istilo</h4>
+                                <p>Ang wikang ginagamit ng may akda sa pagsulat.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <h3>Mga Sangkap (Pagpapatuloy)</h3>
+                    <div class="elements-grid">
+                        <div class="element-item">
+                            <i class="fas fa-image"></i>
+                            <div>
+                                <h4>Larawan ng Buhay</h4>
+                                <p>Makatotohanang salaysay na may masining na paglalahad.</p>
+                            </div>
+                        </div>
+                        <div class="element-item">
+                            <i class="fas fa-brain"></i>
+                            <div>
+                                <h4>Kaisipan</h4>
+                                <p>Paglalapat ng mga ideyang may kaugnayan sa paksa.</p>
+                            </div>
+                        </div>
+                        <div class="element-item">
+                            <i class="fas fa-heart"></i>
+                            <div>
+                                <h4>Damdamin</h4>
+                                <p>Layunin ng may akda sa pagsulat ng akda.</p>
+                            </div>
+                        </div>
+                        <div class="element-item">
+                            <i class="fas fa-music"></i>
+                            <div>
+                                <h4>Himig</h4>
+                                <p>Ipinahihiwatig ang damdamin - masaya, malungkot, mapanudyo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ISTRUKTURA SECTION ===== -->
+        <section id="structure" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-sitemap"></i> Istruktura ng Sanaysay</h2>
+            </div>
+            <div class="book-page">
+                <div class="page-left">
+                    <div class="structure-page">
+                        <h3>01 Panimula o Introduksyon</h3>
+                        <p>Nakapupukaw ng atensyon ng mambabasa. Dito ipinapakilala ang paksa at ang tesis ng sanaysay.</p>
+                        <div class="structure-tips">
+                            <span class="tip"><i class="fas fa-lightbulb"></i> Gumamit ng hook</span>
+                            <span class="tip"><i class="fas fa-lightbulb"></i> Ipakilala ang paksa</span>
+                        </div>
+                        <div class="structure-example">
+                            <p><strong>Halimbawa:</strong> "Sa panahon ng pandemya, maraming buhay ang nagbago..."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="structure-page">
+                        <h3>02 Katawan ng Sanaysay</h3>
+                        <p>Mga ideya o pahayag at pagtatalakay sa mahahalagang puntos ukol sa tema.</p>
+                        <div class="structure-tips">
+                            <span class="tip"><i class="fas fa-lightbulb"></i> Organisadong ideya</span>
+                            <span class="tip"><i class="fas fa-lightbulb"></i> Magkakaugnay na talata</span>
+                        </div>
+                        <div class="structure-example">
+                            <p><strong>Halimbawa:</strong> "Una, tinalakay ang epekto ng pandemya sa edukasyon..."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="book-page" style="margin-top: 1.5rem;">
+                <div class="page-left">
+                    <div class="structure-page">
+                        <h3>03 Wakas o Konklusyon</h3>
+                        <p>Pangwakas na salita o ang buod sa sanaysay. Nagbibigay ng panghuling impresyon.</p>
+                        <div class="structure-tips">
+                            <span class="tip"><i class="fas fa-lightbulb"></i> Ibuod ang mga puntos</span>
+                            <span class="tip"><i class="fas fa-lightbulb"></i> Mag-iwan ng mensahe</span>
+                        </div>
+                        <div class="structure-example">
+                            <p><strong>Halimbawa:</strong> "Sa kabuuan, ang pandemya ay nagturo sa atin ng kahalagahan..."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="structure-page">
+                        <h3>📌 Tandaan!</h3>
+                        <p>Ang isang mahusay na sanaysay ay may:</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check-circle"></i> Malinaw na panimula</li>
+                            <li><i class="fas fa-check-circle"></i> Organisadong katawan</li>
+                            <li><i class="fas fa-check-circle"></i> Makabuluhang wakas</li>
+                        </ul>
+                        <div class="highlight">
+                            <p><strong>💡 Tip:</strong> Ang bawat bahagi ay dapat magkakaugnay at may iisang layunin.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== ANYO SECTION ===== -->
+        <section id="forms" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-pen-fancy"></i> Anyo ng Sanaysay</h2>
+            </div>
+            <div class="book-page">
+                <div class="page-left">
+                    <div class="form-page">
+                        <div class="form-header">
+                            <i class="fas fa-user"></i>
+                            <h3>Personal na Sanaysay</h3>
+                        </div>
+                        <p>Ang nilalaman ay tungkol sa nararamdaman ng manunulat kaugnay sa kaniyang nakikita o nararanasan.</p>
+                        <div class="form-example">
+                            <p><strong>📖 Halimbawa:</strong> "Aking Karanasan sa Pandemya"</p>
+                            <p><small>Isang sanaysay tungkol sa personal na karanasan ng manunulat sa panahon ng pandemya.</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="form-page">
+                        <div class="form-header">
+                            <i class="fas fa-search"></i>
+                            <h3>Mapunuri o Kritikal</h3>
+                        </div>
+                        <p>Ang nilalaman ay batay sa naiisip o kuro-kuro kaugnay sa namatyagan ng manunulat.</p>
+                        <div class="form-example">
+                            <p><strong>📖 Halimbawa:</strong> "Pagsusuri sa Pelikulang 'Heneral Luna'"</p>
+                            <p><small>Isang kritikal na pagsusuri sa pelikula at ang mensahe nito sa lipunan.</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="book-page" style="margin-top: 1.5rem;">
+                <div class="page-left">
+                    <div class="form-page">
+                        <div class="form-header">
+                            <i class="fas fa-leaf"></i>
+                            <h3>Patalinghaga</h3>
+                        </div>
+                        <p>Ang bukal ng nilalaman mula sa mga kasabihan o sawikain o simbolismo bilang panimula.</p>
+                        <div class="form-example">
+                            <p><strong>📖 Halimbawa:</strong> "Ang Buhay ay Parang Rosas"</p>
+                            <p><small>Gumagamit ng simbolismo ng rosas upang ilarawan ang buhay.</small></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="form-page">
+                        <h3>📌 Paghahambing ng Anyo</h3>
+                        <div class="comparison-table">
+                            <div class="comparison-row">
+                                <div class="comparison-label">Personal</div>
+                                <div class="comparison-desc">Sariling karanasan at damdamin</div>
+                            </div>
+                            <div class="comparison-row">
+                                <div class="comparison-label">Kritikal</div>
+                                <div class="comparison-desc">Pagsusuri at opinyon</div>
+                            </div>
+                            <div class="comparison-row">
+                                <div class="comparison-label">Patalinghaga</div>
+                                <div class="comparison-desc">Simbolismo at matalinghagang wika</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== URI NG TEKSTO SECTION ===== -->
+        <section id="text-types" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-file-alt"></i> Mga Uri ng Teksto</h2>
+            </div>
+            
+            <div class="book-page">
+                <div class="page-left">
+                    <div class="text-page">
+                        <div class="text-header">
+                            <i class="fas fa-info-circle"></i>
+                            <h3>Tekstong Impormatibo</h3>
+                        </div>
+                        <p>Naglalayong magpaliwanag at magbigay ng impormasyon.</p>
+                        <div class="text-details">
+                            <h4>Mga Katangian:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Nagbibigay ng datos at impormasyon</li>
+                                <li><i class="fas fa-check"></i> Obhetibo at walang halong opinyon</li>
+                                <li><i class="fas fa-check"></i> Gumagamit ng mga ebidensya</li>
+                            </ul>
+                        </div>
+                        <button class="modal-trigger" data-modal="impormatiboModal">
+                            <i class="fas fa-eye"></i> Tingnan ang Halimbawa
+                        </button>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="text-page">
+                        <div class="text-header">
+                            <i class="fas fa-palette"></i>
+                            <h3>Tekstong Deskriptibo</h3>
+                        </div>
+                        <p>May layuning maglarawan ng isang bagay, tao, lugar, o karanasan.</p>
+                        <div class="text-details">
+                            <h4>Mga Katangian:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> Gumagamit ng mga pang-uri</li>
+                                <li><i class="fas fa-check"></i> Nagpapakita ng detalye</li>
+                                <li><i class="fas fa-check"></i> Lumilikha ng imahe sa isip</li>
+                            </ul>
+                        </div>
+                        <button class="modal-trigger" data-modal="deskriptiboModal">
+                            <i class="fas fa-eye"></i> Tingnan ang Halimbawa
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-page" style="margin-top: 1.5rem;">
+                <div class="page-left">
+                    <div class="text-page">
+                        <div class="text-header">
+                            <i class="fas fa-handshake"></i>
+                            <h3>Tekstong Persuwesyib</h3>
+                        </div>
+                        <p>Upang kumbinsihin ang mga mambabasa na sumang-ayon sa manunulat.</p>
+                        <div class="text-details">
+                            <h4>Mga Katangian:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> May layuning mangumbinsi</li>
+                                <li><i class="fas fa-check"></i> Gumagamit ng emosyonal na apela</li>
+                                <li><i class="fas fa-check"></i> May malinaw na posisyon</li>
+                            </ul>
+                        </div>
+                        <button class="modal-trigger" data-modal="persuwesyibModal">
+                            <i class="fas fa-eye"></i> Tingnan ang Halimbawa
+                        </button>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="text-page">
+                        <div class="text-header">
+                            <i class="fas fa-story"></i>
+                            <h3>Tekstong Naratibo</h3>
+                        </div>
+                        <p>Nagkukuwento ng mga serye ng pangyayari o di-piksiyon.</p>
+                        <div class="text-details">
+                            <h4>Mga Katangian:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> May kwento o salaysay</li>
+                                <li><i class="fas fa-check"></i> May tauhan at tagpuan</li>
+                                <li><i class="fas fa-check"></i> Sunod-sunod na pangyayari</li>
+                            </ul>
+                        </div>
+                        <button class="modal-trigger" data-modal="naratiboModal">
+                            <i class="fas fa-eye"></i> Tingnan ang Halimbawa
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-page" style="margin-top: 1.5rem;">
+                <div class="page-left">
+                    <div class="text-page">
+                        <div class="text-header">
+                            <i class="fas fa-scale-balanced"></i>
+                            <h3>Tekstong Argumentatibo</h3>
+                        </div>
+                        <p>Ipagtanggol ang posisyon gamit ang mga ebidensiya.</p>
+                        <div class="text-details">
+                            <h4>Mga Katangian:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> May malinaw na posisyon</li>
+                                <li><i class="fas fa-check"></i> Gumagamit ng ebidensya</li>
+                                <li><i class="fas fa-check"></i> Nangangatwiran nang lohikal</li>
+                            </ul>
+                        </div>
+                        <button class="modal-trigger" data-modal="argumentatiboModal">
+                            <i class="fas fa-eye"></i> Tingnan ang Halimbawa
+                        </button>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="text-page">
+                        <div class="text-header">
+                            <i class="fas fa-list-check"></i>
+                            <h3>Tekstong Prosidyural</h3>
+                        </div>
+                        <p>Nagbibigay ng impormasyon at instruksyon kung paano isagawa ang isang bagay.</p>
+                        <div class="text-details">
+                            <h4>Mga Katangian:</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> May hakbang-hakbang na proseso</li>
+                                <li><i class="fas fa-check"></i> Malinaw at detalyado</li>
+                                <li><i class="fas fa-check"></i> Madaling sundan</li>
+                            </ul>
+                        </div>
+                        <button class="modal-trigger" data-modal="prosidyuralModal">
+                            <i class="fas fa-eye"></i> Tingnan ang Halimbawa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== HAKBANG SECTION ===== -->
+        <section id="steps" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-list-ol"></i> Mga Hakbang sa Pagsulat ng Sanaysay</h2>
+            </div>
+            <div class="book-page">
+                <div class="page-left">
+                    <div class="step-page">
+                        <div class="step-number">1</div>
+                        <h3>Pagbuo ng Balangkas</h3>
+                        <ol>
+                            <li><strong>Pumili ng isang paksa.</strong> Maaaring ito ay tungkol sa isang napapanahong isyu sa lipunan o sa iyong sariling karanasan.</li>
+                            <li><strong>Bumuo ng balangkas</strong> o plano ng daloy ng iyong isusulat na sanaysay.</li>
+                            <li><strong>Itala ang mahahalagang ideya</strong> o mga puntong nais mong talakayin.</li>
+                        </ol>
+                        <div class="step-tip">
+                            <p><i class="fas fa-lightbulb"></i> Tip: Magsimula sa pangunahing ideya at magdagdag ng mga detalye.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="step-page">
+                        <div class="step-number">2</div>
+                        <h3>Paano simulan ang pagsulat</h3>
+                        <ol>
+                            <li>Gumamit ng isang <strong>kasabihan o sipi</strong> mula sa isang kilalang tao.</li>
+                            <li>Simulan ang iyong sanaysay sa pamamagitan ng isang <strong>tanong</strong> upang mapukaw ang interes.</li>
+                        </ol>
+                        <div class="step-tip">
+                            <p><i class="fas fa-lightbulb"></i> Tip: Ang magandang panimula ay nakakakuha ng atensyon ng mambabasa.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="book-page" style="margin-top: 1.5rem;">
+                <div class="page-left">
+                    <div class="step-page">
+                        <div class="step-number">3</div>
+                        <h3>Gitnang bahagi o Katawan</h3>
+                        <ol>
+                            <li><strong>Balikan ang balangkas</strong> at gamitin ito bilang gabay.</li>
+                            <li>Maaaring magsagawa ng <strong>panayam</strong> o magtanong sa ibang tao.</li>
+                            <li><strong>Tiyaking organisado</strong> at magkakaugnay ang mga impormasyon.</li>
+                        </ol>
+                        <div class="step-tip">
+                            <p><i class="fas fa-lightbulb"></i> Tip: Ang bawat talata ay dapat may isang pangunahing ideya.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-right">
+                    <div class="step-page">
+                        <div class="step-number">4</div>
+                        <h3>Panapos ng sanaysay</h3>
+                        <ol>
+                            <li><strong>Lagumin ang mahahalagang ideya</strong> sa kongklusyon.</li>
+                            <li><strong>Wakasan ang iyong sanaysay</strong> sa isang hamon, pagninilay, o panawagan.</li>
+                        </ol>
+                        <div class="step-tip">
+                            <p><i class="fas fa-lightbulb"></i> Tip: Ang wakas ay dapat mag-iwan ng pangmatagalang impresyon.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PAGSUSULIT SECTION ===== -->
+        <section id="quiz" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-pencil-alt"></i> Pagsusulit: Sumulat ng Sanaysay</h2>
+            </div>
+
+            <div id="userInfoContainer">
+                <div class="content-card">
+                    <div class="quiz-intro">
+                        <div>
+                            <h3>👤 Bago Sumulat</h3>
+                            <p>Mangyaring ibigay ang iyong pangalan at email bago gumawa ng sanaysay.</p>
+                        </div>
+                        <button id="openUserInfoModal" class="primary-btn">
+                            <i class="fas fa-user-edit"></i> Ilagay ang Impormasyon
+                        </button>
+                    </div>
+                    <div id="userInfoDisplay" style="display: none; background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--primary);">
+                        <p><strong>👤 Pangalan:</strong> <span id="displayName"></span></p>
+                        <p><strong>📧 Email:</strong> <span id="displayEmail"></span></p>
+                        <button id="editUserInfoBtn" class="secondary-btn" style="margin-top: 0.5rem;"><i class="fas fa-edit"></i> Baguhin</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="essayWritingArea" style="display: none;">
+                <div class="content-card">
+                    <div class="essay-title-input">
+                        <label for="essayTitle"><strong>📝 Pamagat ng Sanaysay:</strong></label>
+                        <input type="text" id="essayTitle" placeholder="Ilagay ang pamagat ng iyong sanaysay..." />
+                    </div>
+
+                    <div class="essay-input-area">
+                        <label for="essayInput"><strong>✍️ Isulat ang Iyong Sanaysay:</strong></label>
+                        <textarea id="essayInput" rows="10" placeholder="Isulat ang iyong sanaysay dito..."></textarea>
+                        <div class="essay-actions">
+                            <button id="analyzeEssayBtn" class="primary-btn"><i class="fas fa-robot"></i> Suriin ang Sanaysay</button>
+                            <button id="clearEssayBtn" class="secondary-btn"><i class="fas fa-trash"></i> Burahin</button>
+                        </div>
+                    </div>
+
+                    <div id="aiAnalysisResult" style="display: none;">
+                        <div class="ai-result-header">
+                            <h3><i class="fas fa-robot"></i> Pagsusuri ng AI</h3>
+                            <span class="ai-badge">AI-Powered</span>
+                        </div>
+                        <div id="analysisMessage" class="analysis-message"></div>
+                        <div id="deepTranslateSection" style="display: none;">
+                            <button id="deepTranslateBtn" class="primary-btn"><i class="fas fa-language"></i> Isalin sa Mas Malalim na Tagalog</button>
+                        </div>
+                    </div>
+
+                    <div id="comparisonView" style="display: none;">
+                        <div class="comparison-container">
+                            <div class="comparison-left">
+                                <h4><i class="fas fa-file-alt"></i> Orihinal na Sanaysay</h4>
+                                <div id="originalEssayDisplay" class="essay-display"></div>
+                            </div>
+                            <div class="comparison-right">
+                                <h4><i class="fas fa-language"></i> Malalim na Tagalog</h4>
+                                <div id="deepTagalogDisplay" class="essay-display improved"></div>
+                            </div>
+                        </div>
+                        <div class="submit-section">
+                            <button id="submitEssayBtn" class="success-btn"><i class="fas fa-paper-plane"></i> Ipasa ang Sanaysay</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================================ -->
+    <!-- USER INFO MODAL -->
+    <!-- ============================================================ -->
+    <div class="modal-overlay" id="userInfoModal">
+        <div class="modal modal-small">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Impormasyon ng Gumagamit</h2>
+                <button class="modal-close" id="closeUserInfoModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Mangyaring ilagay ang iyong pangalan at email upang makapagsimula sa pagsusulit.</p>
+                <form id="userInfoForm">
+                    <div class="form-group">
+                        <label for="userName"><i class="fas fa-user"></i> Buong Pangalan:</label>
+                        <input type="text" id="userName" placeholder="Hal. Juan Dela Cruz" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail"><i class="fas fa-envelope"></i> Email Address:</label>
+                        <input type="email" id="userEmail" placeholder="Hal. juan@email.com" required />
+                    </div>
+                    <button type="submit" class="primary-btn" style="width: 100%; justify-content: center;">
+                        <i class="fas fa-check"></i> Simulan ang Pagsusulit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SUCCESS MODAL -->
+    <!-- ============================================================ -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal modal-success">
+            <div class="modal-header success-header">
+                <h2><i class="fas fa-check-circle" style="color: #28a745;"></i> Matagumpay na Naipasa!</h2>
+                <button class="modal-close" id="closeSuccessModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="success-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </div>
+                <h3>Ang iyong sanaysay ay naipasa na!</h3>
+                <p>Isang kopya ng iyong sanaysay ay ipinadala sa iyong email at sa aming sistema.</p>
+                
+                <div class="pdf-download-notice">
+                    <i class="fas fa-file-pdf"></i>
+                    <p>Ang iyong PDF ay awtomatikong na-download na.</p>
+                </div>
+                
+                <div class="success-details">
+                    <p><strong>👤 Pangalan:</strong> <span id="successName"></span></p>
+                    <p><strong>📧 Email:</strong> <span id="successEmail"></span></p>
+                    <p><strong>📝 Pamagat:</strong> <span id="successTitle"></span></p>
+                    <p><strong>📅 Petsa:</strong> <span id="successDate"></span></p>
+                </div>
+                
+                <div class="success-actions">
+                    <button id="newEssaySameUserBtn" class="primary-btn">
+                        <i class="fas fa-user"></i> Gumawa ng Bagong Sanaysay <br><small>(Same Name & Email)</small>
+                    </button>
+                    <button id="newEssayDifferentUserBtn" class="secondary-btn">
+                        <i class="fas fa-user-plus"></i> Gumawa ng Bagong Sanaysay <br><small>(Ibang Name & Email)</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- MODALS - Examples -->
+    <!-- ============================================================ -->
+    
+    <div class="modal-overlay" id="pormalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-graduation-cap"></i> Halimbawa ng Pormal na Sanaysay</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Pamagat:</strong> [Ilagay ang pamagat ng pormal na sanaysay dito]</p>
+                <div class="modal-content">
+                    <p><em>[Ilagay ang unang talata ng pormal na sanaysay dito]</em></p>
+                    <p><em>[Ilagay ang ikalawang talata ng pormal na sanaysay dito]</em></p>
+                    <p><em>[Ilagay ang ikatlong talata ng pormal na sanaysay dito - kung mayroon]</em></p>
+                    <p><em>[Ilagay ang ikaapat na talata ng pormal na sanaysay dito - kung mayroon]</em></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn">Isara</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="diPormalModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-comment"></i> Halimbawa ng Di-pormal na Sanaysay</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Pamagat:</strong> [Ilagay ang pamagat ng di-pormal na sanaysay dito]</p>
+                <div class="modal-content">
+                    <p><em>[Ilagay ang unang talata ng di-pormal na sanaysay dito]</em></p>
+                    <p><em>[Ilagay ang ikalawang talata ng di-pormal na sanaysay dito]</em></p>
+                    <p><em>[Ilagay ang ikatlong talata ng di-pormal na sanaysay dito - kung mayroon]</em></p>
+                    <p><em>[Ilagay ang ikaapat na talata ng di-pormal na sanaysay dito - kung mayroon]</em></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn">Isara</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="impormatiboModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-info-circle"></i> Halimbawa ng Tekstong Impormatibo</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Pamagat:</strong> [Ilagay ang pamagat ng tekstong impormatibo dito]</p>
+                <div class="modal-content">
+                    <p><em>[Ilagay ang unang talata ng tekstong impormatibo dito]</em></p>
+                    <p><em>[Ilagay ang ikalawang talata ng tekstong impormatibo dito]</em></p>
+                    <p><em>[Ilagay ang ikatlong talata ng tekstong impormatibo dito - kung mayroon]</em></p>
+                    <p><em>[Ilagay ang ikaapat na talata ng tekstong impormatibo dito - kung mayroon]</em></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn">Isara</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="deskriptiboModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-palette"></i> Halimbawa ng Tekstong Deskriptibo</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Pamagat:</strong> [Ilagay ang pamagat ng tekstong deskriptibo dito]</p>
+                <div class="modal-content">
+                    <p><em>[Ilagay ang unang talata ng tekstong deskriptibo dito]</em></p>
+                    <p><em>[Ilagay ang ikalawang talata ng tekstong deskriptibo dito]</em></p>
+                    <p><em>[Ilagay ang ikatlong talata ng tekstong deskriptibo dito - kung mayroon]</em></p>
+                    <p><em>[Ilagay ang ikaapat na talata ng tekstong deskriptibo dito - kung mayroon]</em></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn">Isara</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="persuwesyibModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-handshake"></i> Halimbawa ng Tekstong Persuwesyib</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Pamagat:</strong> [Ilagay ang pamagat ng tekstong persuwesyib dito]</p>
+                <div class="modal-content">
+                    <p><em>[Ilagay ang unang talata ng tekstong persuwesyib dito]</em></p>
+                    <p><em>[Ilagay ang ikalawang talata ng tekstong persuwesyib dito]</em></p>
+                    <p><em>[Ilagay ang ikatlong talata ng tekstong persuwesyib dito - kung mayroon]</em></p>
+                    <p><em>[Ilagay ang ikaapat na talata ng tekstong persuwesyib dito - kung mayroon]</em></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn">Isara</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="naratiboModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-story"></i> Halimbawa ng Tekstong Naratibo</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Pamagat:</strong> [Ilagay ang pamagat ng tekstong naratibo dito]</p>
+                <div class="modal-content">
+                    <p><em>[Ilagay ang unang talata ng tekstong naratibo dito]</em></p>
+                    <p><em>[Ilagay ang ikalawang talata ng tekstong naratibo dito]</em></p>
+                    <p><em>[Ilagay ang ikatlong talata ng tekstong naratibo dito - kung mayroon]</em></p>
+                    <p><em>[Ilagay ang ikaapat na talata ng tekstong naratibo dito - kung mayroon]</em></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn">Isara</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="argumentatiboModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-scale-balanced"></i> Halimbawa ng Tekstong Argumentatibo</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Pamagat:</strong> [Ilagay ang pamagat ng tekstong argumentatibo dito]</p>
+                <div class="modal-content">
+                    <p><em>[Ilagay ang unang talata ng tekstong argumentatibo dito]</em></p>
+                    <p><em>[Ilagay ang ikalawang talata ng tekstong argumentatibo dito]</em></p>
+                    <p><em>[Ilagay ang ikatlong talata ng tekstong argumentatibo dito - kung mayroon]</em></p>
+                    <p><em>[Ilagay ang ikaapat na talata ng tekstong argumentatibo dito - kung mayroon]</em></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn">Isara</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="prosidyuralModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-list-check"></i> Halimbawa ng Tekstong Prosidyural</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Pamagat:</strong> [Ilagay ang pamagat ng tekstong prosidyural dito]</p>
+                <div class="modal-content">
+                    <p><em>[Ilagay ang unang talata ng tekstong prosidyural dito]</em></p>
+                    <p><em>[Ilagay ang ikalawang talata ng tekstong prosidyural dito]</em></p>
+                    <p><em>[Ilagay ang ikatlong talata ng tekstong prosidyural dito - kung mayroon]</em></p>
+                    <p><em>[Ilagay ang ikaapat na talata ng tekstong prosidyural dito - kung mayroon]</em></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close-btn">Isara</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Sanaysay Learning System | Para sa asignaturang Filipino</p>
+            <div class="footer-social">
+                <a href="#" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link youtube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-link instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" title="Bumalik sa itaas"><i class="fas fa-arrow-up"></i></button>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
