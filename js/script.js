@@ -820,16 +820,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function generatePDFContent(name, email, title, original, translated, date, time) {
-        // Tiyaking may laman
-        const safeOriginal = original || 'Walang nilalaman.';
+        // Siguraduhing may laman
+        const safeOriginal = original || 'Walang nilalaman ang sanaysay.';
         const safeTranslated = translated || 'Walang translation na ginawa.';
-        
+        const safeTitle = title || 'Walang Pamagat';
+        const safeName = name || 'Hindi Nakapangalan';
+        const safeEmail = email || 'Walang Email';
+        const safeDate = date || new Date().toLocaleDateString('tl-PH');
+        const safeTime = time || new Date().toLocaleTimeString('tl-PH');
+
         return `
         <!DOCTYPE html>
         <html>
         <head>
             <meta charset="UTF-8">
-            <title>Sanaysay - ${escapeHtml(title)}</title>
+            <title>Sanaysay - ${escapeHtml(safeTitle)}</title>
             <style>
                 * { margin: 0; padding: 0; box-sizing: border-box; }
                 body {
@@ -907,9 +912,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     page-break-after: always;
                     margin-bottom: 30px;
                 }
-                .error-text {
-                    color: #dc3545;
-                    font-style: italic;
+                .content-box p {
+                    margin-bottom: 10px;
+                }
+                .content-box p:last-child {
+                    margin-bottom: 0;
                 }
             </style>
         </head>
@@ -920,10 +927,10 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             
             <div class="info-box">
-                <p><strong>👤 Pangalan:</strong> ${escapeHtml(name)}</p>
-                <p><strong>📧 Email:</strong> ${escapeHtml(email)}</p>
-                <p><strong>📝 Pamagat:</strong> ${escapeHtml(title)}</p>
-                <p><strong>📅 Petsa:</strong> ${escapeHtml(date)} | ${escapeHtml(time)}</p>
+                <p><strong>👤 Pangalan:</strong> ${escapeHtml(safeName)}</p>
+                <p><strong>📧 Email:</strong> ${escapeHtml(safeEmail)}</p>
+                <p><strong>📝 Pamagat:</strong> ${escapeHtml(safeTitle)}</p>
+                <p><strong>📅 Petsa:</strong> ${escapeHtml(safeDate)} | ${escapeHtml(safeTime)}</p>
             </div>
             
             <div class="page-break">
@@ -946,8 +953,18 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function generateAndDownloadPDF(name, email, title, original, translated, date, time) {
+        // Check kung may laman
+        if (!original || original.trim() === '') {
+            showToast('Walang laman ang sanaysay. Hindi ma-generate ang PDF.', 'warning', 'PDF Error');
+            return;
+        }
+
+        console.log('📄 Generating PDF for:', title);
+        console.log('📄 Original length:', original.length);
+
         const fullHtml = generatePDFContent(name, email, title, original, translated, date, time);
         
+        // Gumawa ng container
         const container = document.createElement('div');
         container.innerHTML = fullHtml;
         container.style.position = 'fixed';
@@ -956,38 +973,48 @@ document.addEventListener('DOMContentLoaded', function() {
         container.style.width = '800px';
         container.style.background = 'white';
         container.style.zIndex = '-1';
+        container.style.padding = '40px';
         document.body.appendChild(container);
-        
-        const opt = {
-            margin: [0.5, 0.5, 0.5, 0.5],
-            filename: `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { 
-                scale: 2, 
-                useCORS: true,
-                letterRendering: true,
-                width: 800
-            },
-            jsPDF: { 
-                unit: 'in', 
-                format: 'a4', 
-                orientation: 'portrait' 
-            },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-        };
-        
-        html2pdf()
-            .set(opt)
-            .from(container)
-            .save()
-            .then(function() {
-                document.body.removeChild(container);
-                console.log('✅ PDF downloaded successfully!');
-            })
-            .catch(function(error) {
-                console.error('PDF Generation Error:', error);
-                document.body.removeChild(container);
-            });
+
+        // ⚠️ CRITICAL: Maghintay ng 1 segundo para mag-render ang content
+        setTimeout(function() {
+            console.log('📄 Rendering PDF...');
+            
+            const opt = {
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true,
+                    letterRendering: true,
+                    width: 800,
+                    height: container.scrollHeight || 1200,
+                    logging: true
+                },
+                jsPDF: { 
+                    unit: 'in', 
+                    format: 'a4', 
+                    orientation: 'portrait' 
+                },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            html2pdf()
+                .set(opt)
+                .from(container)
+                .save()
+                .then(function() {
+                    document.body.removeChild(container);
+                    console.log('✅ PDF downloaded successfully!');
+                    showToast('Na-download ang PDF ng iyong sanaysay!', 'success', 'PDF');
+                })
+                .catch(function(error) {
+                    console.error('❌ PDF Generation Error:', error);
+                    document.body.removeChild(container);
+                    showToast('May error sa pag-generate ng PDF. Subukan muli.', 'error', 'PDF Error');
+                });
+        }, 1000); // ⚠️ 1 second delay - IMPORTANTE ITO!
     }
 
     // ============================================================
