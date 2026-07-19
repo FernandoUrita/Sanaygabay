@@ -1,3 +1,4 @@
+// netlify/functions/save-essay.js
 const { createClient } = require('@supabase/supabase-js');
 
 exports.handler = async function(event, context) {
@@ -20,8 +21,14 @@ exports.handler = async function(event, context) {
     }
 
     try {
+        const supabase = createClient(
+            process.env.SUPABASE_URL,
+            process.env.SUPABASE_ANON_KEY
+        );
+
         const { name, email, title, original, translated, score, date, time } = JSON.parse(event.body);
 
+        // Validation
         if (!name || !email || !title || !original) {
             return {
                 statusCode: 400,
@@ -30,11 +37,7 @@ exports.handler = async function(event, context) {
             };
         }
 
-        const supabase = createClient(
-            process.env.SUPABASE_URL,
-            process.env.SUPABASE_ANON_KEY
-        );
-
+        // Save to Supabase
         const { data, error } = await supabase
             .from('essays')
             .insert([
@@ -56,7 +59,7 @@ exports.handler = async function(event, context) {
             return {
                 statusCode: 500,
                 headers,
-                body: JSON.stringify({ error: 'Failed to save essay' })
+                body: JSON.stringify({ error: error.message })
             };
         }
 

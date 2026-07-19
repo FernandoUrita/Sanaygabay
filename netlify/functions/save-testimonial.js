@@ -1,3 +1,4 @@
+// netlify/functions/save-testimonial.js
 const { createClient } = require('@supabase/supabase-js');
 
 exports.handler = async function(event, context) {
@@ -20,6 +21,10 @@ exports.handler = async function(event, context) {
     }
 
     try {
+        // 🔴 SURTIIN: Naka-set ba ang environment variables?
+        console.log('SUPABASE_URL:', process.env.SUPABASE_URL);
+        console.log('SUPABASE_ANON_KEY:', process.env.SUPABASE_ANON_KEY ? '✅ Set' : '❌ Not set');
+
         const { name, role, message, rating } = JSON.parse(event.body);
 
         if (!name || !message || !rating) {
@@ -51,7 +56,7 @@ exports.handler = async function(event, context) {
             return {
                 statusCode: 500,
                 headers,
-                body: JSON.stringify({ error: 'Failed to save testimonial' })
+                body: JSON.stringify({ error: error.message })
             };
         }
 

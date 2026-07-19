@@ -1,3 +1,4 @@
+// netlify/functions/get-essays.js
 const { createClient } = require('@supabase/supabase-js');
 
 exports.handler = async function(event, context) {
@@ -20,13 +21,15 @@ exports.handler = async function(event, context) {
     }
 
     try {
-        const email = event.queryStringParameters?.email;
         const supabase = createClient(
             process.env.SUPABASE_URL,
             process.env.SUPABASE_ANON_KEY
         );
 
+        const email = event.queryStringParameters?.email;
+
         let query = supabase.from('essays').select('*');
+        
         if (email) {
             query = query.eq('email', email.toLowerCase());
         }
@@ -38,7 +41,7 @@ exports.handler = async function(event, context) {
             return {
                 statusCode: 500,
                 headers,
-                body: JSON.stringify({ error: 'Failed to fetch essays' })
+                body: JSON.stringify({ error: error.message })
             };
         }
 
