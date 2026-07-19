@@ -967,10 +967,20 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('📄 Title:', title);
         console.log('📄 Original length:', original.length);
 
+        // Check if html2canvas is loaded
+        if (typeof html2canvas === 'undefined' && typeof window.html2canvas === 'undefined') {
+            console.error('❌ html2canvas is not loaded!');
+            showToast('❌ Error: html2canvas library not loaded. Please refresh and try again.', 'error', 'PDF Error');
+            return;
+        }
+
+        // Use the correct reference
+        const h2c = typeof html2canvas !== 'undefined' ? html2canvas : window.html2canvas;
+
         // Create the HTML content
         const htmlContent = generatePDFContent(name, email, title, original, translated, date, time);
 
-        // Create a VISIBLE container - lalabas sa screen!
+        // Create a VISIBLE container
         const container = document.createElement('div');
         container.innerHTML = htmlContent;
         container.style.position = 'fixed';
@@ -988,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function() {
         container.style.borderRadius = '12px';
         container.style.border = '2px solid #8B4513';
         
-        // Add a loading overlay behind it
+        // Add a loading overlay
         const overlay = document.createElement('div');
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
@@ -1001,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.style.alignItems = 'center';
         overlay.style.justifyContent = 'center';
         overlay.innerHTML = `
-            <div style="background: white; padding: 30px; border-radius: 12px; text-align: center;">
+            <div style="background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 400px;">
                 <div class="loading-spinner" style="margin: 0 auto 15px;"></div>
                 <h3 style="color: #5a3310;">⏳ Nagge-generate ng PDF...</h3>
                 <p style="color: #6b5540;">Mangyaring maghintay ng ilang segundo.</p>
@@ -1017,7 +1027,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('📄 Container scrollHeight:', container.scrollHeight);
             console.log('📄 Container scrollWidth:', container.scrollWidth);
 
-            html2canvas(container, {
+            h2c(container, {
                 scale: 2,
                 useCORS: true,
                 allowTaint: true,
@@ -1039,10 +1049,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 try {
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF('p', 'mm', 'a4');
-                    const imgWidth = 210; // A4 width in mm
-                    const pageHeight = 297; // A4 height in mm
-                    
-                    // Calculate image height to maintain aspect ratio
+                    const imgWidth = 210;
+                    const pageHeight = 297;
                     const imgHeight = (canvas.height * imgWidth) / canvas.width;
                     
                     console.log('📄 PDF dimensions:', imgWidth, 'x', imgHeight, 'mm');
@@ -1051,12 +1059,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     let position = 0;
                     let pageCount = 0;
 
-                    // Add first page
                     pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                     pageCount++;
 
-                    // Add more pages if needed
                     while (heightLeft > 0) {
                         position = heightLeft - imgHeight;
                         pdf.addPage();
@@ -1067,11 +1073,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     console.log('📄 PDF pages created:', pageCount);
 
-                    // Save PDF
                     const filename = `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
                     pdf.save(filename);
                     
-                    // Remove container and overlay
                     document.body.removeChild(container);
                     document.body.removeChild(overlay);
                     
@@ -1091,7 +1095,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.removeChild(overlay);
                 showToast('❌ May error sa pag-generate ng PDF. Subukan muli.', 'error', 'PDF Error');
             });
-        }, 2000); // 2 seconds delay
+        }, 2000);
     }
 
     // ============================================================

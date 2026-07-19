@@ -2179,3 +2179,71 @@ footer {
         padding: 1.2rem;
     }
 }
+
+/* ============================================================ */
+/* MODAL CONTENT - Justified Text (Universal) */
+/* ============================================================ */
+
+.modal-content {
+    background: var(--bg-light);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary);
+    margin-top: 0.5rem;
+    text-align: justify;
+    text-justify: inter-word;
+    -webkit-text-justify: inter-word;
+}
+
+.modal-content p {
+    margin-bottom: 0.8rem;
+    line-height: 1.8;
+    color: var(--text-medium);
+    text-align: justify;
+    text-justify: inter-word;
+    text-indent: 1.5rem;
+}
+
+.modal-content p:first-of-type {
+    text-indent: 0;
+}
+
+.modal-content p:last-child {
+    margin-bottom: 0;
+}
+
+.modal-content p em {
+    font-style: italic;
+}
+
+/* For modals inside any page */
+.modal .modal-content,
+.about-main .modal-content,
+.home-main .modal-content {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 1rem;
+    }
+    
+    .modal-content p {
+        font-size: 0.95rem;
+        text-indent: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 0.8rem;
+    }
+    
+    .modal-content p {
+        font-size: 0.9rem;
+        text-indent: 0.8rem;
+        line-height: 1.6;
+    }
+}
