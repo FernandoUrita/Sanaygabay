@@ -820,7 +820,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function generatePDFContent(name, email, title, original, translated, date, time) {
-        // Siguraduhing may laman
         const safeOriginal = original || 'Walang nilalaman ang sanaysay.';
         const safeTranslated = translated || 'Walang translation na ginawa.';
         const safeTitle = title || 'Walang Pamagat';
@@ -829,6 +828,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const safeDate = date || new Date().toLocaleDateString('tl-PH');
         const safeTime = time || new Date().toLocaleTimeString('tl-PH');
 
+        // Clean the text - remove extra spaces and fix line breaks
+        const cleanOriginal = safeOriginal.replace(/\s+/g, ' ').trim();
+        const cleanTranslated = safeTranslated.replace(/\s+/g, ' ').trim();
+
         return `
         <!DOCTYPE html>
         <html>
@@ -836,42 +839,49 @@ document.addEventListener('DOMContentLoaded', function() {
             <meta charset="UTF-8">
             <title>Sanaysay - ${escapeHtml(safeTitle)}</title>
             <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
+                * { 
+                    margin: 0; 
+                    padding: 0; 
+                    box-sizing: border-box; 
+                }
                 body {
-                    font-family: 'Arial', 'Helvetica', sans-serif;
-                    padding: 40px;
+                    font-family: 'Times New Roman', 'Georgia', serif;
+                    padding: 50px;
                     max-width: 800px;
                     margin: 0 auto;
-                    background: white;
-                    color: #333;
+                    background: #ffffff;
+                    color: #1a1a1a;
                     font-size: 14px;
-                    line-height: 1.8;
+                    line-height: 2;
                 }
                 .header {
                     text-align: center;
-                    border-bottom: 3px solid #b36722;
+                    border-bottom: 4px solid #8B4513;
                     padding-bottom: 20px;
                     margin-bottom: 30px;
                 }
                 .header h1 {
                     color: #5a3310;
-                    font-size: 24px;
+                    font-size: 26px;
+                    font-weight: bold;
                     margin: 0;
                 }
                 .header p {
                     color: #6b5540;
                     font-size: 14px;
-                    margin: 5px 0 0;
+                    margin-top: 5px;
                 }
                 .info-box {
                     background: #fdf6f0;
                     padding: 15px 20px;
                     border-radius: 8px;
-                    border-left: 4px solid #b36722;
+                    border-left: 5px solid #8B4513;
                     margin-bottom: 30px;
                 }
                 .info-box p {
-                    margin: 5px 0;
+                    margin: 3px 0;
+                    font-size: 14px;
+                    line-height: 1.8;
                 }
                 .info-box strong {
                     color: #5a3310;
@@ -879,44 +889,54 @@ document.addEventListener('DOMContentLoaded', function() {
                 .section-title {
                     color: #5a3310;
                     font-size: 20px;
-                    border-bottom: 2px solid #ddd;
+                    border-bottom: 3px solid #ddd;
                     padding-bottom: 10px;
                     margin-top: 30px;
-                    margin-bottom: 15px;
+                    margin-bottom: 20px;
+                    font-weight: bold;
                 }
                 .content-box {
-                    padding: 20px;
+                    padding: 25px;
                     background: #f9f9f9;
                     border-radius: 8px;
                     border: 1px solid #ddd;
-                    line-height: 1.8;
+                    line-height: 2.2;
                     white-space: pre-wrap;
-                    font-size: 14px;
+                    word-wrap: break-word;
+                    font-size: 15px;
                     min-height: 100px;
+                    font-family: 'Georgia', serif;
                 }
                 .content-box.translated {
                     background: #fdf6f0;
-                    border: 1px solid #b36722;
-                    border-left: 4px solid #b36722;
+                    border: 2px solid #8B4513;
+                    border-left: 5px solid #8B4513;
                 }
                 .footer {
                     text-align: center;
                     border-top: 2px solid #ddd;
                     padding-top: 20px;
-                    margin-top: 30px;
+                    margin-top: 40px;
                     color: #6b5540;
                     font-size: 12px;
                 }
-                .footer p { margin: 3px 0; }
+                .footer p {
+                    margin: 5px 0;
+                    line-height: 1.6;
+                }
                 .page-break {
                     page-break-after: always;
                     margin-bottom: 30px;
+                    padding-bottom: 20px;
+                    border-bottom: 2px dashed #ddd;
                 }
-                .content-box p {
-                    margin-bottom: 10px;
+                .essay-content {
+                    font-family: 'Georgia', serif;
+                    font-size: 15px;
+                    line-height: 2.2;
                 }
-                .content-box p:last-child {
-                    margin-bottom: 0;
+                .clearfix {
+                    clear: both;
                 }
             </style>
         </head>
@@ -935,17 +955,21 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <div class="page-break">
                 <h2 class="section-title">📄 Orihinal na Sanaysay</h2>
-                <div class="content-box">${escapeHtml(safeOriginal)}</div>
+                <div class="content-box essay-content">${escapeHtml(cleanOriginal)}</div>
             </div>
             
             <div>
                 <h2 class="section-title">🌿 Malalim na Tagalog (AI-Translated)</h2>
-                <div class="content-box translated">${escapeHtml(safeTranslated)}</div>
+                <div class="content-box translated essay-content">${escapeHtml(cleanTranslated)}</div>
             </div>
             
             <div class="footer">
                 <p>© 2026 Sanaysay Learning System | Para sa asignaturang Filipino</p>
                 <p>Ito ay isang awtomatikong nabuong PDF mula sa iyong isinumiteng sanaysay.</p>
+                <p>Nilikha gamit ang Talagabay Learning System</p>
+                <p style="margin-top: 10px; font-size: 10px; color: #aaa;">
+                    📅 Nilikha: ${escapeHtml(new Date().toLocaleString('tl-PH'))}
+                </p>
             </div>
         </body>
         </html>
@@ -957,145 +981,95 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================================
 
     function generateAndDownloadPDF(name, email, title, original, translated, date, time) {
-        // Check kung may laman
         if (!original || original.trim() === '') {
             showToast('Walang laman ang sanaysay. Hindi ma-generate ang PDF.', 'warning', 'PDF Error');
             return;
         }
 
-        console.log('📄 Generating PDF using ULTIMATE method...');
+        console.log('📄 Generating PDF...');
         console.log('📄 Title:', title);
         console.log('📄 Original length:', original.length);
 
-        // Check if html2canvas is loaded
-        if (typeof html2canvas === 'undefined' && typeof window.html2canvas === 'undefined') {
-            console.error('❌ html2canvas is not loaded!');
-            showToast('❌ Error: html2canvas library not loaded. Please refresh and try again.', 'error', 'PDF Error');
-            return;
-        }
-
-        // Use the correct reference
-        const h2c = typeof html2canvas !== 'undefined' ? html2canvas : window.html2canvas;
-
-        // Create the HTML content
         const htmlContent = generatePDFContent(name, email, title, original, translated, date, time);
 
-        // Create a VISIBLE container
+        // Create container with proper styling
         const container = document.createElement('div');
         container.innerHTML = htmlContent;
         container.style.position = 'fixed';
-        container.style.top = '50%';
-        container.style.left = '50%';
-        container.style.transform = 'translate(-50%, -50%)';
-        container.style.width = '95%';
+        container.style.top = '0';
+        container.style.left = '0';
+        container.style.width = '100%';
         container.style.maxWidth = '800px';
-        container.style.maxHeight = '90vh';
-        container.style.background = 'white';
+        container.style.background = '#ffffff';
         container.style.zIndex = '99999';
-        container.style.padding = '40px';
-        container.style.overflow = 'auto';
-        container.style.boxShadow = '0 0 100px rgba(0,0,0,0.5)';
-        container.style.borderRadius = '12px';
-        container.style.border = '2px solid #8B4513';
+        container.style.padding = '0';
+        container.style.overflow = 'visible';
+        container.style.margin = '0 auto';
+        container.style.left = '50%';
+        container.style.transform = 'translateX(-50%)';
         
-        // Add a loading overlay
-        const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.background = 'rgba(0,0,0,0.5)';
-        overlay.style.zIndex = '99998';
-        overlay.style.display = 'flex';
-        overlay.style.alignItems = 'center';
-        overlay.style.justifyContent = 'center';
-        overlay.innerHTML = `
-            <div style="background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 400px;">
-                <div class="loading-spinner" style="margin: 0 auto 15px;"></div>
-                <h3 style="color: #5a3310;">⏳ Nagge-generate ng PDF...</h3>
-                <p style="color: #6b5540;">Mangyaring maghintay ng ilang segundo.</p>
-            </div>
-        `;
-        
-        document.body.appendChild(overlay);
         document.body.appendChild(container);
 
-        // Wait for rendering - 2 seconds
+        showToast('⏳ Nagge-generate ng PDF...', 'info', 'PDF');
+
+        // Wait for rendering
         setTimeout(function() {
             console.log('📄 Rendering with html2canvas...');
-            console.log('📄 Container scrollHeight:', container.scrollHeight);
-            console.log('📄 Container scrollWidth:', container.scrollWidth);
 
-            h2c(container, {
+            html2canvas(container, {
                 scale: 2,
                 useCORS: true,
-                allowTaint: true,
-                logging: true,
+                allowTaint: false,
+                logging: false,
+                backgroundColor: '#ffffff',
                 width: container.scrollWidth || 800,
                 height: container.scrollHeight || 1200,
-                backgroundColor: '#ffffff',
-                onclone: function(clonedDoc) {
-                    console.log('📄 html2canvas clone created');
+                onclone: function(doc) {
+                    console.log('📄 Clone created');
                 }
             }).then(function(canvas) {
                 console.log('📄 Canvas created! Size:', canvas.width, 'x', canvas.height);
                 
-                // Convert canvas to image data
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                console.log('📄 Image data length:', imgData.length);
+                const imgData = canvas.toDataURL('image/jpeg', 0.98);
                 
-                // Create PDF using jsPDF
-                try {
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF('p', 'mm', 'a4');
-                    const imgWidth = 210;
-                    const pageHeight = 297;
-                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    
-                    console.log('📄 PDF dimensions:', imgWidth, 'x', imgHeight, 'mm');
-                    
-                    let heightLeft = imgHeight;
-                    let position = 0;
-                    let pageCount = 0;
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210;
+                const pageHeight = 297;
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                let heightLeft = imgHeight;
+                let position = 0;
+                let pageCount = 0;
 
+                pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                pageCount++;
+
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
                     pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                     pageCount++;
-
-                    while (heightLeft > 0) {
-                        position = heightLeft - imgHeight;
-                        pdf.addPage();
-                        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-                        heightLeft -= pageHeight;
-                        pageCount++;
-                    }
-
-                    console.log('📄 PDF pages created:', pageCount);
-
-                    const filename = `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
-                    pdf.save(filename);
-                    
-                    document.body.removeChild(container);
-                    document.body.removeChild(overlay);
-                    
-                    console.log('✅ PDF downloaded successfully!');
-                    showToast('✅ Na-download ang PDF ng iyong sanaysay!', 'success', 'PDF');
-
-                } catch (pdfError) {
-                    console.error('❌ jsPDF Error:', pdfError);
-                    document.body.removeChild(container);
-                    document.body.removeChild(overlay);
-                    showToast('❌ May error sa pag-create ng PDF. Subukan muli.', 'error', 'PDF Error');
                 }
+
+                console.log('📄 PDF pages:', pageCount);
+
+                const filename = `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
+                pdf.save(filename);
+                
+                document.body.removeChild(container);
+                
+                console.log('✅ PDF downloaded successfully!');
+                showToast('✅ Na-download ang PDF ng iyong sanaysay!', 'success', 'PDF');
 
             }).catch(function(error) {
                 console.error('❌ html2canvas Error:', error);
                 document.body.removeChild(container);
-                document.body.removeChild(overlay);
                 showToast('❌ May error sa pag-generate ng PDF. Subukan muli.', 'error', 'PDF Error');
             });
-        }, 2000);
+        }, 1500);
     }
 
     // ============================================================
