@@ -1149,7 +1149,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.body.removeChild(container);
                     showToast('May error sa pag-generate ng PDF. Subukan muli.', 'error', 'PDF Error');
                 });
-        }, 1500); // 1.5 seconds delay
+        }, 5000); // 1.5 seconds delay
 }
 
     // ============================================================
