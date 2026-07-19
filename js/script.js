@@ -21,10 +21,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // EMAILJS CONFIGURATION
     // ============================================================
     const EMAILJS_CONFIG = {
-        publicKey: 'KZg1auPTnCvcF5Ko3',
-        serviceID: 'service_cxdhpih',
-        templateIDStudent: 'template_kkza0yn',
-        templateIDSystem: 'template_mr7yebw',
+        publicKey: '9ij51SpdkUbjW348o',
+        serviceID: 'service_f4ln0k7',
+        templateIDStudent: 'template_at2sx1b',
+        templateIDSystem: 'template_v3otl38',
         systemEmail: 'sanaysay.system2026@gmail.com'
     };
 
@@ -820,6 +820,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function generatePDFContent(name, email, title, original, translated, date, time) {
+        // Tiyaking may laman
+        const safeOriginal = original || 'Walang nilalaman.';
+        const safeTranslated = translated || 'Walang translation na ginawa.';
+        
         return `
         <!DOCTYPE html>
         <html>
@@ -835,6 +839,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     margin: 0 auto;
                     background: white;
                     color: #333;
+                    font-size: 14px;
+                    line-height: 1.8;
                 }
                 .header {
                     text-align: center;
@@ -881,6 +887,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     line-height: 1.8;
                     white-space: pre-wrap;
                     font-size: 14px;
+                    min-height: 100px;
                 }
                 .content-box.translated {
                     background: #fdf6f0;
@@ -900,6 +907,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     page-break-after: always;
                     margin-bottom: 30px;
                 }
+                .error-text {
+                    color: #dc3545;
+                    font-style: italic;
+                }
             </style>
         </head>
         <body>
@@ -917,12 +928,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             <div class="page-break">
                 <h2 class="section-title">📄 Orihinal na Sanaysay</h2>
-                <div class="content-box">${escapeHtml(original)}</div>
+                <div class="content-box">${escapeHtml(safeOriginal)}</div>
             </div>
             
             <div>
                 <h2 class="section-title">🌿 Malalim na Tagalog (AI-Translated)</h2>
-                <div class="content-box translated">${escapeHtml(translated || 'Walang translation na ginawa.')}</div>
+                <div class="content-box translated">${escapeHtml(safeTranslated)}</div>
             </div>
             
             <div class="footer">
