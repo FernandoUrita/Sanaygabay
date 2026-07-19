@@ -5,35 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tungkol sa Sanaysay Learning System 2026</title>
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/home.css" />
     <link rel="stylesheet" href="css/about.css" />
+    <link rel="icon" type="image/x-icon" href="assets/logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
     <!-- Background Image Overlay -->
     <div class="bg-overlay"></div>
-
-    <!-- Header -->
-    <header class="about-header">
-        <div class="header-container">
-            <div class="header-badge">
-                <span class="badge">Tungkol sa Amin</span>
-            </div>
-            <h1>Sanaysay: Sistema ng Makabagong  Pagkatuto</h1>
-            <p>Ang mga mananaliksik sa likod ng proyektong ito</p>
-            <div class="section-actions">
-                <button class="action-btn" id="aboutDarkModeToggle"><i class="fas fa-moon"></i> Dark Mode</button>
-            </div>
-        </div>
-    </header>
+    <div class="bg-book-overlay"></div>
 
     <!-- Navigation -->
-    <nav>
-        <ul>
-            <li><a href="index.html"><i class="fas fa-home"></i> Bumalik sa Home</a></li>
-            <li><a href="#" class="active"><i class="fas fa-users"></i> Tungkol sa Amin</a></li>
-        </ul>
+    <nav class="home-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">
+                    <i class="fas fa-book-open"></i>
+                    <span>Talagabay</span>
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="learn.html"><i class="fas fa-graduation-cap"></i> Matuto</a></li>
+                <li><a href="about.html" class="active"><i class="fas fa-users"></i> Mananaliksik</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle Navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
     </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header-container">
+            <div class="page-header-content">
+                <div class="page-header-badge">
+                    <span class="badge">👥 Talagabay</span>
+                </div>
+                <h1>Ang mga <span>Mananaliksik</span></h1>
+                <p>Ang mga mag-aaral sa likod ng proyektong ito</p>
+            </div>
+            <div class="page-header-image">
+                <div class="header-image-container">
+                    <img src="assets/group-photo.jpg" alt="Mga Mananaliksik" />
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Main Content -->
     <main class="about-main">
@@ -49,17 +68,17 @@
                 <div class="group-photo">
                     <img src="assets/group-photo.jpg" alt="Group Photo ng mga Mananaliksik" />
                     <div class="group-photo-caption">
-                        <p>Ang mga mananaliksik ng Sanaysay: Sistema ng Makabagong  Pagkatuto</p>
+                        <p>📸 Ang mga mananaliksik ng Sanaysay: Sistema ng Makabagong Pagkatuto</p>
                     </div>
                 </div>
             </div>
 
             <!-- Members Grid -->
             <div class="members-grid">
-                <!-- Member 1 -->
+                <!-- Member 1 - Lider -->
                 <div class="member-card">
                     <div class="member-image">
-                        <img src="assets/images/member1.jpg" alt="Member 1" />
+                        <img src="assets/images/member1.jpg" alt="Leila Charisma C. Asuncion" />
                         <div class="member-overlay">
                             <span class="member-role">Lider</span>
                         </div>
@@ -69,8 +88,8 @@
                         <p class="member-role-text">Lider</p>
                         <p class="member-bio">"Ang sanaysay ay hindi lamang kalipunan ng mga salita; ito'y ensayklopidiya na tahanan ng kaalaman at bukal ng karunungan."</p>
                         <div class="member-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>
@@ -78,7 +97,7 @@
                 <!-- Member 2 -->
                 <div class="member-card">
                     <div class="member-image">
-                        <img src="assets/images/member2.jpg" alt="Member 2" />
+                        <img src="assets/images/member2.jpg" alt="Hanna Jane M. Susalta" />
                         <div class="member-overlay">
                             <span class="member-role">Miyembro</span>
                         </div>
@@ -88,8 +107,8 @@
                         <p class="member-role-text">Miyembro</p>
                         <p class="member-bio">"Ang pagsulat ay katumbas ng mga pangarap na nais nating makamtan sa hinaharap."</p>
                         <div class="member-social">
-                            <a href="https://www.facebook.com/hannah.susalta"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.facebook.com/hannah.susalta" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>
@@ -97,7 +116,7 @@
                 <!-- Member 3 -->
                 <div class="member-card">
                     <div class="member-image">
-                        <img src="assets/images/member3.jpg" alt="Member 3" />
+                        <img src="assets/images/member3.jpg" alt="John Renier T. Viaña" />
                         <div class="member-overlay">
                             <span class="member-role">Miyembro</span>
                         </div>
@@ -107,8 +126,8 @@
                         <p class="member-role-text">Miyembro</p>
                         <p class="member-bio">"Ang panulat ay nagiging makapangyarihan kapag ang bawat sanaysay ay may saysay."</p>
                         <div class="member-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>
@@ -116,7 +135,7 @@
                 <!-- Member 4 -->
                 <div class="member-card">
                     <div class="member-image">
-                        <img src="assets/images/member4.jpg" alt="Member 4" />
+                        <img src="assets/images/member4.jpg" alt="Jhershe Mae H. Palimping" />
                         <div class="member-overlay">
                             <span class="member-role">Miyembro</span>
                         </div>
@@ -126,8 +145,8 @@
                         <p class="member-role-text">Miyembro</p>
                         <p class="member-bio">"Ang sanaysay ay salamin ng isipan at puso ng manunulat."</p>
                         <div class="member-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>
@@ -135,7 +154,7 @@
                 <!-- Member 5 -->
                 <div class="member-card">
                     <div class="member-image">
-                        <img src="assets/images/member5.jpg" alt="Member 5" />
+                        <img src="assets/images/member5.jpg" alt="Samirah C. Ampa" />
                         <div class="member-overlay">
                             <span class="member-role">Miyembro</span>
                         </div>
@@ -145,8 +164,8 @@
                         <p class="member-role-text">Miyembro</p>
                         <p class="member-bio">"Ang sanaysay ay walang saysay kung walang puso at kaisipan sa bawat salitang isinasalaysay."</p>
                         <div class="member-social">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>
@@ -163,6 +182,10 @@
                         <span><i class="fas fa-check-circle"></i> Interactive Modals</span>
                         <span><i class="fas fa-check-circle"></i> AI Essay Checker</span>
                         <span><i class="fas fa-check-circle"></i> Dark Mode</span>
+                        <span><i class="fas fa-check-circle"></i> Auto-Save Draft</span>
+                        <span><i class="fas fa-check-circle"></i> Essay Scoring</span>
+                        <span><i class="fas fa-check-circle"></i> History Archive</span>
+                        <span><i class="fas fa-check-circle"></i> Export Options</span>
                     </div>
                 </div>
 
@@ -191,7 +214,7 @@
 
             <!-- Back Button -->
             <div class="back-button-container">
-                <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Bumalik sa Learning System</a>
+                <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Bumalik sa Home</a>
             </div>
         </section>
     </main>
@@ -199,7 +222,15 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p>&copy; 2026 Sanaysay Learning System | Para sa asignaturang Filipino</p>
+            <div class="footer-brand">
+                <h3><i class="fas fa-book-open"></i> Talagabay</h3>
+                <p>Sanaysay: Sistema ng Makabagong Pagkatuto</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="learn.html">Matuto</a>
+                <a href="about.html">Mananaliksik</a>
+            </div>
             <div class="footer-social">
                 <a href="#" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
                 <a href="#" class="social-link twitter"><i class="fab fa-twitter"></i></a>
@@ -208,7 +239,13 @@
                 <a href="#" class="social-link tiktok"><i class="fab fa-tiktok"></i></a>
             </div>
         </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Sanaysay: Sistema ng Makabagong Pagkatuto | Para sa asignaturang Filipino</p>
+        </div>
     </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollTopBtn" title="Bumalik sa itaas"><i class="fas fa-arrow-up"></i></button>
 
     <script src="js/about.js"></script>
 </body>

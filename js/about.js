@@ -1,9 +1,71 @@
 // ============================================================
-// ABOUT PAGE - Sanaysay Learning System 2026
+// ABOUT PAGE - SANAYSAY LEARNING SYSTEM 2026
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function() {
     'use strict';
+
+    // ============================================================
+    // TOAST NOTIFICATION SYSTEM
+    // ============================================================
+    function showToast(message, type = 'info', title = '') {
+        const container = document.getElementById('toastContainer') || createToastContainer();
+        
+        const icons = {
+            success: 'fas fa-check-circle',
+            error: 'fas fa-exclamation-circle',
+            warning: 'fas fa-exclamation-triangle',
+            info: 'fas fa-info-circle'
+        };
+        
+        const titles = {
+            success: 'Tagumpay!',
+            error: 'Error!',
+            warning: 'Babala!',
+            info: 'Impormasyon'
+        };
+        
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+            <div class="toast-icon"><i class="${icons[type] || icons.info}"></i></div>
+            <div class="toast-content">
+                <h4>${title || titles[type] || ''}</h4>
+                <p>${message}</p>
+            </div>
+            <button class="toast-close"><i class="fas fa-times"></i></button>
+        `;
+        
+        container.appendChild(toast);
+        
+        const timeout = setTimeout(() => {
+            removeToast(toast);
+        }, 4000);
+        
+        toast.querySelector('.toast-close').addEventListener('click', () => {
+            clearTimeout(timeout);
+            removeToast(toast);
+        });
+        
+        return toast;
+    }
+
+    function createToastContainer() {
+        const container = document.createElement('div');
+        container.id = 'toastContainer';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+        return container;
+    }
+
+    function removeToast(toast) {
+        toast.classList.add('removing');
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 300);
+    }
 
     // ============================================================
     // DARK MODE
@@ -22,10 +84,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.documentElement.removeAttribute('data-theme');
                 localStorage.setItem('darkMode', 'disabled');
                 this.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+                showToast('Light mode activated.', 'info', 'Tema');
             } else {
                 document.documentElement.setAttribute('data-theme', 'dark');
                 localStorage.setItem('darkMode', 'enabled');
                 this.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                showToast('Dark mode activated.', 'info', 'Tema');
             }
         });
     }
@@ -33,24 +97,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================================
     // SCROLL TO TOP
     // ============================================================
-    const scrollTopBtn = document.createElement('button');
-    scrollTopBtn.id = 'scrollTopBtn';
-    scrollTopBtn.title = 'Bumalik sa itaas';
-    scrollTopBtn.innerHTML = '<i class="fas fa-arrow-up"></i>';
-    document.body.appendChild(scrollTopBtn);
+    const scrollTopBtn = document.getElementById('scrollTopBtn');
 
-    window.addEventListener('scroll', function() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        if (scrollTop > 300) {
-            scrollTopBtn.classList.add('visible');
-        } else {
-            scrollTopBtn.classList.remove('visible');
-        }
-    });
+    if (scrollTopBtn) {
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
 
-    scrollTopBtn.addEventListener('click', function() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 
     // ============================================================
     // ANIMATE MEMBER CARDS ON SCROLL
@@ -80,5 +142,12 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(card);
     });
 
-    console.log('👥 About page loaded successfully!');
+    // ============================================================
+    // SHOW WELCOME TOAST
+    // ============================================================
+    setTimeout(() => {
+        showToast('Maligayang pagdating sa About page ng Sanaysay Learning System 2026!', 'info', '👥 Tungkol sa Amin');
+    }, 800);
+
+    console.log('👥 About page loaded with enhancements!');
 });

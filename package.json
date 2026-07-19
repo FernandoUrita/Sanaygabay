@@ -1,0 +1,8 @@
+{
+  "name": "sanaysay-learning-system",
+  "version": "1.0.0",
+  "description": "Sanaysay: Sistema ng Makabagong Pagkatuto",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.0"
+  }
+}

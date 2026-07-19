@@ -2,10 +2,6 @@
 /* ABOUT PAGE STYLES */
 /* ============================================================ */
 
-.about-header {
-    padding: 2rem 1.5rem;
-}
-
 .about-main {
     max-width: 1200px;
     margin: 2rem auto;
@@ -61,7 +57,7 @@
 .group-photo img {
     width: 100%;
     height: auto;
-    max-height: 530px;
+    max-height: 400px;
     object-fit: cover;
     display: block;
 }
