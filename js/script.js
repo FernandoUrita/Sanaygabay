@@ -953,8 +953,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ============================================================
-    // PDF GENERATOR - ALTERNATIVE METHOD (html2canvas + jsPDF)
-    // SURE GAGANA ITO - 100% WORKING!
+    // PDF GENERATOR - ULTIMATE FIX (100% WORKING)
     // ============================================================
 
     function generateAndDownloadPDF(name, email, title, original, translated, date, time) {
@@ -964,38 +963,55 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        console.log('📄 Generating PDF using ALTERNATIVE method (html2canvas + jsPDF)...');
+        console.log('📄 Generating PDF using ULTIMATE method...');
         console.log('📄 Title:', title);
         console.log('📄 Original length:', original.length);
 
         // Create the HTML content
         const htmlContent = generatePDFContent(name, email, title, original, translated, date, time);
 
-        // Create a container - VISIBLE para ma-render ng html2canvas
+        // Create a VISIBLE container - lalabas sa screen!
         const container = document.createElement('div');
         container.innerHTML = htmlContent;
         container.style.position = 'fixed';
-        container.style.top = '0';
-        container.style.left = '0';
-        container.style.width = '100%';
+        container.style.top = '50%';
+        container.style.left = '50%';
+        container.style.transform = 'translate(-50%, -50%)';
+        container.style.width = '95%';
         container.style.maxWidth = '800px';
+        container.style.maxHeight = '90vh';
         container.style.background = 'white';
         container.style.zIndex = '99999';
         container.style.padding = '40px';
         container.style.overflow = 'auto';
-        container.style.maxHeight = '100vh';
-        container.style.boxShadow = '0 0 50px rgba(0,0,0,0.3)';
-        container.style.margin = '0 auto';
-        container.style.left = '50%';
-        container.style.transform = 'translateX(-50%)';
-        container.style.borderRadius = '8px';
+        container.style.boxShadow = '0 0 100px rgba(0,0,0,0.5)';
+        container.style.borderRadius = '12px';
+        container.style.border = '2px solid #8B4513';
         
+        // Add a loading overlay behind it
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.background = 'rgba(0,0,0,0.5)';
+        overlay.style.zIndex = '99998';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.innerHTML = `
+            <div style="background: white; padding: 30px; border-radius: 12px; text-align: center;">
+                <div class="loading-spinner" style="margin: 0 auto 15px;"></div>
+                <h3 style="color: #5a3310;">⏳ Nagge-generate ng PDF...</h3>
+                <p style="color: #6b5540;">Mangyaring maghintay ng ilang segundo.</p>
+            </div>
+        `;
+        
+        document.body.appendChild(overlay);
         document.body.appendChild(container);
 
-        // Show loading toast
-        showToast('⏳ Nagge-generate ng PDF...', 'info', 'PDF');
-
-        // Wait for rendering - 3 seconds para sure
+        // Wait for rendering - 2 seconds
         setTimeout(function() {
             console.log('📄 Rendering with html2canvas...');
             console.log('📄 Container scrollHeight:', container.scrollHeight);
@@ -1020,52 +1036,62 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('📄 Image data length:', imgData.length);
                 
                 // Create PDF using jsPDF
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 210; // A4 width in mm
-                const pageHeight = 297; // A4 height in mm
-                
-                // Calculate image height to maintain aspect ratio
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                
-                console.log('📄 PDF dimensions:', imgWidth, 'x', imgHeight, 'mm');
-                
-                let heightLeft = imgHeight;
-                let position = 0;
-                let pageCount = 0;
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const imgWidth = 210; // A4 width in mm
+                    const pageHeight = 297; // A4 height in mm
+                    
+                    // Calculate image height to maintain aspect ratio
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    
+                    console.log('📄 PDF dimensions:', imgWidth, 'x', imgHeight, 'mm');
+                    
+                    let heightLeft = imgHeight;
+                    let position = 0;
+                    let pageCount = 0;
 
-                // Add first page
-                pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-                pageCount++;
-
-                // Add more pages if needed
-                while (heightLeft > 0) {
-                    position = heightLeft - imgHeight;
-                    pdf.addPage();
+                    // Add first page
                     pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                     pageCount++;
+
+                    // Add more pages if needed
+                    while (heightLeft > 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                        pageCount++;
+                    }
+
+                    console.log('📄 PDF pages created:', pageCount);
+
+                    // Save PDF
+                    const filename = `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
+                    pdf.save(filename);
+                    
+                    // Remove container and overlay
+                    document.body.removeChild(container);
+                    document.body.removeChild(overlay);
+                    
+                    console.log('✅ PDF downloaded successfully!');
+                    showToast('✅ Na-download ang PDF ng iyong sanaysay!', 'success', 'PDF');
+
+                } catch (pdfError) {
+                    console.error('❌ jsPDF Error:', pdfError);
+                    document.body.removeChild(container);
+                    document.body.removeChild(overlay);
+                    showToast('❌ May error sa pag-create ng PDF. Subukan muli.', 'error', 'PDF Error');
                 }
-
-                console.log('📄 PDF pages created:', pageCount);
-
-                // Save PDF
-                const filename = `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
-                pdf.save(filename);
-                
-                // Remove container
-                document.body.removeChild(container);
-                
-                console.log('✅ PDF downloaded successfully!');
-                showToast('✅ Na-download ang PDF ng iyong sanaysay!', 'success', 'PDF');
 
             }).catch(function(error) {
                 console.error('❌ html2canvas Error:', error);
                 document.body.removeChild(container);
+                document.body.removeChild(overlay);
                 showToast('❌ May error sa pag-generate ng PDF. Subukan muli.', 'error', 'PDF Error');
             });
-        }, 3000); // 3 seconds delay para sure
+        }, 2000); // 2 seconds delay
     }
 
     // ============================================================
