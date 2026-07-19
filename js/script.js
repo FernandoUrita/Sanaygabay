@@ -952,6 +952,11 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
+    // ============================================================
+    // PDF GENERATOR - ALTERNATIVE METHOD (html2canvas + jsPDF)
+    // SURE GAGANA ITO - 100% WORKING!
+    // ============================================================
+
     function generateAndDownloadPDF(name, email, title, original, translated, date, time) {
         // Check kung may laman
         if (!original || original.trim() === '') {
@@ -959,198 +964,109 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        console.log('📄 Generating PDF for:', title);
+        console.log('📄 Generating PDF using ALTERNATIVE method (html2canvas + jsPDF)...');
+        console.log('📄 Title:', title);
         console.log('📄 Original length:', original.length);
-        console.log('📄 Translated length:', translated ? translated.length : 0);
 
-        // Create HTML content with proper styling
-        const content = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Sanaysay - ${escapeHtml(title)}</title>
-            <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                body {
-                    font-family: 'Times New Roman', 'Arial', serif;
-                    padding: 50px;
-                    max-width: 800px;
-                    margin: 0 auto;
-                    background: white;
-                    color: #1a1a1a;
-                    font-size: 14px;
-                    line-height: 1.8;
-                }
-                .header {
-                    text-align: center;
-                    border-bottom: 4px solid #8B4513;
-                    padding-bottom: 20px;
-                    margin-bottom: 30px;
-                }
-                .header h1 {
-                    color: #5a3310;
-                    font-size: 26px;
-                    margin: 0;
-                    font-weight: bold;
-                }
-                .header p {
-                    color: #6b5540;
-                    font-size: 14px;
-                    margin: 5px 0 0;
-                }
-                .info-box {
-                    background: #fdf6f0;
-                    padding: 20px 25px;
-                    border-radius: 8px;
-                    border-left: 5px solid #8B4513;
-                    margin-bottom: 30px;
-                }
-                .info-box p {
-                    margin: 5px 0;
-                    font-size: 14px;
-                }
-                .info-box strong {
-                    color: #5a3310;
-                }
-                .section-title {
-                    color: #5a3310;
-                    font-size: 22px;
-                    border-bottom: 3px solid #ddd;
-                    padding-bottom: 10px;
-                    margin-top: 35px;
-                    margin-bottom: 20px;
-                    font-weight: bold;
-                }
-                .content-box {
-                    padding: 25px;
-                    background: #f9f9f9;
-                    border-radius: 8px;
-                    border: 1px solid #ddd;
-                    line-height: 2;
-                    white-space: pre-wrap;
-                    font-size: 14px;
-                    min-height: 150px;
-                    font-family: 'Georgia', serif;
-                }
-                .content-box.translated {
-                    background: #fdf6f0;
-                    border: 2px solid #8B4513;
-                    border-left: 5px solid #8B4513;
-                }
-                .footer {
-                    text-align: center;
-                    border-top: 2px solid #ddd;
-                    padding-top: 20px;
-                    margin-top: 40px;
-                    color: #6b5540;
-                    font-size: 12px;
-                }
-                .footer p { margin: 5px 0; }
-                .page-break {
-                    page-break-after: always;
-                    margin-bottom: 30px;
-                }
-                .content-box p {
-                    margin-bottom: 10px;
-                }
-                .content-box p:last-child {
-                    margin-bottom: 0;
-                }
-                .essay-content {
-                    font-family: 'Georgia', serif;
-                    font-size: 15px;
-                    line-height: 2.2;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h1>📝 Sanaysay Learning System 2026</h1>
-                <p>Pagsusulit sa Pagsulat ng Sanaysay</p>
-            </div>
-            
-            <div class="info-box">
-                <p><strong>👤 Pangalan:</strong> ${escapeHtml(name)}</p>
-                <p><strong>📧 Email:</strong> ${escapeHtml(email)}</p>
-                <p><strong>📝 Pamagat:</strong> ${escapeHtml(title)}</p>
-                <p><strong>📅 Petsa:</strong> ${escapeHtml(date)} | ${escapeHtml(time)}</p>
-            </div>
-            
-            <div class="page-break">
-                <h2 class="section-title">📄 Orihinal na Sanaysay</h2>
-                <div class="content-box essay-content">${escapeHtml(original)}</div>
-            </div>
-            
-            <div>
-                <h2 class="section-title">🌿 Malalim na Tagalog (AI-Translated)</h2>
-                <div class="content-box translated essay-content">${escapeHtml(translated || 'Walang translation na ginawa.')}</div>
-            </div>
-            
-            <div class="footer">
-                <p>© 2026 Sanaysay Learning System | Para sa asignaturang Filipino</p>
-                <p>Ito ay isang awtomatikong nabuong PDF mula sa iyong isinumiteng sanaysay.</p>
-                <p>Nilikha gamit ang Talagabay Learning System</p>
-            </div>
-        </body>
-        </html>
-        `;
+        // Create the HTML content
+        const htmlContent = generatePDFContent(name, email, title, original, translated, date, time);
 
-        // Create container with the content
+        // Create a container - VISIBLE para ma-render ng html2canvas
         const container = document.createElement('div');
-        container.innerHTML = content;
+        container.innerHTML = htmlContent;
         container.style.position = 'fixed';
-        container.style.left = '-9999px';
         container.style.top = '0';
-        container.style.width = '800px';
+        container.style.left = '0';
+        container.style.width = '100%';
+        container.style.maxWidth = '800px';
         container.style.background = 'white';
-        container.style.zIndex = '-1';
+        container.style.zIndex = '99999';
+        container.style.padding = '40px';
+        container.style.overflow = 'auto';
+        container.style.maxHeight = '100vh';
+        container.style.boxShadow = '0 0 50px rgba(0,0,0,0.3)';
+        container.style.margin = '0 auto';
+        container.style.left = '50%';
+        container.style.transform = 'translateX(-50%)';
+        container.style.borderRadius = '8px';
+        
         document.body.appendChild(container);
 
-        // Wait for rendering
-        setTimeout(function() {
-            console.log('📄 Rendering PDF...');
-            console.log('📄 Container height:', container.scrollHeight);
-            
-            const opt = {
-                margin: [0.5, 0.5, 0.5, 0.5],
-                filename: `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true,
-                    letterRendering: true,
-                    width: 800,
-                    height: container.scrollHeight || 1200,
-                    logging: true,
-                    onclone: function(doc) {
-                        console.log('📄 html2canvas clone ready');
-                    }
-                },
-                jsPDF: { 
-                    unit: 'in', 
-                    format: 'a4', 
-                    orientation: 'portrait' 
-                },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-            };
+        // Show loading toast
+        showToast('⏳ Nagge-generate ng PDF...', 'info', 'PDF');
 
-            html2pdf()
-                .set(opt)
-                .from(container)
-                .save()
-                .then(function() {
-                    document.body.removeChild(container);
-                    console.log('✅ PDF downloaded successfully!');
-                    showToast('Na-download ang PDF ng iyong sanaysay!', 'success', 'PDF');
-                })
-                .catch(function(error) {
-                    console.error('❌ PDF Generation Error:', error);
-                    document.body.removeChild(container);
-                    showToast('May error sa pag-generate ng PDF. Subukan muli.', 'error', 'PDF Error');
-                });
-        }, 5000); // 1.5 seconds delay
-}
+        // Wait for rendering - 3 seconds para sure
+        setTimeout(function() {
+            console.log('📄 Rendering with html2canvas...');
+            console.log('📄 Container scrollHeight:', container.scrollHeight);
+            console.log('📄 Container scrollWidth:', container.scrollWidth);
+
+            html2canvas(container, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                logging: true,
+                width: container.scrollWidth || 800,
+                height: container.scrollHeight || 1200,
+                backgroundColor: '#ffffff',
+                onclone: function(clonedDoc) {
+                    console.log('📄 html2canvas clone created');
+                }
+            }).then(function(canvas) {
+                console.log('📄 Canvas created! Size:', canvas.width, 'x', canvas.height);
+                
+                // Convert canvas to image data
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                console.log('📄 Image data length:', imgData.length);
+                
+                // Create PDF using jsPDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                const imgWidth = 210; // A4 width in mm
+                const pageHeight = 297; // A4 height in mm
+                
+                // Calculate image height to maintain aspect ratio
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                console.log('📄 PDF dimensions:', imgWidth, 'x', imgHeight, 'mm');
+                
+                let heightLeft = imgHeight;
+                let position = 0;
+                let pageCount = 0;
+
+                // Add first page
+                pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                pageCount++;
+
+                // Add more pages if needed
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                    pageCount++;
+                }
+
+                console.log('📄 PDF pages created:', pageCount);
+
+                // Save PDF
+                const filename = `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
+                pdf.save(filename);
+                
+                // Remove container
+                document.body.removeChild(container);
+                
+                console.log('✅ PDF downloaded successfully!');
+                showToast('✅ Na-download ang PDF ng iyong sanaysay!', 'success', 'PDF');
+
+            }).catch(function(error) {
+                console.error('❌ html2canvas Error:', error);
+                document.body.removeChild(container);
+                showToast('❌ May error sa pag-generate ng PDF. Subukan muli.', 'error', 'PDF Error');
+            });
+        }, 3000); // 3 seconds delay para sure
+    }
 
     // ============================================================
     // EXPORT FUNCTIONS
