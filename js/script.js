@@ -1483,7 +1483,6 @@ ${translated || 'Walang translation na ginawa.'}
                 </div>
                 <div class="history-actions">
                     <button class="view-btn" onclick="viewHistoryItem(${item.id})"><i class="fas fa-eye"></i> Tingnan</button>
-                    <button class="delete-btn" onclick="deleteHistoryItemUI(${item.id})"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         `).join('');
@@ -1746,7 +1745,6 @@ ${translated || 'Walang translation na ginawa.'}
                 </div>
                 <div class="essay-actions">
                     <button class="view-essay-btn" onclick="viewUserEssay(${index})"><i class="fas fa-eye"></i> Tingnan</button>
-                    <button class="delete-essay-btn" onclick="deleteUserEssay(${index})"><i class="fas fa-trash"></i> Burahin</button>
                 </div>
             </div>
             `;
