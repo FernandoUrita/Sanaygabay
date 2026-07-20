@@ -384,3 +384,45 @@
         justify-content: center;
     }
 }
+
+/* ============================================================ */
+/* FOOTER SOCIAL LINKS - FONT AWESOME ICONS                    */
+/* ============================================================ */
+
+.footer-social {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    color: #4B5563;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: 1px solid #e5e7eb;
+}
+
+.footer-social a:hover {
+    background: #B36722;
+    color: #ffffff;
+    border-color: #B36722;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(179, 103, 34, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-social a {
+        width: 35px;
+        height: 35px;
+        font-size: 0.95rem;
+    }
+}
