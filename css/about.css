@@ -1,5 +1,5 @@
 /* ============================================================ */
-/* ABOUT PAGE STYLES */
+/* ABOUT PAGE STYLES - SANAYSAY LEARNING SYSTEM 2026           */
 /* ============================================================ */
 
 .about-main {
@@ -162,6 +162,7 @@
     font-size: 0.95rem;
     line-height: 1.6;
     margin-bottom: 1rem;
+    font-style: italic;
 }
 
 .member-social {
@@ -315,7 +316,7 @@
 }
 
 /* ============================================================ */
-/* RESPONSIVE */
+/* RESPONSIVE - About Page                                      */
 /* ============================================================ */
 
 @media (max-width: 992px) {
@@ -346,6 +347,10 @@
     .timeline-date {
         min-width: auto;
     }
+    
+    .project-features {
+        justify-content: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -372,6 +377,10 @@
 
     .back-btn {
         width: 100%;
+        justify-content: center;
+    }
+    
+    .member-social {
         justify-content: center;
     }
 }

@@ -2249,15 +2249,246 @@ footer {
 }
 
 /* ============================================================ */
-/* ENHANCEMENTS: Essay Module, Sanggunian, Pagination, Search */
+/* ENHANCEMENTS: Sanggunian, Testimonials, Pagination, Search   */
 /* ============================================================ */
 
-/* ===== ESSAY MODULE - Enhanced ===== */
+/* ============================================================ */
+/* REFERENCES / SANGGUNIAN SECTION - HOME PAGE                  */
+/* ============================================================ */
+
+.references-section {
+    padding: 4rem 1.5rem;
+    background: var(--bg-card);
+}
+
+.references-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.references-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.reference-card {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--bg-light);
+    border-radius: var(--radius);
+    border: 1px solid var(--border-light);
+    transition: var(--transition);
+    align-items: flex-start;
+}
+
+.reference-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px var(--shadow-hover);
+    border-color: var(--primary);
+}
+
+.reference-icon {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+
+.reference-content {
+    flex: 1;
+}
+
+.reference-content h4 {
+    font-family: var(--font-serif);
+    color: var(--primary-dark);
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+
+.reference-content .reference-author {
+    font-size: 0.85rem;
+    color: var(--text-medium);
+    margin-bottom: 0.1rem;
+}
+
+.reference-content .reference-source {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.reference-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.reference-link:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* ============================================================ */
+/* TESTIMONIALS CONTROLS - Search & Sort                        */
+/* ============================================================ */
+
+.testimonials-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    align-items: center;
+}
+
+.testimonials-controls .search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+
+.testimonials-controls .search-box i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+}
+
+.testimonials-controls .search-box input {
+    width: 100%;
+    padding: 0.7rem 1rem 0.7rem 2.8rem;
+    border: 2px solid var(--border-light);
+    border-radius: 50px;
+    font-size: 0.95rem;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    transition: var(--transition);
+    font-family: var(--font);
+}
+
+.testimonials-controls .search-box input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.testimonials-controls .sort-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.testimonials-controls .sort-box label {
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    font-weight: 500;
+}
+
+.testimonials-controls .sort-box select {
+    padding: 0.6rem 1rem;
+    border: 2px solid var(--border-light);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    transition: var(--transition);
+    cursor: pointer;
+    font-family: var(--font);
+}
+
+.testimonials-controls .sort-box select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* ============================================================ */
+/* TESTIMONIALS - Enhanced Grid                                 */
+/* ============================================================ */
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ============================================================ */
+/* PAGINATION - Universal                                       */
+/* ============================================================ */
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+.pagination-container button {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.85rem;
+    font-family: var(--font);
+    min-width: 36px;
+}
+
+.pagination-container button:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.pagination-container button.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.pagination-container button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.pagination-container .page-info {
+    color: var(--text-light);
+    font-size: 0.85rem;
+    padding: 0 0.5rem;
+}
+
+.pagination-container span:not(.page-info) {
+    color: var(--text-light);
+    padding: 0 0.2rem;
+}
+
+/* ============================================================ */
+/* ESSAY MODULE - User Essays                                   */
+/* ============================================================ */
+
 .essay-module-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-top: 2rem;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .essay-module-card {
@@ -2266,19 +2497,22 @@ footer {
     padding: 1.5rem;
     border: 1px solid var(--border-light);
     transition: var(--transition);
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .essay-module-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 8px 30px var(--shadow-hover);
+    border-color: var(--primary);
 }
 
 .essay-module-card .essay-title {
     font-family: var(--font-serif);
     color: var(--primary-dark);
     font-size: 1.1rem;
-    margin-bottom: 0.3rem;
+    font-weight: 700;
 }
 
 .essay-module-card .essay-meta {
@@ -2286,8 +2520,7 @@ footer {
     color: var(--text-light);
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
+    gap: 0.8rem;
 }
 
 .essay-module-card .essay-meta span {
@@ -2304,13 +2537,25 @@ footer {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    flex: 1;
+}
+
+.essay-module-card .essay-timer {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.essay-module-card .essay-timer i {
+    color: var(--primary);
 }
 
 .essay-module-card .essay-actions {
-    margin-top: 1rem;
     display: flex;
     gap: 0.5rem;
-    flex-wrap: wrap;
+    margin-top: 0.5rem;
 }
 
 .essay-module-card .essay-actions button {
@@ -2320,6 +2565,7 @@ footer {
     font-size: 0.75rem;
     cursor: pointer;
     transition: var(--transition);
+    font-family: var(--font);
 }
 
 .essay-module-card .essay-actions .view-essay-btn {
@@ -2342,21 +2588,80 @@ footer {
     transform: translateY(-2px);
 }
 
-/* Essay Timer */
-.essay-timer {
-    font-size: 0.85rem;
-    color: var(--text-light);
+/* ============================================================ */
+/* ESSAY SEARCH & FILTER                                        */
+/* ============================================================ */
+
+.essay-search-filter {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+.essay-search-filter input,
+.essay-search-filter select {
+    padding: 0.6rem 1rem;
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    transition: var(--transition);
+    font-family: var(--font);
+    flex: 1;
+    min-width: 150px;
+}
+
+.essay-search-filter input:focus,
+.essay-search-filter select:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.essay-search-filter .filter-label {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.3rem 0;
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    font-weight: 500;
 }
 
-.essay-timer i {
-    color: var(--primary);
+/* ============================================================ */
+/* STAR FILTER                                                  */
+/* ============================================================ */
+
+.sort-stars {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    flex-wrap: wrap;
 }
 
-/* ===== SANGGUNIAN / REFERENCES ===== */
+.sort-stars .star-filter {
+    cursor: pointer;
+    font-size: 1rem;
+    color: #ddd;
+    transition: var(--transition);
+    padding: 0.1rem 0.2rem;
+    border-radius: 4px;
+    user-select: none;
+}
+
+.sort-stars .star-filter.active {
+    color: #f5b342;
+}
+
+.sort-stars .star-filter:hover {
+    transform: scale(1.15);
+}
+
+/* ============================================================ */
+/* SANGGUNIAN SECTION (Learn Page)                              */
+/* ============================================================ */
+
 .sanggunian-section {
     margin-top: 2rem;
     padding: 2rem;
@@ -2385,7 +2690,7 @@ footer {
 }
 
 .sanggunian-list li {
-    padding: 0.5rem 0;
+    padding: 0.6rem 0;
     border-bottom: 1px solid var(--border-light);
     font-size: 0.9rem;
     color: var(--text-medium);
@@ -2394,16 +2699,6 @@ footer {
 
 .sanggunian-list li:last-child {
     border-bottom: none;
-}
-
-.sanggunian-list li a {
-    color: var(--primary);
-    text-decoration: none;
-    word-break: break-all;
-}
-
-.sanggunian-list li a:hover {
-    text-decoration: underline;
 }
 
 .sanggunian-list li .ref-type {
@@ -2417,60 +2712,67 @@ footer {
     margin-right: 0.5rem;
 }
 
-/* ===== PAGINATION ===== */
-.pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    flex-wrap: wrap;
+.sanggunian-list li a {
+    color: var(--primary);
+    text-decoration: none;
+    word-break: break-all;
 }
 
-.pagination-container button {
-    padding: 0.4rem 0.8rem;
-    border: 1px solid var(--border-light);
-    border-radius: 6px;
-    background: var(--bg-card);
-    color: var(--text-dark);
-    cursor: pointer;
-    transition: var(--transition);
-    font-size: 0.85rem;
+.sanggunian-list li a:hover {
+    text-decoration: underline;
 }
 
-.pagination-container button:hover {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
+/* ============================================================ */
+/* HISTORY CONTROLS                                             */
+/* ============================================================ */
 
-.pagination-container button.active {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-
-.pagination-container button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.pagination-container .page-info {
-    color: var(--text-light);
-    font-size: 0.85rem;
-    padding: 0 0.5rem;
-}
-
-/* ===== SEARCH & FILTER ===== */
-.essay-search-filter {
+.history-controls {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    align-items: center;
 }
 
-.essay-search-filter input,
-.essay-search-filter select {
+.history-controls .history-search-box {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+
+.history-controls .history-search-box i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+}
+
+.history-controls .history-search-box input {
+    width: 100%;
+    padding: 0.6rem 1rem 0.6rem 2.8rem;
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    transition: var(--transition);
+    font-family: var(--font);
+}
+
+.history-controls .history-search-box input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.history-controls .history-filter-box {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.history-controls .history-filter-box select {
     padding: 0.6rem 1rem;
     border: 2px solid var(--border-light);
     border-radius: 8px;
@@ -2478,57 +2780,293 @@ footer {
     background: var(--bg-light);
     color: var(--text-dark);
     transition: var(--transition);
-    flex: 1;
-    min-width: 150px;
+    font-family: var(--font);
+    cursor: pointer;
 }
 
-.essay-search-filter input:focus,
-.essay-search-filter select:focus {
+.history-controls .history-filter-box select:focus {
     outline: none;
     border-color: var(--primary);
 }
 
-.essay-search-filter .filter-label {
+/* ============================================================ */
+/* HISTORY STATS                                                */
+/* ============================================================ */
+
+.history-stats {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+}
+
+.history-stats span {
     font-size: 0.9rem;
     color: var(--text-medium);
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
-/* ===== SORT BY STARS ===== */
-.sort-stars {
+.history-stats span i {
+    color: var(--primary);
+}
+
+.history-stats span strong {
+    color: var(--text-dark);
+}
+
+/* ============================================================ */
+/* HISTORY ITEMS (Enhanced)                                     */
+/* ============================================================ */
+
+.history-item {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+    padding: 1rem 1.2rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary);
+    margin-bottom: 0.8rem;
+    transition: var(--transition);
+    flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.sort-stars .star-filter {
+.history-item:hover {
+    background: var(--bg-card);
+    box-shadow: 0 2px 10px var(--shadow);
+}
+
+.history-item .history-info {
+    flex: 1;
+    min-width: 200px;
+}
+
+.history-item .history-title {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.history-item .history-meta {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.history-item .history-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.history-item .history-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.history-item .history-actions button {
+    padding: 0.3rem 0.8rem;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.75rem;
     cursor: pointer;
-    font-size: 1.2rem;
-    color: #ddd;
     transition: var(--transition);
+    font-family: var(--font);
 }
 
-.sort-stars .star-filter.active {
-    color: #f5b342;
+.history-item .history-actions .view-btn {
+    background: var(--primary);
+    color: white;
 }
 
-.sort-stars .star-filter:hover {
-    transform: scale(1.2);
+.history-item .history-actions .view-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
 }
 
-/* ===== RESPONSIVE ===== */
+.history-item .history-actions .delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.history-item .history-actions .delete-btn:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
+/* ============================================================ */
+/* HISTORY PAGINATION                                            */
+/* ============================================================ */
+
+.history-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.history-pagination button {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid var(--border-light);
+    border-radius: 6px;
+    background: var(--bg-card);
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.8rem;
+    font-family: var(--font);
+    min-width: 32px;
+}
+
+.history-pagination button:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.history-pagination button.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.history-pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.history-pagination .page-info {
+    color: var(--text-light);
+    font-size: 0.8rem;
+    padding: 0 0.5rem;
+}
+
+/* ============================================================ */
+/* HISTORY EXPORT OPTIONS                                       */
+/* ============================================================ */
+
+.history-export-options {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.history-export-options .export-btn {
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font);
+}
+
+.history-export-options .export-btn.txt {
+    background: #6c757d;
+    color: white;
+}
+
+.history-export-options .export-btn.txt:hover {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.history-export-options .export-btn.json {
+    background: #6f42c1;
+    color: white;
+}
+
+.history-export-options .export-btn.json:hover {
+    background: #5a32a3;
+    transform: translateY(-2px);
+}
+
+.history-export-options .export-btn.csv {
+    background: #28a745;
+    color: white;
+}
+
+.history-export-options .export-btn.csv:hover {
+    background: #218838;
+    transform: translateY(-2px);
+}
+
+/* ============================================================ */
+/* HISTORY MODAL - Enhanced                                     */
+/* ============================================================ */
+
+.history-meta-details {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+}
+
+.history-meta-details span {
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.history-meta-details span i {
+    color: var(--primary);
+}
+
+/* ============================================================ */
+/* RESPONSIVE - Enhancements                                    */
+/* ============================================================ */
+
 @media (max-width: 992px) {
     .essay-module-container {
         grid-template-columns: 1fr;
     }
+    
+    .references-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
 }
 
 @media (max-width: 768px) {
+    .testimonials-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .testimonials-controls .search-box {
+        min-width: auto;
+    }
+    
+    .testimonials-controls .sort-box {
+        flex-wrap: wrap;
+    }
+    
+    .testimonials-controls .sort-box select {
+        flex: 1;
+    }
+    
     .essay-search-filter {
         flex-direction: column;
+        align-items: stretch;
     }
     
     .essay-search-filter input,
@@ -2536,8 +3074,56 @@ footer {
         width: 100%;
     }
     
+    .history-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .history-controls .history-search-box {
+        min-width: auto;
+    }
+    
+    .history-controls .history-filter-box {
+        flex-direction: column;
+    }
+    
+    .history-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .history-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .history-item .history-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
     .sanggunian-section {
         padding: 1.2rem;
+    }
+    
+    .reference-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .reference-icon {
+        min-width: 60px;
+        width: 60px;
+        height: 60px;
+    }
+    
+    .references-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .sort-stars {
+        justify-content: center;
     }
     
     .pagination-container {
@@ -2547,6 +3133,7 @@ footer {
     .pagination-container button {
         padding: 0.3rem 0.6rem;
         font-size: 0.75rem;
+        min-width: 30px;
     }
 }
 
@@ -2560,7 +3147,94 @@ footer {
         gap: 0.3rem;
     }
     
+    .essay-module-card .essay-actions {
+        flex-direction: column;
+    }
+    
+    .essay-module-card .essay-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .history-item .history-meta {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+    
+    .history-item .history-actions {
+        flex-direction: column;
+    }
+    
+    .history-item .history-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .history-export-options {
+        flex-direction: column;
+    }
+    
+    .history-export-options .export-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
     .sanggunian-list li {
         font-size: 0.8rem;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================ */
+/* ESSAY TIMER DISPLAY                                           */
+/* ============================================================ */
+
+.essay-timer-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    background: var(--bg-light);
+    border-radius: 8px;
+    padding: 0.8rem 1.2rem;
+    margin-top: 0.5rem;
+    border: 1px solid var(--border-light);
+}
+
+.essay-timer-display span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.essay-timer-display i {
+    color: var(--primary);
+}
+
+.essay-timer-display strong {
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+.essay-timer-display .timer-running {
+    animation: pulseTimer 1s ease-in-out infinite;
+}
+
+@keyframes pulseTimer {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Timer responsive */
+@media (max-width: 480px) {
+    .essay-timer-display {
+        flex-direction: column;
+        gap: 0.3rem;
+        font-size: 0.85rem;
     }
 }

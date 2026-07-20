@@ -185,8 +185,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================================
 
     // ============================================================
-    // LOAD TESTIMONIALS FROM BACKEND
+    // LOAD TESTIMONIALS FROM BACKEND (Enhanced with Search, Sort)
     // ============================================================
+    let allTestimonials = [];
+    let filteredTestimonials = [];
+    let currentTestimonialPage = 1;
+    const testimonialsPerPage = 3;
+    let testimonialSearch = '';
+    let testimonialSort = 'newest';
+
     async function loadTestimonials() {
         const grid = document.getElementById('testimonialsGrid');
         if (!grid) return;
@@ -198,33 +205,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
-            const testimonials = await response.json();
-
-            if (testimonials.length === 0) {
-                grid.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-light);">
-                        <i class="fas fa-comment-slash" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
-                        <p>Wala pang mga patotoo. Maging una na mag-iwan ng iyong mensahe!</p>
-                    </div>
-                `;
-                return;
-            }
-
-            grid.innerHTML = testimonials.map(item => `
-                <div class="testimonial-card">
-                    <div class="testimonial-stars">${getStars(item.rating)}</div>
-                    <div class="testimonial-icon">
-                        <i class="fas fa-quote-left"></i>
-                    </div>
-                    <p>${escapeHtml(item.message)}</p>
-                    <div class="testimonial-author">
-                        <strong>${escapeHtml(item.name)}</strong>
-                        <span>${escapeHtml(item.role || 'Gumagamit')}</span>
-                    </div>
-                    <div class="testimonial-date">📅 ${formatDate(item.created_at)}</div>
-                </div>
-            `).join('');
-
+            allTestimonials = await response.json();
+            applyTestimonialFilters();
+            
         } catch (error) {
             console.error('Error loading testimonials:', error);
             grid.innerHTML = `
@@ -238,6 +221,144 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }
     }
+
+    function applyTestimonialFilters() {
+        let filtered = [...allTestimonials];
+        
+        // Search filter
+        if (testimonialSearch.trim()) {
+            const search = testimonialSearch.toLowerCase().trim();
+            filtered = filtered.filter(item => 
+                item.name.toLowerCase().includes(search) ||
+                item.message.toLowerCase().includes(search) ||
+                (item.role && item.role.toLowerCase().includes(search))
+            );
+        }
+        
+        // Sort
+        switch(testimonialSort) {
+            case 'newest':
+                filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+                break;
+            case 'oldest':
+                filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+                break;
+            case 'rating-high':
+                filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                break;
+            case 'rating-low':
+                filtered.sort((a, b) => (a.rating || 0) - (b.rating || 0));
+                break;
+            case 'alphabetical':
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+        }
+        
+        filteredTestimonials = filtered;
+        currentTestimonialPage = 1;
+        renderTestimonials();
+    }
+
+    // Render testimonials with pagination
+    function renderTestimonials() {
+        const grid = document.getElementById('testimonialsGrid');
+        if (!grid) return;
+
+        const totalPages = Math.ceil(filteredTestimonials.length / testimonialsPerPage);
+        const start = (currentTestimonialPage - 1) * testimonialsPerPage;
+        const end = start + testimonialsPerPage;
+        const pageTestimonials = filteredTestimonials.slice(start, end);
+
+        if (filteredTestimonials.length === 0) {
+            grid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-light);">
+                    <i class="fas fa-comment-slash" style="font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+                    <p>${allTestimonials.length === 0 ? 'Wala pang mga patotoo. Maging una na mag-iwan ng iyong mensahe!' : 'Walang nakitang patotoo. Subukan ang ibang search term.'}</p>
+                </div>
+            `;
+        } else {
+            grid.innerHTML = pageTestimonials.map(item => `
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">${getStars(item.rating)}</div>
+                    <div class="testimonial-icon">
+                        <i class="fas fa-quote-left"></i>
+                    </div>
+                    <p>${escapeHtml(item.message)}</p>
+                    <div class="testimonial-author">
+                        <strong>${escapeHtml(item.name)}</strong>
+                        <span>${escapeHtml(item.role || 'Gumagamit')}</span>
+                    </div>
+                    <div class="testimonial-date">📅 ${formatDate(item.created_at)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Render pagination
+        renderTestimonialPagination(totalPages);
+    }
+
+    function renderTestimonialPagination(totalPages) {
+        const container = document.getElementById('testimonialPagination');
+        if (!container) return;
+
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+
+        let html = `
+            <button onclick="changeTestimonialPage(${currentTestimonialPage - 1})" ${currentTestimonialPage <= 1 ? 'disabled' : ''}>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        `;
+
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || Math.abs(i - currentTestimonialPage) <= 2) {
+                html += `<button onclick="changeTestimonialPage(${i})" class="${i === currentTestimonialPage ? 'active' : ''}">${i}</button>`;
+            } else if (i === currentTestimonialPage - 3 || i === currentTestimonialPage + 3) {
+                html += `<span>...</span>`;
+            }
+        }
+
+        html += `
+            <button onclick="changeTestimonialPage(${currentTestimonialPage + 1})" ${currentTestimonialPage >= totalPages ? 'disabled' : ''}>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <span class="page-info">Pahina ${currentTestimonialPage} ng ${totalPages}</span>
+        `;
+
+        container.innerHTML = html;
+    }
+
+    function changeTestimonialPage(page) {
+        const totalPages = Math.ceil(filteredTestimonials.length / testimonialsPerPage);
+        if (page < 1 || page > totalPages) return;
+        currentTestimonialPage = page;
+        renderTestimonials();
+        document.getElementById('testimonials').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ============================================================
+    // TESTIMONIAL SEARCH & SORT EVENT LISTENERS
+    // ============================================================
+    const testimonialSearchInput = document.getElementById('testimonialSearch');
+    if (testimonialSearchInput) {
+        testimonialSearchInput.addEventListener('input', function() {
+            testimonialSearch = this.value;
+            applyTestimonialFilters();
+        });
+    }
+
+    const testimonialSortSelect = document.getElementById('testimonialSort');
+    if (testimonialSortSelect) {
+        testimonialSortSelect.addEventListener('change', function() {
+            testimonialSort = this.value;
+            applyTestimonialFilters();
+        });
+    }
+
+    // Make functions globally accessible for HTML onclick
+    window.changeTestimonialPage = changeTestimonialPage;
 
     // ============================================================
     // SAVE TESTIMONIAL TO BACKEND
@@ -364,7 +485,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const message = document.getElementById('testimonialMessage').value.trim();
             const rating = parseInt(ratingInput.value) || 0;
 
-            // Validation
             if (!name || !role || !message) {
                 showToast('Mangyaring kumpletuhin ang lahat ng field.', 'warning', 'Kinakailangan');
                 return;
@@ -375,14 +495,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Show loading state
             const submitBtn = document.getElementById('submitTestimonialBtn');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ipinapasa...';
             submitBtn.disabled = true;
 
             try {
-                // Save to backend
                 await saveTestimonial({
                     name: name,
                     role: role,
@@ -390,7 +508,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     rating: rating
                 });
 
-                // Show success message
                 const successDiv = document.querySelector('.testimonial-success');
                 if (successDiv) {
                     successDiv.classList.add('show');
@@ -399,14 +516,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 5000);
                 }
 
-                // Reset form
                 testimonialForm.reset();
                 selectedRating = 0;
                 ratingInput.value = 0;
                 updateStars(0);
                 updateRatingLabel(0);
 
-                // Reload testimonials
                 await loadTestimonials();
 
                 showToast('Salamat sa iyong patotoo!', 'success', 'Na-save');
@@ -498,5 +613,5 @@ document.addEventListener('DOMContentLoaded', function() {
     loadTestimonials();
 
     console.log('🏠 Home page loaded successfully!');
-    console.log('📝 Testimonials system connected to Supabase!');
+    console.log('📝 Testimonials system connected to Supabase with Search, Sort & Pagination!');
 });

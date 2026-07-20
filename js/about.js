@@ -47,6 +47,13 @@ document.addEventListener('DOMContentLoaded', function() {
             removeToast(toast);
         });
         
+        toast.addEventListener('click', function(e) {
+            if (e.target === this || e.target.closest('.toast-content')) {
+                clearTimeout(timeout);
+                removeToast(this);
+            }
+        });
+        
         return toast;
     }
 

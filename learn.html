@@ -10,8 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/assets/logo.png" />
-    <link rel="shortcut icon" href="/logo.png" />
+    <link rel="icon" type="image/png" href="assets/logo.png" />
+    <link rel="shortcut icon" href="assets/logo.png" />
+    <link rel="apple-touch-icon" href="assets/logo.png" />
 
     <!-- PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -66,7 +67,6 @@
     </section>
 
     <!-- Learning Navigation -->
-    <!-- Learning Navigation - Updated -->
     <nav class="learn-nav">
         <ul>
             <li><a href="#" class="active" data-section="intro"><i class="fas fa-home"></i> Panimula</a></li>
@@ -646,6 +646,13 @@
                     <div class="essay-input-area">
                         <label for="essayInput"><strong>✍️ Isulat ang Iyong Sanaysay:</strong></label>
                         <textarea id="essayInput" rows="10" placeholder="Isulat ang iyong sanaysay dito..."></textarea>
+                        
+                        <!-- ⏱️ Timer Display -->
+                        <div class="essay-timer-display" id="essayTimerDisplay">
+                            <span><i class="fas fa-clock"></i> Oras ng Paggawa: <strong id="essayTimer">00:00</strong></span>
+                            <span style="margin-left: 1rem;"><i class="fas fa-hourglass-half"></i> Oras ng Pagbasa: <strong id="readTimeDisplay">0</strong> min</span>
+                        </div>
+                        
                         <div class="essay-actions">
                             <button id="analyzeEssayBtn" class="primary-btn"><i class="fas fa-robot"></i> Suriin ang Sanaysay</button>
                             <button id="clearEssayBtn" class="secondary-btn"><i class="fas fa-trash"></i> Burahin</button>
@@ -865,6 +872,7 @@
                     <p><strong>📧 Email:</strong> <span id="successEmail"></span></p>
                     <p><strong>📝 Pamagat:</strong> <span id="successTitle"></span></p>
                     <p><strong>📅 Petsa:</strong> <span id="successDate"></span></p>
+                    <p><strong>⏱️ Oras ng Paggawa:</strong> <span id="successTimer">00:00</span></p>
                 </div>
                 
                 <div class="success-actions">
@@ -923,10 +931,10 @@
             <div class="modal-body">
                 <p><strong>Pamagat:</strong> Disiplina: Tulay para wakasan ang Kahirapan</p>
                 <div class="modal-content">
-                    <p><em>&emsp;Ang kahirapan ang isa sa mga mabibigat na problema ng ating bansa. Minsan sinisisi natin ito sa gobyerno dahil sa pamamalakad ng ilan. Kung tutuusin sino nga ba ang dapat sisihin kung bakit tayo naghihirap? Sa panahon ngayon habang lumalala ang sitwasyon ng mga Pilipino, ano nga ba ang dapat nating gawin? Tayo nga ba ang may kasalanan kung bakit hindi tayo umaahon sa hirap? Sabi nila "Katamaran ay katumbas ng Kahirapan", tama nga naman pero kailangan din nating kwestiyonin ang mga pamamalakad ng ilang pinuno kung saan napunta ang mga perang binigay ng mamamayan.</em></p>
+                    <p><em>Ang kahirapan ang isa sa mga mabibigat na problema ng ating bansa. Minsan sinisisi natin ito sa gobyerno dahil sa pamamalakad ng ilan. Kung tutuusin sino nga ba ang dapat sisihin kung bakit tayo naghihirap? Sa panahon ngayon habang lumalala ang sitwasyon ng mga Pilipino, ano nga ba ang dapat nating gawin? Tayo nga ba ang may kasalanan kung bakit hindi tayo umaahon sa hirap? Sabi nila "Katamaran ay katumbas ng Kahirapan", tama nga naman pero kailangan din nating kwestiyonin ang mga pamamalakad ng ilang pinuno kung saan napunta ang mga perang binigay ng mamamayan.</em></p>
                     <p><em>Ang rason kung bakit patuloy tayong naghihirap ay wala tayong pagtutulungan. Tama di ba? Ikumpara natin sa Japan kung may sakuna o naghihirap ang iilan sa kanila ay anong ginagawa nila? Tulong tulong silang sosolusyonan ang naturang problema ng bansa nila.</em></p>
                     <p><em>Kahit dumating ang mga bagyo at tsunami, nasisira ang mga pagkakakitaan nila ngunit mabilis silang nakakaraos bakit? Dahil may pagtutulungan sila na masasabi kong tayo ay may kakulangan doon. Isa pang rason ay digmaan bakit? Imbes na idaan sa malinis na usapan, idinadaan sa bala ang usapan. Uunlad ba tayo niyan? Mas lalo lang nating pinahihirapan ang sarili nating lutasin ang problema.</em></p>
-                    <p><em>&emsp;Kung nakaangat man ang iba, huwag nating ibababa. Nakaangat sila dahil nagsumikap silang makaahon sa hirap. Kung gusto nating makaangat, tulungan din natin ang sarili upang masolusyonan ang kahirapan. Kung gusto nating mawakasan ang kahirapan, turuan natin ang sarili nating kung paano maging disiplinadong mamamayan. Kung mayroon ka ng disiplina, tumulong ka na sa komunidad upang makagawa tayo ng mas maunlad at mabuting bansa.</em></p>
+                    <p><em>Kung nakaangat man ang iba, huwag nating ibababa. Nakaangat sila dahil nagsumikap silang makaahon sa hirap. Kung gusto nating makaangat, tulungan din natin ang sarili upang masolusyonan ang kahirapan. Kung gusto nating mawakasan ang kahirapan, turuan natin ang sarili nating kung paano maging disiplinadong mamamayan. Kung mayroon ka ng disiplina, tumulong ka na sa komunidad upang makagawa tayo ng mas maunlad at mabuting bansa.</em></p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -945,7 +953,7 @@
                 <p><strong>Pamagat:</strong> Pamilya ang aking kayamanan</p>
                 <p><strong>Akda ni:</strong> Maricel Viloria</p>
                 <div class="modal-content">
-                    <p><em>&emsp;Isa sa mga pinakamagandang regalo na natanggap ko ay ang buhay na pinagkaloob sa akin ng Panginoon. Ang pagmamahal niya sa kanyang mga anak ay totoo at walang katapusan. Masaya tayong nakikipagkwentuhan sa mga taong malapit sa atin at araw-araw nating ipinapadama sa kanila ang ating pagmamahal at atensyon. Wala na akong hihilingin pang iba kundi ang magkaroon ng payapang buhay na kasama ang mga mahal ko sa buhay.</em></p>
+                    <p><em>Isa sa mga pinakamagandang regalo na natanggap ko ay ang buhay na pinagkaloob sa akin ng Panginoon. Ang pagmamahal niya sa kanyang mga anak ay totoo at walang katapusan. Masaya tayong nakikipagkwentuhan sa mga taong malapit sa atin at araw-araw nating ipinapadama sa kanila ang ating pagmamahal at atensyon. Wala na akong hihilingin pang iba kundi ang magkaroon ng payapang buhay na kasama ang mga mahal ko sa buhay.</em></p>
                     <p><em>Ako si Maricel Viloria, 3rd year student at naniniwala ako sa kasabihang "Ang aking pamilya ang aking lakas at kahinaan." Sa loob ng 21 taon na aking pananatili sa mundong ito, pinadama sa akin ng tatay na sobra niya akong minahal at pati na rin ang mga kapatid ko. Kahit wala kaming nanay na nag-aalaga sa amin, pero kahit ganoon pinaramdam sa aking tatay at mga kuya ko na hindi ako nag-iisa.</em></p>
                     <p><em>Ang pamilya ko ang nagsisilbing lakas ko para harapin ang mga pagsubok sa buhay, kahit hindi man ganoon kayaman ang aking pamilya, mayaman naman sa pagmamahal. Ang aking aral na napulot ay, maging kontento kung ano ang meron ka. At imbes na maghanap ng kulang mo, ituon mo ang atensyon mo sa mga bagay na meron ka. Dahil hangga't hinahanap mo ang kulang sa'yo, lalo kang magiging malungkot.</em></p>
                 </div>
@@ -965,9 +973,9 @@
             <div class="modal-body">
                 <p><strong>Pamagat:</strong> Kahirapan sa Pilipinas</p>
                 <div class="modal-content">
-                    <p><em>&emsp;Ito ang isa sa mga problema ng ating bansa na hanggang ngayon ay hindi parin masolusyonan, at lubos na dapat bigyan pansin ang ganitong problema at hanapin ang mga salik kung bakit ganito ang sitwasyon ng Pilipinas. Isa na sa mga kontribyutor ng kahirapan ay ang mismong gobyerno natin dahil kung hindi man corrupt ay walang planong resolbahan ang ganitong problema dahil halos kalahati ng populasyon ng Pilipinas ay mahihirap at nasa 11 million na pamilya ang kabilang sa kahirapan.</em></p>
-                    <p><em>&emsp;Ang kahirapan na ating nararanasan ay nagdudulot ng masamang epekto sa atin lalong-lalo na sa mga kabataan. Ang iba sa kanila'y hindi na nakapag-aaral sapagkat wala na silang pera pangmatrikula. Ang iba naman ay nagtatrabaho na kahit bata pa lamang sila. Nagiging kawawa ang mga ito dahil imbis na sa eskwelahan at papel at ballpen ang hawak, sampaguita at sa lansangan sila.</em></p>
-                    <p><em>&emsp;Ang tanging solusyon nalang ng ating bansa para dito ay nagsisimula sa kabataan, dapat iimprove ang sistema ng edukasyon ng ating bansa at karamihan sa mga mahihirap ay di nakapagtapos ng pag-aaral. Napakalaking bagay ng edukasyon para umasenso ang bansa kaya dapat bigyan pansin ito ng ating gobyerno at hanggat sa maaari ay mabawasan ang poverty sa Pilipinas.</em></p>
+                    <p><em>Ito ang isa sa mga problema ng ating bansa na hanggang ngayon ay hindi parin masolusyonan, at lubos na dapat bigyan pansin ang ganitong problema at hanapin ang mga salik kung bakit ganito ang sitwasyon ng Pilipinas. Isa na sa mga kontribyutor ng kahirapan ay ang mismong gobyerno natin dahil kung hindi man corrupt ay walang planong resolbahan ang ganitong problema dahil halos kalahati ng populasyon ng Pilipinas ay mahihirap at nasa 11 million na pamilya ang kabilang sa kahirapan.</em></p>
+                    <p><em>Ang kahirapan na ating nararanasan ay nagdudulot ng masamang epekto sa atin lalong-lalo na sa mga kabataan. Ang iba sa kanila'y hindi na nakapag-aaral sapagkat wala na silang pera pangmatrikula. Ang iba naman ay nagtatrabaho na kahit bata pa lamang sila. Nagiging kawawa ang mga ito dahil imbis na sa eskwelahan at papel at ballpen ang hawak, sampaguita at sa lansangan sila.</em></p>
+                    <p><em>Ang tanging solusyon nalang ng ating bansa para dito ay nagsisimula sa kabataan, dapat iimprove ang sistema ng edukasyon ng ating bansa at karamihan sa mga mahihirap ay di nakapagtapos ng pag-aaral. Napakalaking bagay ng edukasyon para umasenso ang bansa kaya dapat bigyan pansin ito ng ating gobyerno at hanggat sa maaari ay mabawasan ang poverty sa Pilipinas.</em></p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -986,10 +994,10 @@
                 <p><strong>Pamagat:</strong> Ang Karanasang Di Ko Makakalimutan</p>
                 <p><strong>Ni:</strong> Jheru Anselmo Mendoza</p>
                 <div class="modal-content">
-                    <p><em>&emsp;Lahat tayo ay may karanasang 'di malilimutan - karanasan sa pag-ibig, sa pakikipagkaibigan, at sa pamilya. Kailan nga ba tayo unang umibig? Kailan ba tayo unang nasaktan? Aling alaala ang lubos na nagdulot sa atin ng sakit? Kailan ba tayo naging masaya? Naaalala mo pa ba? Sa dami ng mga bagay na aking naranasan, kulang pa yata ang isang libro para maikuwento ko ng buo ang simpleng buhay ko.</em></p>
-                    <p><em>&emsp;Ang aking pamilya ay malaki, pero simple lang ang aming pamumuhay. Lagi kaming magkakasama noon. Nagtatawanan at nagkukulitan kahit may problemang nararanasan, kinakaya namin anumang unos ang dumating dahil lagi kaming magkakasama. Sabi pa ng aking mahal na ina noon. "Ayos lang daw maghirap kami at magdildil ng asin, basta kompleto at magkakasama kaming lahat.</em></p>
-                    <p><em>&emsp;Lumipas ang ilang taon, na palaging masaya ang aking pamilya. Ngunit ang 'di namin nalalaman ay isang malaking problema ang parating sa aming buhay na ganap na susubok sa aming katatagan. Sampung taong gulang pa lamang ako noon at nasa ikaanim na baitang nang malaman ng doktor na may kanser sa atay ang aking ama.</em></p>
-                    <p><em>&emsp;Ilang buwan na ang lumipas pero hindi namin siya maipagamot dahil sa kakulangan sa pera. Lumala nang lumala ang sakit niya, bumagsak ang dating masigla niyang katawan, at nangayayat siya nang husto. Ikatatlumpu ng Hunyo 2004 noon, ito ang araw ng kanyang pagsilang. Nagluto ang aking ina. Kaunti lang ang handa at kami lang ang nagdiwang ng kaarawan niya. Tatlong araw ang lumipas, iniwan na niya kami. Wala na siya. Namatay na ang aking ama.</em></p>
+                    <p><em>Lahat tayo ay may karanasang 'di malilimutan - karanasan sa pag-ibig, sa pakikipagkaibigan, at sa pamilya. Kailan nga ba tayo unang umibig? Kailan ba tayo unang nasaktan? Aling alaala ang lubos na nagdulot sa atin ng sakit? Kailan ba tayo naging masaya? Naaalala mo pa ba? Sa dami ng mga bagay na aking naranasan, kulang pa yata ang isang libro para maikuwento ko ng buo ang simpleng buhay ko.</em></p>
+                    <p><em>Ang aking pamilya ay malaki, pero simple lang ang aming pamumuhay. Lagi kaming magkakasama noon. Nagtatawanan at nagkukulitan kahit may problemang nararanasan, kinakaya namin anumang unos ang dumating dahil lagi kaming magkakasama. Sabi pa ng aking mahal na ina noon. "Ayos lang daw maghirap kami at magdildil ng asin, basta kompleto at magkakasama kaming lahat.</em></p>
+                    <p><em>Lumipas ang ilang taon, na palaging masaya ang aking pamilya. Ngunit ang 'di namin nalalaman ay isang malaking problema ang parating sa aming buhay na ganap na susubok sa aming katatagan. Sampung taong gulang pa lamang ako noon at nasa ikaanim na baitang nang malaman ng doktor na may kanser sa atay ang aking ama.</em></p>
+                    <p><em>Ilang buwan na ang lumipas pero hindi namin siya maipagamot dahil sa kakulangan sa pera. Lumala nang lumala ang sakit niya, bumagsak ang dating masigla niyang katawan, at nangayayat siya nang husto. Ikatatlumpu ng Hunyo 2004 noon, ito ang araw ng kanyang pagsilang. Nagluto ang aking ina. Kaunti lang ang handa at kami lang ang nagdiwang ng kaarawan niya. Tatlong araw ang lumipas, iniwan na niya kami. Wala na siya. Namatay na ang aking ama.</em></p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1007,9 +1015,9 @@
             <div class="modal-body">
                 <p><strong>Pamagat:</strong> PAANO KITA MAHIHIKAYAT</p>
                 <div class="modal-content">
-                    <p><em>&emsp;Nagkaroon ka na ba ng karanasan kung saan hinikayat mo ang iyong mga kaibigan kung saang restawran mas mabuting kumain? Naranasan mo na rin bang kumbinsihin ang mga magulang mo na payagan kang sumama sa isang byahe kasama ang mga kabarkada? O kaya ay nagwagi ka na ba sa isang diskusyon sa grupo kung anong paksa ang gagamitin ninyo sa isang presentasyon? Ang mga pamamaraang ginagamit mo bilang panghihikayat sa mga impormal na kumbersasyon tulad ng mga nabanggit ay maaaring maging batayan din sa pagbuo ng tekstong persuweysib.</em></p>
-                    <p><em>&emsp;Ang tekstong persuweysib ay isang uri ng di-piksiyon na pagsulat upang kumbinsihin ang mga mambabasa na sumang-ayon sa manunulat hinggil sa isang isyu. Ang manunulat ay naglalahad ng iba't ibang impormasyon at katotohanan upang suportahan ang isang opinyon gamit ang argumentatibong estilo ng pagsulat. Sa pagsulat ng tekstong ito, hindi dapat magpahayag ng mga personal at walang batayang opinyon ang isang manunulat.</em></p>
-                    <p><em>&emsp;Sa ilang pagkakataon, inilalahad ng manunulat ang mga impormasyon sa dalawang panig ng argumento. Ginagawa ito upang bigyan ng pagkakataon ang mga mambabasa na pag-isipan ang dalawang panig, at upang agad na masagot ng manunulat ang mga posibleng argumento na lilitaw sa isip ng mambabasa habang inuunawa ang teksto.</em></p>
+                    <p><em>Nagkaroon ka na ba ng karanasan kung saan hinikayat mo ang iyong mga kaibigan kung saang restawran mas mabuting kumain? Naranasan mo na rin bang kumbinsihin ang mga magulang mo na payagan kang sumama sa isang byahe kasama ang mga kabarkada? O kaya ay nagwagi ka na ba sa isang diskusyon sa grupo kung anong paksa ang gagamitin ninyo sa isang presentasyon? Ang mga pamamaraang ginagamit mo bilang panghihikayat sa mga impormal na kumbersasyon tulad ng mga nabanggit ay maaaring maging batayan din sa pagbuo ng tekstong persuweysib.</em></p>
+                    <p><em>Ang tekstong persuweysib ay isang uri ng di-piksiyon na pagsulat upang kumbinsihin ang mga mambabasa na sumang-ayon sa manunulat hinggil sa isang isyu. Ang manunulat ay naglalahad ng iba't ibang impormasyon at katotohanan upang suportahan ang isang opinyon gamit ang argumentatibong estilo ng pagsulat. Sa pagsulat ng tekstong ito, hindi dapat magpahayag ng mga personal at walang batayang opinyon ang isang manunulat.</em></p>
+                    <p><em>Sa ilang pagkakataon, inilalahad ng manunulat ang mga impormasyon sa dalawang panig ng argumento. Ginagawa ito upang bigyan ng pagkakataon ang mga mambabasa na pag-isipan ang dalawang panig, at upang agad na masagot ng manunulat ang mga posibleng argumento na lilitaw sa isip ng mambabasa habang inuunawa ang teksto.</em></p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1027,9 +1035,9 @@
             <div class="modal-body">
                 <p><strong>Pamagat:</strong> Guro Noon sa Guro Ngayon</p>
                 <div class="modal-content">
-                    <p><em>&emsp;Noong pagsisimula ko pa lamang ng pagtuturo ay naipadala ako sa bundok at doon ko ginugol ang unang dalawang taon ng aking pagtuturo. Hindi naging madali ang pagharap sa pagsubok dahil una mahirap ang daan papunta dito. Malayo sa aking pamilya dahil kailangan kong tumigil sa lugar na iyon ng ilang araw at saka uuwi sa aking pamilya tuwing Biyernes ng hapon.</em></p>
+                    <p><em>Noong pagsisimula ko pa lamang ng pagtuturo ay naipadala ako sa bundok at doon ko ginugol ang unang dalawang taon ng aking pagtuturo. Hindi naging madali ang pagharap sa pagsubok dahil una mahirap ang daan papunta dito. Malayo sa aking pamilya dahil kailangan kong tumigil sa lugar na iyon ng ilang araw at saka uuwi sa aking pamilya tuwing Biyernes ng hapon.</em></p>
                     <p><em>Marami akong hawak na asignaturang ituturo dahil iilan lang naman kaming guro sa paaralan, nabibilang lang sa anim kasama ang aming punong-guro. Mahirap ngunit masaya ang karanasan na ito dahil masayahin ang mga gurong aking nakasama. Hindi sila reklamador sa kabila ng maraming hirap na aming hinaharap.</em></p>
-                    <p><em>&emsp;Pagkalipas ng dalawang taon ako ay nalipat na sa mas malapit sa amin. Masasabi kong nakatulong ang aking naging karanasan sa bundok para makisama sa mga bagong katrabaho. Tinanggap ang mga trabahong iniatas sa amin dahil kulang din naman kami sa bilang ng guro. Anuman ang trabahong ibinigay ay aming tinatanggap dahil kasama ito sa aming sinumpaang tungkulin.</em></p>
+                    <p><em>Pagkalipas ng dalawang taon ako ay nalipat na sa mas malapit sa amin. Masasabi kong nakatulong ang aking naging karanasan sa bundok para makisama sa mga bagong katrabaho. Tinanggap ang mga trabahong iniatas sa amin dahil kulang din naman kami sa bilang ng guro. Anuman ang trabahong ibinigay ay aming tinatanggap dahil kasama ito sa aming sinumpaang tungkulin.</em></p>
                     <p><em>Nang lumaki na ang aming paaralan ay lumaki din ang bilang ng mga guro. Mas gumaan na ang trabaho dahil marami na kayong kabahagi sa paggawa. Ngunit sa paglipas ng panahon iba na rin ang mga batang gurong dumarating sa paaralan. Nagrereklamo sa mga trabahong iniaatas sa kanila. Sinasabing porke sila ay bata sila ay sinasamantala.</em></p>
                 </div>
             </div>
@@ -1048,10 +1056,10 @@
             <div class="modal-body">
                 <p><strong>Pamagat:</strong> Ban the Plastic Bag</p>
                 <div class="modal-content">
-                    <p><em>&emsp;Ano na nga ba ang kalagayan ng ating kapaligiran ngayong napaka dami na ng mga hindi nabubulok na basura? Ang Pilipinas ay isa sa pinakamabilis na lumalagong gumagamit ng mga plastic bag sa mundo. Ang ilang mga tao ay gusto ang ideya ng pagbabawal ng mga plastic bag at ipinaglalaban ang kanilang pagpapakilala, habang ang iba ay nagsisikap na hamunin ang mga pagbabawal na ito. Plastic nga na kaibigan ayoko eh plastic na basura pa kaya!</em></p>
+                    <p><em>Ano na nga ba ang kalagayan ng ating kapaligiran ngayong napaka dami na ng mga hindi nabubulok na basura? Ang Pilipinas ay isa sa pinakamabilis na lumalagong gumagamit ng mga plastic bag sa mundo. Ang ilang mga tao ay gusto ang ideya ng pagbabawal ng mga plastic bag at ipinaglalaban ang kanilang pagpapakilala, habang ang iba ay nagsisikap na hamunin ang mga pagbabawal na ito. Plastic nga na kaibigan ayoko eh plastic na basura pa kaya!</em></p>
                     <p><em>Nararapat lang na tanggalin o ipagbawal ang paggamit ng plastic bag dahil sa masamang epekto nito sa ating kalikasan at kalusugan. Maraming masamang dulot ang mga plastic na basura, nakakasama ito sa kalikasan at ating kalusugan. Bukod sa problema ito sa ating kalikasan at kalusugan nagiging masama din ito sa mga hayop na napagkakamalang pagkain ang plastic.</em></p>
-                    <p><em>&emsp;Madali lang naman ang pagrerecycle ng mga plastic ngunit di ko maintindihan kung bakit marami pa din sa mga tao ang hindi gumagawa nito. Hindi na din epektibo ang pagrerecycle nito kaya mas nakabubuti nalang kung ipagbabawal ito. Napaka daming magandang epekto kung ipagbabawal ang paggamit ng plastic.</em></p>
-                    <p><em>&emsp;Bilang pagtatapos mas maganda talaga kung tatanggalin ang paggamit ng mga plastic bags. Maari naman gumamit ng reusable eco-bags na makakatulong pa sa pagbabawas ng polusyon sa ating kalikasan. Ang problema ay ang mga disposable plastic bag ay bihirang itapon nang responsable. Dapat ay alagaan natin ang mother earth ito lang ang ating tirahan kinakailangan natin itong panatilihing buhay.</em></p>
+                    <p><em>Madali lang naman ang pagrerecycle ng mga plastic ngunit di ko maintindihan kung bakit marami pa din sa mga tao ang hindi gumagawa nito. Hindi na din epektibo ang pagrerecycle nito kaya mas nakabubuti nalang kung ipagbabawal ito. Napaka daming magandang epekto kung ipagbabawal ang paggamit ng plastic.</em></p>
+                    <p><em>Bilang pagtatapos mas maganda talaga kung tatanggalin ang paggamit ng mga plastic bags. Maari naman gumamit ng reusable eco-bags na makakatulong pa sa pagbabawas ng polusyon sa ating kalikasan. Ang problema ay ang mga disposable plastic bag ay bihirang itapon nang responsable. Dapat ay alagaan natin ang mother earth ito lang ang ating tirahan kinakailangan natin itong panatilihing buhay.</em></p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1069,9 +1077,9 @@
             <div class="modal-body">
                 <p><strong>Pamagat:</strong> Adobong Manok sa Gata at Piña</p>
                 <div class="modal-content">
-                    <p><em>&emsp;Ang Adobong Manok sa Gata at Piña ay isang makabagong bersyon ng tradisyonal na adobong manok. Pinagsasama nito ang maalat at malinamnam na lasa ng adobo sa creamy na gata at matamis na piña, kaya nagkakaroon ng kakaibang timpla na tiyak na magugustuhan ng maraming Pilipino.</em></p>
+                    <p><em>Ang Adobong Manok sa Gata at Piña ay isang makabagong bersyon ng tradisyonal na adobong manok. Pinagsasama nito ang maalat at malinamnam na lasa ng adobo sa creamy na gata at matamis na piña, kaya nagkakaroon ng kakaibang timpla na tiyak na magugustuhan ng maraming Pilipino.</em></p>
                     <p><em>Sa pagluluto nito, ihanda ang mga sumusunod na sangkap: tatlong kutsara ng mantika, isang kilo ng hita ng manok, tatlong katamtamang laki ng patatas na hiniwa sa maliliit na cubes, 1/3 tasa ng toyo, 1/4 tasa ng suka, 1/2 kutsarang durog na paminta, dalawang piraso ng dahon ng laurel, isang tasa ng tubig, 400 gramo ng gata, 1/2 tasa ng gisantes, 227 gramo ng pineapple chunks, isang sibuyas, at tatlong butil ng bawang.</em></p>
-                    <p><em>&emsp;Bago magsimula, tiyaking malinis ang mga kamay at maayos na nakatali ang buhok o nakasuot ng hair net. Initin ang mantika sa isang malaking kawali at igisa ang bawang at sibuyas hanggang maging mabango at bahagyang caramelized. Idagdag ang manok at patatas at lutuin hanggang maging kulay brown.</em></p>
+                    <p><em>Bago magsimula, tiyaking malinis ang mga kamay at maayos na nakatali ang buhok o nakasuot ng hair net. Initin ang mantika sa isang malaking kawali at igisa ang bawang at sibuyas hanggang maging mabango at bahagyang caramelized. Idagdag ang manok at patatas at lutuin hanggang maging kulay brown.</em></p>
                     <p><em>Isunod ang toyo, suka, piña, paminta, at dahon ng laurel. Ibuhos ang tubig hanggang matakpan ang manok at patatas, saka takpan ang kawali at hayaang kumulo. Pakuluan nang humigit-kumulang dalawampung minuto o hanggang maluto ang manok at patatas. Pagkatapos, alisin ang takip, idagdag ang gata, at haluin hanggang maging mamantika ito. Ilagay ang gisantes at pakuluan pa nang pitong minuto. Kapag lumapot na ang sarsa at nanuot na ang lasa sa manok, maaari na itong ihain habang mainit kasama ng bagong saing na kanin.</em></p>
                 </div>
             </div>
