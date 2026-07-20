@@ -226,7 +226,9 @@
         </div>
     </section>
 
-    <!-- ===== TESTIMONIALS SECTION - WITH FEEDBACK SYSTEM ===== -->
+    <!-- ============================================================ -->
+    <!-- TESTIMONIALS SECTION - ENHANCED WITH PAGINATION, SEARCH, SORT -->
+    <!-- ============================================================ -->
     <section id="testimonials" class="testimonials">
         <div class="testimonials-container">
             <div class="section-header">
@@ -234,12 +236,32 @@
                 <p>Narito ang mga mensahe mula sa mga gumamit ng Talagabay.</p>
             </div>
             
+            <!-- Testimonials Controls -->
+            <div class="testimonials-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="testimonialSearch" placeholder="Maghanap ng patotoo..." />
+                </div>
+                <div class="sort-box">
+                    <label><i class="fas fa-sort"></i> Ayusin:</label>
+                    <select id="testimonialSort">
+                        <option value="newest">Pinakabago</option>
+                        <option value="oldest">Pinakaluma</option>
+                        <option value="rating-high">Pinakamataas na Rating</option>
+                        <option value="rating-low">Pinakamababang Rating</option>
+                        <option value="alphabetical">A-Z</option>
+                    </select>
+                </div>
+            </div>
+            
             <!-- Testimonials Grid -->
             <div class="testimonials-grid" id="testimonialsGrid">
-                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
-                    <div class="loading-spinner"></div>
-                    <p style="color: var(--text-light); margin-top: 1rem;">Naglo-load ng mga patotoo...</p>
-                </div>
+                <!-- Rendered by JavaScript -->
+            </div>
+            
+            <!-- Pagination -->
+            <div class="testimonials-pagination" id="testimonialsPagination">
+                <!-- Rendered by JavaScript -->
             </div>
 
             <!-- Add Testimonial Form -->
@@ -247,7 +269,6 @@
                 <h3><i class="fas fa-pen-fancy"></i> Mag-iwan ng Patotoo</h3>
                 <p>Ibahagi ang iyong karanasan sa paggamit ng Talagabay.</p>
                 
-                <!-- Success Message -->
                 <div class="testimonial-success" id="testimonialSuccess">
                     <i class="fas fa-check-circle"></i>
                     <h4>Matagumpay na Naipasa!</h4>
@@ -285,6 +306,170 @@
                         <i class="fas fa-paper-plane"></i> I-submit ang Patotoo
                     </button>
                 </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SANGGUNIAN / REFERENCES SECTION -->
+    <!-- ============================================================ -->
+    <section id="references" class="references-section">
+        <div class="references-container">
+            <div class="section-header">
+                <h2><i class="fas fa-book" style="color: var(--primary);"></i> Sanggunian</h2>
+                <p>Mga pinagkunan ng impormasyon at sanggunian sa pagbuo ng Talagabay.</p>
+            </div>
+            
+            <div class="references-grid">
+                <!-- Reference 1 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Kahirapan sa Pilipinas</h4>
+                        <p class="reference-author">Cheane DV</p>
+                        <p class="reference-source">Medium</p>
+                        <a href="https://medium.com/@cheanedv/kahirapan-sa-pilipinas-65994ff19e30" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Reference 2 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-slideshare"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Sanaysay</h4>
+                        <p class="reference-author">Client Challenge</p>
+                        <p class="reference-source">SlideShare</p>
+                        <a href="https://www.slideshare.net/slideshow/sanaysayppt/255823232" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Reference 3 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Sanaysay at mga Uri</h4>
+                        <p class="reference-author">Client Challenge</p>
+                        <p class="reference-source">Scribd</p>
+                        <a href="https://www.scribd.com/presentation/497861066/SANAYSAY-AT-MGA-URI" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Reference 4 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Mga Uri ng Teksto</h4>
+                        <p class="reference-author">Client Challenge</p>
+                        <p class="reference-source">Scribd</p>
+                        <a href="https://www.scribd.com/presentation/444839677/GRDAE-11-MGA-URI-NG-TEKSTO" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Reference 5 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Di-pormal at Pormal na Sanaysay</h4>
+                        <p class="reference-author">Client Challenge</p>
+                        <p class="reference-source">Scribd</p>
+                        <a href="https://www.scribd.com/document/551433026/Di-pormal-at-Pormal-na-Sanaysay" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Reference 6 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Halimbawa ng Tekstong Deskriptibo</h4>
+                        <p class="reference-author">Client Challenge</p>
+                        <p class="reference-source">Scribd</p>
+                        <a href="https://www.scribd.com/document/488096700/Halimbawa-ng-Tekstong-Deskriptibo" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Reference 7 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Naratibong Sanaysay</h4>
+                        <p class="reference-author">Client Challenge</p>
+                        <p class="reference-source">Scribd</p>
+                        <a href="https://www.scribd.com/document/442593268/naratibong-sanaysay-docx" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Reference 8 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Tekstong Persuweysib</h4>
+                        <p class="reference-author">Client Challenge</p>
+                        <p class="reference-source">Scribd</p>
+                        <a href="https://www.scribd.com/document/486002496/Tekstong-Persuweysib" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Reference 9 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Tekstong Prosidyural</h4>
+                        <p class="reference-author">Client Challenge</p>
+                        <p class="reference-source">Scribd</p>
+                        <a href="https://www.scribd.com/document/642516833/TEKSTONG-PROSIDYURAL-HALIMBAWA-S-G" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Reference 10 -->
+                <div class="reference-card">
+                    <div class="reference-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <div class="reference-content">
+                        <h4>Paano Sumulat ng Mahusay na Sanaysay?</h4>
+                        <p class="reference-author">Teacher Aiza</p>
+                        <p class="reference-source">YouTube</p>
+                        <a href="https://www.youtube.com/watch?v=skRBYwwbuuU" target="_blank" class="reference-link">
+                            <i class="fas fa-external-link-alt"></i> Tingnan ang Sanggunian
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

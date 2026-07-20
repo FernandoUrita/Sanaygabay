@@ -1526,6 +1526,431 @@ ${translated || 'Walang translation na ginawa.'}
     });
 
     // ============================================================
+    // ============================================================
+    // ENHANCEMENTS: Sanggunian, User Essays, Pagination, Search
+    // ============================================================
+    // ============================================================
+
+    // ============================================================
+    // SANGGUNIAN / REFERENCES
+    // ============================================================
+
+    const sanggunianData = [
+        { type: 'Website', title: 'Kahirapan sa Pilipinas', author: 'Cheane DV', url: 'https://medium.com/@cheanedv/kahirapan-sa-pilipinas-65994ff19e30' },
+        { type: 'Presentation', title: 'Sanaysay', author: 'Client Challenge', url: 'https://www.slideshare.net/slideshow/sanaysayppt/255823232' },
+        { type: 'Presentation', title: 'Sanaysay at mga uri', author: 'Client Challenge', url: 'https://www.scribd.com/presentation/497861066/SANAYSAY-AT-MGA-URI' },
+        { type: 'Presentation', title: 'Mga uri ng teksto', author: 'Client Challenge', url: 'https://www.scribd.com/presentation/444839677/GRDAE-11-MGA-URI-NG-TEKSTO' },
+        { type: 'Document', title: 'Di-pormal at pormal na sanaysay', author: 'Scribd', url: 'https://www.scribd.com/document/551433026/Di-pormal-at-Pormal-na-Sanaysay' },
+        { type: 'Document', title: 'Halimbawa ng tekstong deskriptibo', author: 'Scribd', url: 'https://www.scribd.com/document/488096700/Halimbawa-ng-Tekstong-Deskriptibo' },
+        { type: 'Document', title: 'Naratibong sanaysay', author: 'Scribd', url: 'https://www.scribd.com/document/442593268/naratibong-sanaysay-docx' },
+        { type: 'Document', title: 'Tekstong persuweysib', author: 'Scribd', url: 'https://www.scribd.com/document/486002496/Tekstong-Persuweysib' },
+        { type: 'Document', title: 'Tekstong prosidyural: Halimbawa', author: 'Scribd', url: 'https://www.scribd.com/document/642516833/TEKSTONG-PROSIDYURAL-HALIMBAWA-S-G' },
+        { type: 'Video', title: 'Paano sumulat ng mahusay na sanaysay?', author: 'Teacher Aiza', url: 'https://www.youtube.com/watch?v=skRBYwwbuuU' }
+    ];
+
+    function renderSanggunian() {
+        const container = document.getElementById('sanggunianList');
+        if (!container) return;
+
+        container.innerHTML = sanggunianData.map(item => `
+            <li>
+                <span class="ref-type">${item.type}</span>
+                <strong>${escapeHtml(item.title)}</strong> — ${escapeHtml(item.author)}
+                <br>
+                <a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.url}</a>
+            </li>
+        `).join('');
+    }
+
+    // ============================================================
+    // USER ESSAYS - LOAD FROM SUPABASE & LOCAL STORAGE
+    // ============================================================
+
+    let allUserEssays = [];
+    let filteredEssays = [];
+    let currentPage = 1;
+    const essaysPerPage = 6;
+    let currentStarFilter = 0;
+    let currentSort = 'newest';
+    let currentSearch = '';
+
+    // Load essays from Supabase and local storage
+    async function loadUserEssays() {
+        try {
+            // Get from Supabase
+            const response = await fetch(API.essays.get);
+            let supabaseEssays = [];
+            if (response.ok) {
+                supabaseEssays = await response.json();
+            }
+            
+            // Get from local history (backup)
+            const localHistory = getHistory();
+            
+            // Merge: Supabase first, then local (avoid duplicates by title + email)
+            const merged = [...supabaseEssays];
+            localHistory.forEach(local => {
+                const exists = merged.some(m => m.title === local.title && m.email === local.email);
+                if (!exists) {
+                    merged.push(local);
+                }
+            });
+            
+            allUserEssays = merged;
+            applyFiltersAndRender();
+            
+        } catch (error) {
+            console.error('Error loading user essays:', error);
+            // Fallback to local history
+            allUserEssays = getHistory();
+            applyFiltersAndRender();
+        }
+    }
+
+    // Apply filters, sorting, and render
+    function applyFiltersAndRender() {
+        // Apply search filter
+        let filtered = allUserEssays;
+        if (currentSearch.trim()) {
+            const search = currentSearch.toLowerCase().trim();
+            filtered = filtered.filter(essay => 
+                (essay.title && essay.title.toLowerCase().includes(search)) ||
+                (essay.name && essay.name.toLowerCase().includes(search)) ||
+                (essay.original && essay.original.toLowerCase().includes(search))
+            );
+        }
+        
+        // Apply star filter (based on score)
+        if (currentStarFilter > 0) {
+            const minScore = (currentStarFilter - 1) * 20 + 1;
+            const maxScore = currentStarFilter * 20;
+            filtered = filtered.filter(essay => {
+                const score = essay.score || 0;
+                return score >= minScore && score <= maxScore;
+            });
+        }
+        
+        // Apply sorting
+        switch(currentSort) {
+            case 'newest':
+                filtered.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date));
+                break;
+            case 'oldest':
+                filtered.sort((a, b) => new Date(a.created_at || a.date) - new Date(b.created_at || b.date));
+                break;
+            case 'score-high':
+                filtered.sort((a, b) => (b.score || 0) - (a.score || 0));
+                break;
+            case 'score-low':
+                filtered.sort((a, b) => (a.score || 0) - (b.score || 0));
+                break;
+            case 'title':
+                filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+                break;
+            default:
+                break;
+        }
+        
+        filteredEssays = filtered;
+        currentPage = 1;
+        renderUserEssays();
+    }
+
+    // Render user essays with pagination
+    function renderUserEssays() {
+        const container = document.getElementById('userEssaysContainer');
+        const paginationContainer = document.getElementById('essayPagination');
+        if (!container) return;
+        
+        const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
+        const start = (currentPage - 1) * essaysPerPage;
+        const end = start + essaysPerPage;
+        const pageEssays = filteredEssays.slice(start, end);
+        
+        if (filteredEssays.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-light);">
+                    <i class="fas fa-inbox" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
+                    <p>Walang nakitang sanaysay. Maging una na magsulat!</p>
+                </div>
+            `;
+            if (paginationContainer) paginationContainer.innerHTML = '';
+            return;
+        }
+        
+        container.innerHTML = pageEssays.map((essay, index) => {
+            const displayDate = essay.created_at || essay.date || new Date().toISOString();
+            const score = essay.score || 0;
+            const stars = getStarRating(score);
+            const wordCount = (essay.original || '').split(/\s+/).filter(w => w.length > 0).length;
+            const readTime = Math.ceil(wordCount / 200);
+            const timeAgo = getTimeAgo(displayDate);
+            
+            return `
+            <div class="essay-module-card" data-id="${essay.id || index}">
+                <div class="essay-title">${escapeHtml(essay.title || 'Walang Pamagat')}</div>
+                <div class="essay-meta">
+                    <span><i class="fas fa-user"></i> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</span>
+                    <span><i class="fas fa-envelope"></i> ${escapeHtml(essay.email || 'Walang Email')}</span>
+                    <span><i class="fas fa-calendar"></i> ${formatDate2(displayDate)}</span>
+                    <span><i class="fas fa-clock"></i> ${timeAgo}</span>
+                    <span><i class="fas fa-words"></i> ${wordCount} salita</span>
+                    <span><i class="fas fa-hourglass-half"></i> ${readTime} min</span>
+                </div>
+                <div class="essay-timer">
+                    <i class="fas fa-stopwatch"></i> Oras ng Pagbasa: ${readTime} minuto
+                </div>
+                <div class="essay-preview">${escapeHtml((essay.original || '').substring(0, 200))}${(essay.original || '').length > 200 ? '...' : ''}</div>
+                <div class="essay-meta" style="margin-top: 0.5rem;">
+                    <span><i class="fas fa-star" style="color: #f5b342;"></i> ${stars} (${score}%)</span>
+                </div>
+                <div class="essay-actions">
+                    <button class="view-essay-btn" onclick="viewUserEssay(${index})"><i class="fas fa-eye"></i> Tingnan</button>
+                    <button class="delete-essay-btn" onclick="deleteUserEssay(${index})"><i class="fas fa-trash"></i> Burahin</button>
+                </div>
+            </div>
+            `;
+        }).join('');
+        
+        // Render pagination
+        if (paginationContainer) {
+            renderPagination(paginationContainer, totalPages);
+        }
+    }
+
+    // Get star rating based on score
+    function getStarRating(score) {
+        const stars = Math.round(score / 20);
+        return '★'.repeat(Math.min(stars, 5)) + '☆'.repeat(Math.max(0, 5 - Math.min(stars, 5)));
+    }
+
+    // Format date
+    function formatDate2(dateString) {
+        if (!dateString) return 'Kasalukuyan';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('tl-PH', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric' 
+        });
+    }
+
+    // Get time ago
+    function getTimeAgo(dateString) {
+        if (!dateString) return 'Kamakailan';
+        const now = new Date();
+        const then = new Date(dateString);
+        const diffMs = now - then;
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHour = Math.floor(diffMs / 3600000);
+        const diffDay = Math.floor(diffMs / 86400000);
+        
+        if (diffMin < 1) return 'Ilang segundo ang nakalipas';
+        if (diffMin < 60) return `${diffMin} minuto ang nakalipas`;
+        if (diffHour < 24) return `${diffHour} oras ang nakalipas`;
+        if (diffDay < 7) return `${diffDay} araw ang nakalipas`;
+        return formatDate2(dateString);
+    }
+
+    // Render pagination
+    function renderPagination(container, totalPages) {
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+        
+        let html = `
+            <button onclick="changePage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        `;
+        
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
+                html += `<button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                html += `<span>...</span>`;
+            }
+        }
+        
+        html += `
+            <button onclick="changePage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <span class="page-info">Pahina ${currentPage} ng ${totalPages}</span>
+        `;
+        
+        container.innerHTML = html;
+    }
+
+    // Change page
+    function changePage(page) {
+        const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderUserEssays();
+        document.getElementById('user-essays').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // View user essay
+    function viewUserEssay(index) {
+        const essay = filteredEssays[index];
+        if (!essay) return;
+        
+        showToast(`📝 ${essay.title || 'Walang Pamagat'}`, 'info', 'Sanaysay');
+        
+        // Show in modal
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay active';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="modal modal-small" style="max-width: 700px;">
+                <div class="modal-header">
+                    <h2><i class="fas fa-file-alt" style="color: var(--primary);"></i> ${escapeHtml(essay.title || 'Walang Pamagat')}</h2>
+                    <button class="modal-close" onclick="this.closest('.modal-overlay').remove(); document.body.style.overflow = '';">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>👤 May-akda:</strong> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</p>
+                    <p><strong>📧 Email:</strong> ${escapeHtml(essay.email || 'Walang Email')}</p>
+                    <p><strong>📅 Petsa:</strong> ${formatDate2(essay.created_at || essay.date)}</p>
+                    <p><strong>⭐ Iskor:</strong> ${essay.score || 0}% ${getStarRating(essay.score || 0)}</p>
+                    <div style="margin-top: 1rem;">
+                        <h4 style="color: var(--primary-dark);">📄 Orihinal na Sanaysay</h4>
+                        <div class="essay-display" style="max-height: 200px; overflow-y: auto; background: var(--bg-light); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-light); white-space: pre-wrap;">${escapeHtml(essay.original || 'Walang nilalaman.')}</div>
+                    </div>
+                    ${essay.translated ? `
+                    <div style="margin-top: 1rem;">
+                        <h4 style="color: var(--primary-dark);">🌿 Malalim na Tagalog</h4>
+                        <div class="essay-display improved" style="max-height: 200px; overflow-y: auto;">${escapeHtml(essay.translated)}</div>
+                    </div>
+                    ` : ''}
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-close-btn" onclick="this.closest('.modal-overlay').remove(); document.body.style.overflow = '';">Isara</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+        
+        // Close on overlay click
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.remove();
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
+    // Delete user essay
+    function deleteUserEssay(index) {
+        const essay = filteredEssays[index];
+        if (!essay) return;
+        
+        if (confirm(`Sigurado ka bang gusto mong burahin ang "${essay.title || 'Walang Pamagat'}"?`)) {
+            // Remove from allUserEssays
+            const id = essay.id;
+            allUserEssays = allUserEssays.filter(e => e.id !== id);
+            
+            // Remove from localStorage history
+            let history = getHistory();
+            history = history.filter(h => h.id !== id);
+            localStorage.setItem('essayHistory', JSON.stringify(history));
+            
+            applyFiltersAndRender();
+            showToast('Na-bura na ang sanaysay.', 'success', 'Burahin');
+        }
+    }
+
+    // ============================================================
+    // SEARCH, SORT, FILTER FUNCTIONS
+    // ============================================================
+
+    // Search input handler
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('essaySearchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                currentSearch = this.value;
+                applyFiltersAndRender();
+            });
+        }
+        
+        const sortSelect = document.getElementById('essaySortSelect');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', function() {
+                currentSort = this.value;
+                applyFiltersAndRender();
+            });
+        }
+    });
+
+    // Filter by stars
+    function filterByStars(rating) {
+        currentStarFilter = rating;
+        
+        // Update UI
+        document.querySelectorAll('.star-filter').forEach(el => {
+            el.classList.toggle('active', parseInt(el.dataset.rating) === rating);
+        });
+        
+        applyFiltersAndRender();
+    }
+
+    // Refresh essays
+    document.addEventListener('DOMContentLoaded', function() {
+        const refreshBtn = document.getElementById('refreshEssaysBtn');
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Nagre-refresh...';
+                this.disabled = true;
+                loadUserEssays().then(() => {
+                    this.innerHTML = '<i class="fas fa-sync"></i> I-refresh';
+                    this.disabled = false;
+                    showToast('Na-refresh ang mga sanaysay.', 'success', 'Refresh');
+                });
+            });
+        }
+    });
+
+    // ============================================================
+    // SAVE CURRENT SECTION ON REFRESH (Session Storage)
+    // ============================================================
+
+    // Save current section when navigating
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load saved section
+        const savedSection = sessionStorage.getItem('activeSection');
+        if (savedSection) {
+            const targetLink = document.querySelector(`.learn-nav ul li a[data-section="${savedSection}"]`);
+            if (targetLink) {
+                targetLink.click();
+            }
+        }
+        
+        // Save section when clicked
+        document.querySelectorAll('.learn-nav ul li a').forEach(link => {
+            link.addEventListener('click', function() {
+                const sectionId = this.getAttribute('data-section');
+                sessionStorage.setItem('activeSection', sectionId);
+            });
+        });
+    });
+
+    // ============================================================
+    // INITIALIZE ENHANCEMENTS
+    // ============================================================
+
+    // Render sanggunian
+    renderSanggunian();
+
+    // Load user essays
+    loadUserEssays();
+
+    console.log('📚 Enhancements loaded: Sanggunian, User Essays, Pagination, Search, Sort!');
+
+
+    // ============================================================
     // INITIALIZE
     // ============================================================
     const firstNavLink = document.querySelector('.learn-nav ul li a');

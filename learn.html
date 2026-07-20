@@ -66,6 +66,7 @@
     </section>
 
     <!-- Learning Navigation -->
+    <!-- Learning Navigation - Updated -->
     <nav class="learn-nav">
         <ul>
             <li><a href="#" class="active" data-section="intro"><i class="fas fa-home"></i> Panimula</a></li>
@@ -77,6 +78,8 @@
             <li><a href="#" data-section="text-types"><i class="fas fa-file-alt"></i> Teksto</a></li>
             <li><a href="#" data-section="steps"><i class="fas fa-list-ol"></i> Hakbang</a></li>
             <li><a href="#" data-section="quiz"><i class="fas fa-pencil-alt"></i> Pagsusulit</a></li>
+            <li><a href="#" data-section="sanggunian"><i class="fas fa-book-open"></i> Sanggunian</a></li>
+            <li><a href="#" data-section="user-essays"><i class="fas fa-file-alt"></i> Mga Sanaysay</a></li>
         </ul>
     </nav>
 
@@ -683,24 +686,127 @@
                 </div>
             </div>
 
-            <!-- ===== HISTORY SECTION ===== -->
+            <!-- ============================================================ -->
+            <!-- ENHANCED HISTORY / ARCHIVE SECTION -->
+            <!-- ============================================================ -->
             <div class="content-card" style="margin-top: 2rem;">
-                <h3 style="font-family: var(--font-serif); color: var(--primary-dark); margin-bottom: 1rem;">
-                    <i class="fas fa-history" style="color: var(--primary);"></i> Kasaysayan ng mga Naipasa
+                <h3 style="font-family: var(--font-serif); color: var(--primary-dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;">
+                    <i class="fas fa-history" style="color: var(--primary);"></i> Kasaysayan ng mga Sanaysay
+                    <span style="font-size: 0.8rem; font-weight: 400; color: var(--text-light); font-family: var(--font);">
+                        (Tingnan ang mga naipasang sanaysay ng iba)
+                    </span>
                 </h3>
-                <div class="history-filters">
-                    <input type="text" id="historySearch" placeholder="Maghanap ng sanaysay..." style="flex: 1;">
-                    <button class="secondary-btn" onclick="renderHistory(document.getElementById('historySearch').value)">
+                
+                <!-- History Controls -->
+                <div class="history-controls">
+                    <div class="history-search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="historySearchInput" placeholder="Maghanap ng sanaysay (pamagat, may-akda, email)..." />
+                    </div>
+                    <div class="history-filter-box">
+                        <select id="historyFilterSelect">
+                            <option value="all">Lahat</option>
+                            <option value="title">Pamagat</option>
+                            <option value="name">May-akda</option>
+                            <option value="email">Email</option>
+                        </select>
+                        <select id="historySortSelect">
+                            <option value="newest">Pinakabago</option>
+                            <option value="oldest">Pinakaluma</option>
+                            <option value="score-high">Pinakamataas na Iskor</option>
+                            <option value="score-low">Pinakamababang Iskor</option>
+                            <option value="title-az">A-Z (Pamagat)</option>
+                        </select>
+                    </div>
+                    <button class="secondary-btn" onclick="renderHistory(document.getElementById('historySearchInput').value)">
                         <i class="fas fa-search"></i> Hanapin
                     </button>
-                    <button class="secondary-btn" onclick="exportHistory('txt')"><i class="fas fa-file-alt"></i> TXT</button>
-                    <button class="secondary-btn" onclick="exportHistory('json')"><i class="fas fa-code"></i> JSON</button>
+                    <button class="secondary-btn" onclick="resetHistoryFilters()">
+                        <i class="fas fa-undo"></i> I-reset
+                    </button>
                 </div>
+                
+                <!-- History Stats -->
+                <div class="history-stats" id="historyStats">
+                    <span><i class="fas fa-file-alt"></i> Kabuuang Sanaysay: <strong id="totalEssays">0</strong></span>
+                    <span><i class="fas fa-users"></i> Kabuuang May-akda: <strong id="totalAuthors">0</strong></span>
+                    <span><i class="fas fa-star"></i> Average Score: <strong id="avgScore">0</strong></span>
+                </div>
+                
+                <!-- History Container -->
                 <div id="historyContainer" class="history-container">
                     <p style="color: var(--text-light); text-align: center; padding: 2rem;">
                         <i class="fas fa-inbox"></i> Walang naitalang sanaysay.
                     </p>
                 </div>
+                
+                <!-- History Pagination -->
+                <div class="history-pagination" id="historyPagination"></div>
+                
+                <!-- Export Options -->
+                <div class="history-export-options" style="margin-top: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                    <button class="export-btn txt" onclick="exportHistory('txt')"><i class="fas fa-file-alt"></i> TXT</button>
+                    <button class="export-btn json" onclick="exportHistory('json')" style="background: #6f42c1; color: white;"><i class="fas fa-code"></i> JSON</button>
+                    <button class="export-btn csv" onclick="exportHistory('csv')" style="background: #28a745; color: white;"><i class="fas fa-table"></i> CSV</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SANGGUNIAN / REFERENCES SECTION ===== -->
+        <section id="sanggunian" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-book-open"></i> Sanggunian</h2>
+                <div class="section-actions">
+                    <button class="action-btn" onclick="window.print()"><i class="fas fa-print"></i> I-print</button>
+                </div>
+            </div>
+            <div class="sanggunian-section">
+                <h3><i class="fas fa-book"></i> Mga Sanggunian</h3>
+                <p style="color: var(--text-light); margin-bottom: 1rem;">Narito ang mga pinagkunan ng impormasyon para sa Sanaysay Learning System 2026.</p>
+                <ul class="sanggunian-list" id="sanggunianList">
+                    <!-- Will be rendered by JavaScript -->
+                </ul>
+            </div>
+        </section>
+
+        <!-- ===== MGA NAGAWA NG USER - ESSAY MODULE ===== -->
+        <section id="user-essays" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-file-alt"></i> Mga Sanaysay ng mga Gumagamit</h2>
+                <div class="section-actions">
+                    <button class="action-btn" id="refreshEssaysBtn"><i class="fas fa-sync"></i> I-refresh</button>
+                </div>
+            </div>
+            
+            <!-- Search and Filter -->
+            <div class="essay-search-filter">
+                <input type="text" id="essaySearchInput" placeholder="🔍 Maghanap ng sanaysay..." />
+                <select id="essaySortSelect">
+                    <option value="newest">🕐 Pinakabago</option>
+                    <option value="oldest">🕐 Pinakaluma</option>
+                    <option value="score-high">⭐ Pinakamataas na Iskor</option>
+                    <option value="score-low">⭐ Pinakamababang Iskor</option>
+                    <option value="title">📝 A-Z</option>
+                </select>
+                <div class="sort-stars" id="starFilter">
+                    <span class="filter-label">⭐ Filter:</span>
+                    <span class="star-filter" data-rating="5" onclick="filterByStars(5)">★★★★★</span>
+                    <span class="star-filter" data-rating="4" onclick="filterByStars(4)">★★★★☆</span>
+                    <span class="star-filter" data-rating="3" onclick="filterByStars(3)">★★★☆☆</span>
+                    <span class="star-filter" data-rating="2" onclick="filterByStars(2)">★★☆☆☆</span>
+                    <span class="star-filter" data-rating="1" onclick="filterByStars(1)">★☆☆☆☆</span>
+                    <span class="star-filter active" data-rating="0" onclick="filterByStars(0)">Lahat</span>
+                </div>
+            </div>
+            
+            <!-- Essay Cards Grid -->
+            <div id="userEssaysContainer" class="essay-module-container">
+                <!-- Will be rendered by JavaScript -->
+            </div>
+            
+            <!-- Pagination -->
+            <div id="essayPagination" class="pagination-container">
+                <!-- Will be rendered by JavaScript -->
             </div>
         </section>
     </main>
@@ -774,7 +880,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- HISTORY MODAL -->
+    <!-- ENHANCED HISTORY MODAL -->
     <!-- ============================================================ -->
     <div class="modal-overlay" id="historyModal">
         <div class="modal modal-small">
@@ -785,7 +891,10 @@
             <div class="modal-body">
                 <p><strong>👤 May-akda:</strong> <span id="historyModalAuthor"></span></p>
                 <p><strong>📅 Petsa:</strong> <span id="historyModalDate"></span></p>
-                <p><strong>🏆 Iskor:</strong> <span id="historyModalScore"></span></p>
+                <div class="history-meta-details">
+                    <span><i class="fas fa-star"></i> Iskor: <span id="historyModalScore"></span></span>
+                    <span><i class="fas fa-words"></i> <span id="historyModalWordCount"></span></span>
+                </div>
                 <div style="margin-top: 1rem;">
                     <h4 style="color: var(--primary-dark);">📄 Orihinal na Sanaysay</h4>
                     <div class="essay-display" id="historyModalOriginal" style="max-height: 200px; overflow-y: auto;"></div>
