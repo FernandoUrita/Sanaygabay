@@ -470,7 +470,6 @@ document.addEventListener('DOMContentLoaded', function() {
         counter.innerHTML = `
             <span><i class="fas fa-words"></i> Mga Salita: <span class="count-number" id="wordCount">0</span></span>
             <span><i class="fas fa-font"></i> Mga Karakter: <span class="count-number" id="charCount">0</span></span>
-            <span><i class="fas fa-clock"></i> Oras ng Pagbasa: <span class="count-number" id="readTime">0</span> min</span>
         `;
         container.appendChild(counter);
         
