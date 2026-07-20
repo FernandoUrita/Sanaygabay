@@ -1,20 +1,83 @@
 // ============================================================
 // LEARN PAGE - SANAYSAY LEARNING SYSTEM 2026
-// WITH SUPABASE BACKEND INTEGRATION - FIXED
+// WITH SUPABASE BACKEND INTEGRATION - FINAL FIXED VERSION
 // ============================================================
 
+// ============================================================
+// HELPER FUNCTIONS - DAPAT NASA UNA!
+// ============================================================
+function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+// ============================================================
+// SANGGUNIAN / REFERENCES DATA - GLOBAL PARA MA ACCESS NG LAHAT
+// ============================================================
+const sanggunianData = [
+    { type: 'Website', title: 'Kahirapan sa Pilipinas', author: 'Cheane DV', url: 'https://medium.com/@cheanedv/kahirapan-sa-pilipinas-65994ff19e30' },
+    { type: 'Presentation', title: 'Sanaysay', author: 'Client Challenge', url: 'https://www.slideshare.net/slideshow/sanaysayppt/255823232' },
+    { type: 'Presentation', title: 'Sanaysay at mga uri', author: 'Client Challenge', url: 'https://www.scribd.com/presentation/497861066/SANAYSAY-AT-MGA-URI' },
+    { type: 'Presentation', title: 'Mga uri ng teksto', author: 'Client Challenge', url: 'https://www.scribd.com/presentation/444839677/GRDAE-11-MGA-URI-NG-TEKSTO' },
+    { type: 'Document', title: 'Di-pormal at pormal na sanaysay', author: 'Scribd', url: 'https://www.scribd.com/document/551433026/Di-pormal-at-Pormal-na-Sanaysay' },
+    { type: 'Document', title: 'Halimbawa ng tekstong deskriptibo', author: 'Scribd', url: 'https://www.scribd.com/document/488096700/Halimbawa-ng-Tekstong-Deskriptibo' },
+    { type: 'Document', title: 'Naratibong sanaysay', author: 'Scribd', url: 'https://www.scribd.com/document/442593268/naratibong-sanaysay-docx' },
+    { type: 'Document', title: 'Tekstong persuweysib', author: 'Scribd', url: 'https://www.scribd.com/document/486002496/Tekstong-Persuweysib' },
+    { type: 'Document', title: 'Tekstong prosidyural: Halimbawa', author: 'Scribd', url: 'https://www.scribd.com/document/642516833/TEKSTONG-PROSIDYURAL-HALIMBAWA-S-G' },
+    { type: 'Video', title: 'Paano sumulat ng mahusay na sanaysay?', author: 'Teacher Aiza', url: 'https://www.youtube.com/watch?v=skRBYwwbuuU' }
+];
+
+function renderSanggunian() {
+    const container = document.getElementById('sanggunianList');
+    if (!container) return;
+    container.innerHTML = sanggunianData.map(item => `
+        <li>
+            <span class="ref-type">${item.type}</span>
+            <strong>${escapeHtml(item.title)}</strong> — ${escapeHtml(item.author)}
+            <br>
+            <a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.url}</a>
+        </li>
+    `).join('');
+}
+
+// ============================================================
+// LOCAL HISTORY FUNCTIONS - GLOBAL PARA MAGAMIT NG LAHAT
+// ============================================================
+function getHistory() {
+    return JSON.parse(localStorage.getItem('essayHistory') || '[]');
+}
+
+function saveToLocalHistory(name, email, title, original, translated, score) {
+    const history = getHistory();
+    history.push({
+        id: Date.now(),
+        name: name,
+        email: email,
+        title: title,
+        original: original,
+        translated: translated || '',
+        score: score || 0,
+        date: new Date().toISOString(),
+        timestamp: Date.now()
+    });
+    if (history.length > 50) history.shift();
+    localStorage.setItem('essayHistory', JSON.stringify(history));
+}
+
+function deleteHistoryItem(id) {
+    let history = getHistory();
+    history = history.filter(item => item.id !== id);
+    localStorage.setItem('essayHistory', JSON.stringify(history));
+    return history;
+}
+
+// ============================================================
+// DOMContentLoaded - MAIN
+// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
     'use strict';
-
-    // ============================================================
-    // HELPER FUNCTIONS - DAPAT NASA UNA!
-    // ============================================================
-    function escapeHtml(str) {
-        if (!str) return '';
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
 
     // ============================================================
     // API ENDPOINTS (Netlify Functions)
@@ -38,7 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
         systemEmail: 'sanaysay.system2026@gmail.com'
     };
 
-    emailjs.init(EMAILJS_CONFIG.publicKey);
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init(EMAILJS_CONFIG.publicKey);
+    }
 
     // ============================================================
     // DEEP TAGALOG WORDS DATABASE
@@ -800,11 +865,29 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================================
     async function saveEssayToSupabase(essayData) {
         try {
+            // Check if we're on Netlify or localhost
+            const isNetlify = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+            
+            if (!isNetlify) {
+                // If on localhost, save to localStorage only
+                console.log('📝 Localhost detected - saving to localStorage only');
+                saveToLocalHistory(
+                    essayData.name,
+                    essayData.email,
+                    essayData.title,
+                    essayData.original,
+                    essayData.translated,
+                    essayData.score
+                );
+                return { success: true, local: true };
+            }
+            
             const response = await fetch(API.essays.save, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(essayData)
             });
+            
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.error || 'Failed to save essay');
@@ -812,7 +895,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return await response.json();
         } catch (error) {
             console.error('Error saving essay:', error);
-            throw error;
+            // Fallback to localStorage
+            console.log('📝 Saving to localStorage as fallback');
+            saveToLocalHistory(
+                essayData.name,
+                essayData.email,
+                essayData.title,
+                essayData.original,
+                essayData.translated,
+                essayData.score
+            );
+            return { success: true, local: true };
         }
     }
 
@@ -1072,52 +1165,64 @@ document.addEventListener('DOMContentLoaded', function() {
 
         setTimeout(function() {
             console.log('📄 Rendering with html2canvas...');
-            html2canvas(container, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: false,
-                logging: false,
-                backgroundColor: '#ffffff',
-                width: container.scrollWidth || 800,
-                height: container.scrollHeight || 1200,
-                onclone: function(doc) {
-                    console.log('📄 Clone created');
-                }
-            }).then(function(canvas) {
-                console.log('📄 Canvas created! Size:', canvas.width, 'x', canvas.height);
-                const imgData = canvas.toDataURL('image/jpeg', 0.98);
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 210;
-                const pageHeight = 297;
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                let heightLeft = imgHeight;
-                let position = 0;
-                let pageCount = 0;
+            if (typeof html2canvas !== 'undefined') {
+                html2canvas(container, {
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: false,
+                    logging: false,
+                    backgroundColor: '#ffffff',
+                    width: container.scrollWidth || 800,
+                    height: container.scrollHeight || 1200,
+                    onclone: function(doc) {
+                        console.log('📄 Clone created');
+                    }
+                }).then(function(canvas) {
+                    console.log('📄 Canvas created! Size:', canvas.width, 'x', canvas.height);
+                    const imgData = canvas.toDataURL('image/jpeg', 0.98);
+                    if (typeof window.jspdf !== 'undefined') {
+                        const { jsPDF } = window.jspdf;
+                        const pdf = new jsPDF('p', 'mm', 'a4');
+                        const imgWidth = 210;
+                        const pageHeight = 297;
+                        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                        let heightLeft = imgHeight;
+                        let position = 0;
+                        let pageCount = 0;
 
-                pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-                pageCount++;
+                        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                        pageCount++;
 
-                while (heightLeft > 0) {
-                    position = heightLeft - imgHeight;
-                    pdf.addPage();
-                    pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pageHeight;
-                    pageCount++;
-                }
+                        while (heightLeft > 0) {
+                            position = heightLeft - imgHeight;
+                            pdf.addPage();
+                            pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+                            pageCount++;
+                        }
 
-                console.log('📄 PDF pages:', pageCount);
-                const filename = `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
-                pdf.save(filename);
+                        console.log('📄 PDF pages:', pageCount);
+                        const filename = `Sanaysay_${name.replace(/\s/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
+                        pdf.save(filename);
+                        document.body.removeChild(container);
+                        console.log('✅ PDF downloaded successfully!');
+                        showToast('✅ Na-download ang PDF ng iyong sanaysay!', 'success', 'PDF');
+                    } else {
+                        console.warn('jsPDF not loaded, skipping PDF generation');
+                        document.body.removeChild(container);
+                        showToast('⚠️ PDF library not loaded. Please try again.', 'warning', 'PDF');
+                    }
+                }).catch(function(error) {
+                    console.error('❌ html2canvas Error:', error);
+                    document.body.removeChild(container);
+                    showToast('❌ May error sa pag-generate ng PDF. Subukan muli.', 'error', 'PDF Error');
+                });
+            } else {
+                console.warn('html2canvas not loaded, skipping PDF generation');
                 document.body.removeChild(container);
-                console.log('✅ PDF downloaded successfully!');
-                showToast('✅ Na-download ang PDF ng iyong sanaysay!', 'success', 'PDF');
-            }).catch(function(error) {
-                console.error('❌ html2canvas Error:', error);
-                document.body.removeChild(container);
-                showToast('❌ May error sa pag-generate ng PDF. Subukan muli.', 'error', 'PDF Error');
-            });
+                showToast('⚠️ PDF library not loaded. Please try again.', 'warning', 'PDF');
+            }
         }, 1500);
     }
 
@@ -1279,33 +1384,46 @@ ${translated || 'Walang translation na ginawa.'}
                 };
                 
                 await saveEssayToSupabase(essayData);
-                generateAndDownloadPDF(userInfo.name, userInfo.email, title, original, translated, dateStr, timeStr);
-                saveToLocalHistory(userInfo.name, userInfo.email, title, original, translated, score.overall);
                 
-                const studentParams = {
-                    to_name: userInfo.name,
-                    to_email: userInfo.email,
-                    title: title,
-                    original: original,
-                    translated: translated || 'Walang translation na ginawa.',
-                    date: dateStr,
-                    time: timeStr,
-                    message: 'Ito ang iyong isinumiteng sanaysay.'
-                };
+                // Generate PDF only if libraries are available
+                if (typeof html2canvas !== 'undefined' && typeof window.jspdf !== 'undefined') {
+                    generateAndDownloadPDF(userInfo.name, userInfo.email, title, original, translated, dateStr, timeStr);
+                } else {
+                    showToast('PDF libraries not loaded. Essay saved successfully.', 'info', 'Na-save');
+                }
                 
-                const systemParams = {
-                    student_name: userInfo.name,
-                    student_email: userInfo.email,
-                    title: title,
-                    original: original,
-                    translated: translated || 'Walang translation na ginawa.',
-                    date: dateStr,
-                    time: timeStr,
-                    message: 'May bagong sanaysay na naipasa mula kay ' + userInfo.name
-                };
-                
-                await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateIDStudent, studentParams);
-                await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateIDSystem, systemParams);
+                // Send emails if EmailJS is available
+                if (typeof emailjs !== 'undefined') {
+                    try {
+                        const studentParams = {
+                            to_name: userInfo.name,
+                            to_email: userInfo.email,
+                            title: title,
+                            original: original,
+                            translated: translated || 'Walang translation na ginawa.',
+                            date: dateStr,
+                            time: timeStr,
+                            message: 'Ito ang iyong isinumiteng sanaysay.'
+                        };
+                        
+                        const systemParams = {
+                            student_name: userInfo.name,
+                            student_email: userInfo.email,
+                            title: title,
+                            original: original,
+                            translated: translated || 'Walang translation na ginawa.',
+                            date: dateStr,
+                            time: timeStr,
+                            message: 'May bagong sanaysay na naipasa mula kay ' + userInfo.name
+                        };
+                        
+                        await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateIDStudent, studentParams);
+                        await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateIDSystem, systemParams);
+                        console.log('✅ Emails sent successfully');
+                    } catch (emailError) {
+                        console.warn('Email sending failed:', emailError);
+                    }
+                }
                 
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Ipasa ang Sanaysay';
                 submitBtn.disabled = false;
@@ -1330,36 +1448,8 @@ ${translated || 'Walang translation na ginawa.'}
     }
 
     // ============================================================
-    // LOCAL HISTORY
+    // RENDER HISTORY
     // ============================================================
-    function saveToLocalHistory(name, email, title, original, translated, score) {
-        const history = JSON.parse(localStorage.getItem('essayHistory') || '[]');
-        history.push({
-            id: Date.now(),
-            name: name,
-            email: email,
-            title: title,
-            original: original,
-            translated: translated || '',
-            score: score || 0,
-            date: new Date().toISOString(),
-            timestamp: Date.now()
-        });
-        if (history.length > 50) history.shift();
-        localStorage.setItem('essayHistory', JSON.stringify(history));
-    }
-
-    function getHistory() {
-        return JSON.parse(localStorage.getItem('essayHistory') || '[]');
-    }
-
-    function deleteHistoryItem(id) {
-        let history = getHistory();
-        history = history.filter(item => item.id !== id);
-        localStorage.setItem('essayHistory', JSON.stringify(history));
-        return history;
-    }
-
     window.renderHistory = function(filter = '') {
         const container = document.getElementById('historyContainer');
         if (!container) return;
@@ -1543,325 +1633,273 @@ ${translated || 'Walang translation na ginawa.'}
     });
 
     // ============================================================
-    // INITIALIZE
+    // USER ESSAYS - LOAD FROM SUPABASE & LOCAL STORAGE
     // ============================================================
-    const firstNavLink = document.querySelector('.learn-nav ul li a');
-    if (firstNavLink) {
-        firstNavLink.click();
-    }
-    renderHistory();
+    let allUserEssays = [];
+    let filteredEssays = [];
+    let currentPage = 1;
+    const essaysPerPage = 6;
+    let currentStarFilter = 0;
+    let currentSort = 'newest';
+    let currentSearch = '';
 
-    console.log('📝 Sanaysay Learning System 2026 loaded!');
-    console.log('📧 EmailJS configured with your credentials!');
-    console.log('💡 Keyboard shortcuts: Ctrl+Enter = Suriin, Ctrl+Shift+S = Save Draft');
-    console.log('📄 PDF will be auto-downloaded upon submission!');
-    console.log('☁️ Supabase integration enabled for essays!');
-    console.log('⏱️ Essay timer initialized!');
-});
-
-// ============================================================
-// ============================================================
-// ENHANCEMENTS: Sanggunian, User Essays, Pagination, Search, Sort
-// ============================================================
-// ============================================================
-
-// ============================================================
-// SANGGUNIAN / REFERENCES
-// ============================================================
-
-const sanggunianData = [
-    { type: 'Website', title: 'Kahirapan sa Pilipinas', author: 'Cheane DV', url: 'https://medium.com/@cheanedv/kahirapan-sa-pilipinas-65994ff19e30' },
-    { type: 'Presentation', title: 'Sanaysay', author: 'Client Challenge', url: 'https://www.slideshare.net/slideshow/sanaysayppt/255823232' },
-    { type: 'Presentation', title: 'Sanaysay at mga uri', author: 'Client Challenge', url: 'https://www.scribd.com/presentation/497861066/SANAYSAY-AT-MGA-URI' },
-    { type: 'Presentation', title: 'Mga uri ng teksto', author: 'Client Challenge', url: 'https://www.scribd.com/presentation/444839677/GRDAE-11-MGA-URI-NG-TEKSTO' },
-    { type: 'Document', title: 'Di-pormal at pormal na sanaysay', author: 'Scribd', url: 'https://www.scribd.com/document/551433026/Di-pormal-at-Pormal-na-Sanaysay' },
-    { type: 'Document', title: 'Halimbawa ng tekstong deskriptibo', author: 'Scribd', url: 'https://www.scribd.com/document/488096700/Halimbawa-ng-Tekstong-Deskriptibo' },
-    { type: 'Document', title: 'Naratibong sanaysay', author: 'Scribd', url: 'https://www.scribd.com/document/442593268/naratibong-sanaysay-docx' },
-    { type: 'Document', title: 'Tekstong persuweysib', author: 'Scribd', url: 'https://www.scribd.com/document/486002496/Tekstong-Persuweysib' },
-    { type: 'Document', title: 'Tekstong prosidyural: Halimbawa', author: 'Scribd', url: 'https://www.scribd.com/document/642516833/TEKSTONG-PROSIDYURAL-HALIMBAWA-S-G' },
-    { type: 'Video', title: 'Paano sumulat ng mahusay na sanaysay?', author: 'Teacher Aiza', url: 'https://www.youtube.com/watch?v=skRBYwwbuuU' }
-];
-
-function renderSanggunian() {
-    const container = document.getElementById('sanggunianList');
-    if (!container) return;
-    container.innerHTML = sanggunianData.map(item => `
-        <li>
-            <span class="ref-type">${item.type}</span>
-            <strong>${escapeHtml(item.title)}</strong> — ${escapeHtml(item.author)}
-            <br>
-            <a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.url}</a>
-        </li>
-    `).join('');
-}
-
-// ============================================================
-// USER ESSAYS - LOAD FROM SUPABASE & LOCAL STORAGE
-// ============================================================
-
-let allUserEssays = [];
-let filteredEssays = [];
-let currentPage = 1;
-const essaysPerPage = 6;
-let currentStarFilter = 0;
-let currentSort = 'newest';
-let currentSearch = '';
-
-async function loadUserEssays() {
-    try {
-        const response = await fetch(API.essays.get);
-        let supabaseEssays = [];
-        if (response.ok) {
-            supabaseEssays = await response.json();
+    async function loadUserEssays() {
+        try {
+            const isNetlify = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+            let supabaseEssays = [];
+            
+            if (isNetlify) {
+                const response = await fetch(API.essays.get);
+                if (response.ok) {
+                    supabaseEssays = await response.json();
+                }
+            }
+            
+            const localHistory = getHistory();
+            const merged = [...supabaseEssays];
+            localHistory.forEach(local => {
+                const exists = merged.some(m => m.title === local.title && m.email === local.email);
+                if (!exists) merged.push(local);
+            });
+            allUserEssays = merged;
+            applyFiltersAndRender();
+        } catch (error) {
+            console.error('Error loading user essays:', error);
+            allUserEssays = getHistory();
+            applyFiltersAndRender();
         }
-        const localHistory = getHistory();
-        const merged = [...supabaseEssays];
-        localHistory.forEach(local => {
-            const exists = merged.some(m => m.title === local.title && m.email === local.email);
-            if (!exists) merged.push(local);
-        });
-        allUserEssays = merged;
-        applyFiltersAndRender();
-    } catch (error) {
-        console.error('Error loading user essays:', error);
-        allUserEssays = getHistory();
-        applyFiltersAndRender();
     }
-}
 
-function applyFiltersAndRender() {
-    let filtered = allUserEssays;
-    if (currentSearch.trim()) {
-        const search = currentSearch.toLowerCase().trim();
-        filtered = filtered.filter(essay => 
-            (essay.title && essay.title.toLowerCase().includes(search)) ||
-            (essay.name && essay.name.toLowerCase().includes(search)) ||
-            (essay.original && essay.original.toLowerCase().includes(search))
-        );
+    function applyFiltersAndRender() {
+        let filtered = allUserEssays;
+        if (currentSearch.trim()) {
+            const search = currentSearch.toLowerCase().trim();
+            filtered = filtered.filter(essay => 
+                (essay.title && essay.title.toLowerCase().includes(search)) ||
+                (essay.name && essay.name.toLowerCase().includes(search)) ||
+                (essay.original && essay.original.toLowerCase().includes(search))
+            );
+        }
+        if (currentStarFilter > 0) {
+            const minScore = (currentStarFilter - 1) * 20 + 1;
+            const maxScore = currentStarFilter * 20;
+            filtered = filtered.filter(essay => {
+                const score = essay.score || 0;
+                return score >= minScore && score <= maxScore;
+            });
+        }
+        switch(currentSort) {
+            case 'newest': filtered.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date)); break;
+            case 'oldest': filtered.sort((a, b) => new Date(a.created_at || a.date) - new Date(b.created_at || b.date)); break;
+            case 'score-high': filtered.sort((a, b) => (b.score || 0) - (a.score || 0)); break;
+            case 'score-low': filtered.sort((a, b) => (a.score || 0) - (b.score || 0)); break;
+            case 'title': filtered.sort((a, b) => (a.title || '').localeCompare(b.title || '')); break;
+            default: break;
+        }
+        filteredEssays = filtered;
+        currentPage = 1;
+        renderUserEssays();
     }
-    if (currentStarFilter > 0) {
-        const minScore = (currentStarFilter - 1) * 20 + 1;
-        const maxScore = currentStarFilter * 20;
-        filtered = filtered.filter(essay => {
+
+    function renderUserEssays() {
+        const container = document.getElementById('userEssaysContainer');
+        const paginationContainer = document.getElementById('essayPagination');
+        if (!container) return;
+        const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
+        const start = (currentPage - 1) * essaysPerPage;
+        const end = start + essaysPerPage;
+        const pageEssays = filteredEssays.slice(start, end);
+        if (filteredEssays.length === 0) {
+            container.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-light);">
+                    <i class="fas fa-inbox" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
+                    <p>Walang nakitang sanaysay. Maging una na magsulat!</p>
+                </div>
+            `;
+            if (paginationContainer) paginationContainer.innerHTML = '';
+            return;
+        }
+        container.innerHTML = pageEssays.map((essay, index) => {
+            const displayDate = essay.created_at || essay.date || new Date().toISOString();
             const score = essay.score || 0;
-            return score >= minScore && score <= maxScore;
+            const stars = getStarRating(score);
+            const wordCount = (essay.original || '').split(/\s+/).filter(w => w.length > 0).length;
+            const readTime = Math.ceil(wordCount / 200);
+            const timeAgo = getTimeAgo(displayDate);
+            return `
+            <div class="essay-module-card" data-id="${essay.id || index}">
+                <div class="essay-title">${escapeHtml(essay.title || 'Walang Pamagat')}</div>
+                <div class="essay-meta">
+                    <span><i class="fas fa-user"></i> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</span>
+                    <span><i class="fas fa-envelope"></i> ${escapeHtml(essay.email || 'Walang Email')}</span>
+                    <span><i class="fas fa-calendar"></i> ${formatDate2(displayDate)}</span>
+                    <span><i class="fas fa-clock"></i> ${timeAgo}</span>
+                    <span><i class="fas fa-words"></i> ${wordCount} salita</span>
+                    <span><i class="fas fa-hourglass-half"></i> ${readTime} min</span>
+                </div>
+                <div class="essay-timer">
+                    <i class="fas fa-stopwatch"></i> Oras ng Pagbasa: ${readTime} minuto
+                </div>
+                <div class="essay-preview">${escapeHtml((essay.original || '').substring(0, 200))}${(essay.original || '').length > 200 ? '...' : ''}</div>
+                <div class="essay-meta" style="margin-top: 0.5rem;">
+                    <span><i class="fas fa-star" style="color: #f5b342;"></i> ${stars} (${score}%)</span>
+                </div>
+                <div class="essay-actions">
+                    <button class="view-essay-btn" onclick="viewUserEssay(${index})"><i class="fas fa-eye"></i> Tingnan</button>
+                    <button class="delete-essay-btn" onclick="deleteUserEssay(${index})"><i class="fas fa-trash"></i> Burahin</button>
+                </div>
+            </div>
+            `;
+        }).join('');
+        if (paginationContainer) {
+            renderPagination(paginationContainer, totalPages);
+        }
+    }
+
+    function getStarRating(score) {
+        const stars = Math.round(score / 20);
+        return '★'.repeat(Math.min(stars, 5)) + '☆'.repeat(Math.max(0, 5 - Math.min(stars, 5)));
+    }
+
+    function formatDate2(dateString) {
+        if (!dateString) return 'Kasalukuyan';
+        const date = new Date(dateString);
+        return date.toLocaleDateString('tl-PH', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function getTimeAgo(dateString) {
+        if (!dateString) return 'Kamakailan';
+        const now = new Date();
+        const then = new Date(dateString);
+        const diffMs = now - then;
+        const diffMin = Math.floor(diffMs / 60000);
+        const diffHour = Math.floor(diffMs / 3600000);
+        const diffDay = Math.floor(diffMs / 86400000);
+        if (diffMin < 1) return 'Ilang segundo ang nakalipas';
+        if (diffMin < 60) return `${diffMin} minuto ang nakalipas`;
+        if (diffHour < 24) return `${diffHour} oras ang nakalipas`;
+        if (diffDay < 7) return `${diffDay} araw ang nakalipas`;
+        return formatDate2(dateString);
+    }
+
+    function renderPagination(container, totalPages) {
+        if (totalPages <= 1) { container.innerHTML = ''; return; }
+        let html = `
+            <button onclick="changePage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        `;
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
+                html += `<button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                html += `<span>...</span>`;
+            }
+        }
+        html += `
+            <button onclick="changePage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <span class="page-info">Pahina ${currentPage} ng ${totalPages}</span>
+        `;
+        container.innerHTML = html;
+    }
+
+    function changePage(page) {
+        const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderUserEssays();
+        document.getElementById('user-essays').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function viewUserEssay(index) {
+        const essay = filteredEssays[index];
+        if (!essay) return;
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay active';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="modal modal-small" style="max-width: 700px;">
+                <div class="modal-header">
+                    <h2><i class="fas fa-file-alt" style="color: var(--primary);"></i> ${escapeHtml(essay.title || 'Walang Pamagat')}</h2>
+                    <button class="modal-close" onclick="this.closest('.modal-overlay').remove(); document.body.style.overflow = '';">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>👤 May-akda:</strong> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</p>
+                    <p><strong>📧 Email:</strong> ${escapeHtml(essay.email || 'Walang Email')}</p>
+                    <p><strong>📅 Petsa:</strong> ${formatDate2(essay.created_at || essay.date)}</p>
+                    <p><strong>⭐ Iskor:</strong> ${essay.score || 0}% ${getStarRating(essay.score || 0)}</p>
+                    <div style="margin-top: 1rem;">
+                        <h4 style="color: var(--primary-dark);">📄 Orihinal na Sanaysay</h4>
+                        <div class="essay-display" style="max-height: 200px; overflow-y: auto; background: var(--bg-light); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-light); white-space: pre-wrap;">${escapeHtml(essay.original || 'Walang nilalaman.')}</div>
+                    </div>
+                    ${essay.translated ? `
+                    <div style="margin-top: 1rem;">
+                        <h4 style="color: var(--primary-dark);">🌿 Malalim na Tagalog</h4>
+                        <div class="essay-display improved" style="max-height: 200px; overflow-y: auto;">${escapeHtml(essay.translated)}</div>
+                    </div>
+                    ` : ''}
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-close-btn" onclick="this.closest('.modal-overlay').remove(); document.body.style.overflow = '';">Isara</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.remove();
+                document.body.style.overflow = '';
+            }
         });
     }
-    switch(currentSort) {
-        case 'newest': filtered.sort((a, b) => new Date(b.created_at || b.date) - new Date(a.created_at || a.date)); break;
-        case 'oldest': filtered.sort((a, b) => new Date(a.created_at || a.date) - new Date(b.created_at || b.date)); break;
-        case 'score-high': filtered.sort((a, b) => (b.score || 0) - (a.score || 0)); break;
-        case 'score-low': filtered.sort((a, b) => (a.score || 0) - (b.score || 0)); break;
-        case 'title': filtered.sort((a, b) => (a.title || '').localeCompare(b.title || '')); break;
-        default: break;
-    }
-    filteredEssays = filtered;
-    currentPage = 1;
-    renderUserEssays();
-}
 
-function renderUserEssays() {
-    const container = document.getElementById('userEssaysContainer');
-    const paginationContainer = document.getElementById('essayPagination');
-    if (!container) return;
-    const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
-    const start = (currentPage - 1) * essaysPerPage;
-    const end = start + essaysPerPage;
-    const pageEssays = filteredEssays.slice(start, end);
-    if (filteredEssays.length === 0) {
-        container.innerHTML = `
-            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-light);">
-                <i class="fas fa-inbox" style="font-size: 3rem; display: block; margin-bottom: 1rem;"></i>
-                <p>Walang nakitang sanaysay. Maging una na magsulat!</p>
-            </div>
-        `;
-        if (paginationContainer) paginationContainer.innerHTML = '';
-        return;
-    }
-    container.innerHTML = pageEssays.map((essay, index) => {
-        const displayDate = essay.created_at || essay.date || new Date().toISOString();
-        const score = essay.score || 0;
-        const stars = getStarRating(score);
-        const wordCount = (essay.original || '').split(/\s+/).filter(w => w.length > 0).length;
-        const readTime = Math.ceil(wordCount / 200);
-        const timeAgo = getTimeAgo(displayDate);
-        return `
-        <div class="essay-module-card" data-id="${essay.id || index}">
-            <div class="essay-title">${escapeHtml(essay.title || 'Walang Pamagat')}</div>
-            <div class="essay-meta">
-                <span><i class="fas fa-user"></i> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</span>
-                <span><i class="fas fa-envelope"></i> ${escapeHtml(essay.email || 'Walang Email')}</span>
-                <span><i class="fas fa-calendar"></i> ${formatDate2(displayDate)}</span>
-                <span><i class="fas fa-clock"></i> ${timeAgo}</span>
-                <span><i class="fas fa-words"></i> ${wordCount} salita</span>
-                <span><i class="fas fa-hourglass-half"></i> ${readTime} min</span>
-            </div>
-            <div class="essay-timer">
-                <i class="fas fa-stopwatch"></i> Oras ng Pagbasa: ${readTime} minuto
-            </div>
-            <div class="essay-preview">${escapeHtml((essay.original || '').substring(0, 200))}${(essay.original || '').length > 200 ? '...' : ''}</div>
-            <div class="essay-meta" style="margin-top: 0.5rem;">
-                <span><i class="fas fa-star" style="color: #f5b342;"></i> ${stars} (${score}%)</span>
-            </div>
-            <div class="essay-actions">
-                <button class="view-essay-btn" onclick="viewUserEssay(${index})"><i class="fas fa-eye"></i> Tingnan</button>
-                <button class="delete-essay-btn" onclick="deleteUserEssay(${index})"><i class="fas fa-trash"></i> Burahin</button>
-            </div>
-        </div>
-        `;
-    }).join('');
-    if (paginationContainer) {
-        renderPagination(paginationContainer, totalPages);
-    }
-}
-
-function getStarRating(score) {
-    const stars = Math.round(score / 20);
-    return '★'.repeat(Math.min(stars, 5)) + '☆'.repeat(Math.max(0, 5 - Math.min(stars, 5)));
-}
-
-function formatDate2(dateString) {
-    if (!dateString) return 'Kasalukuyan';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('tl-PH', { year: 'numeric', month: 'short', day: 'numeric' });
-}
-
-function getTimeAgo(dateString) {
-    if (!dateString) return 'Kamakailan';
-    const now = new Date();
-    const then = new Date(dateString);
-    const diffMs = now - then;
-    const diffMin = Math.floor(diffMs / 60000);
-    const diffHour = Math.floor(diffMs / 3600000);
-    const diffDay = Math.floor(diffMs / 86400000);
-    if (diffMin < 1) return 'Ilang segundo ang nakalipas';
-    if (diffMin < 60) return `${diffMin} minuto ang nakalipas`;
-    if (diffHour < 24) return `${diffHour} oras ang nakalipas`;
-    if (diffDay < 7) return `${diffDay} araw ang nakalipas`;
-    return formatDate2(dateString);
-}
-
-function renderPagination(container, totalPages) {
-    if (totalPages <= 1) { container.innerHTML = ''; return; }
-    let html = `
-        <button onclick="changePage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>
-            <i class="fas fa-chevron-left"></i>
-        </button>
-    `;
-    for (let i = 1; i <= totalPages; i++) {
-        if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
-            html += `<button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
-        } else if (i === currentPage - 3 || i === currentPage + 3) {
-            html += `<span>...</span>`;
+    function deleteUserEssay(index) {
+        const essay = filteredEssays[index];
+        if (!essay) return;
+        if (confirm(`Sigurado ka bang gusto mong burahin ang "${essay.title || 'Walang Pamagat'}"?`)) {
+            const id = essay.id;
+            allUserEssays = allUserEssays.filter(e => e.id !== id);
+            let history = getHistory();
+            history = history.filter(h => h.id !== id);
+            localStorage.setItem('essayHistory', JSON.stringify(history));
+            applyFiltersAndRender();
+            showToast('Na-bura na ang sanaysay.', 'success', 'Burahin');
         }
     }
-    html += `
-        <button onclick="changePage(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>
-            <i class="fas fa-chevron-right"></i>
-        </button>
-        <span class="page-info">Pahina ${currentPage} ng ${totalPages}</span>
-    `;
-    container.innerHTML = html;
-}
 
-function changePage(page) {
-    const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
-    if (page < 1 || page > totalPages) return;
-    currentPage = page;
-    renderUserEssays();
-    document.getElementById('user-essays').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function viewUserEssay(index) {
-    const essay = filteredEssays[index];
-    if (!essay) return;
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay active';
-    modal.style.display = 'flex';
-    modal.innerHTML = `
-        <div class="modal modal-small" style="max-width: 700px;">
-            <div class="modal-header">
-                <h2><i class="fas fa-file-alt" style="color: var(--primary);"></i> ${escapeHtml(essay.title || 'Walang Pamagat')}</h2>
-                <button class="modal-close" onclick="this.closest('.modal-overlay').remove(); document.body.style.overflow = '';">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p><strong>👤 May-akda:</strong> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</p>
-                <p><strong>📧 Email:</strong> ${escapeHtml(essay.email || 'Walang Email')}</p>
-                <p><strong>📅 Petsa:</strong> ${formatDate2(essay.created_at || essay.date)}</p>
-                <p><strong>⭐ Iskor:</strong> ${essay.score || 0}% ${getStarRating(essay.score || 0)}</p>
-                <div style="margin-top: 1rem;">
-                    <h4 style="color: var(--primary-dark);">📄 Orihinal na Sanaysay</h4>
-                    <div class="essay-display" style="max-height: 200px; overflow-y: auto; background: var(--bg-light); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-light); white-space: pre-wrap;">${escapeHtml(essay.original || 'Walang nilalaman.')}</div>
-                </div>
-                ${essay.translated ? `
-                <div style="margin-top: 1rem;">
-                    <h4 style="color: var(--primary-dark);">🌿 Malalim na Tagalog</h4>
-                    <div class="essay-display improved" style="max-height: 200px; overflow-y: auto;">${escapeHtml(essay.translated)}</div>
-                </div>
-                ` : ''}
-            </div>
-            <div class="modal-footer">
-                <button class="modal-close-btn" onclick="this.closest('.modal-overlay').remove(); document.body.style.overflow = '';">Isara</button>
-            </div>
-        </div>
-    `;
-    document.body.appendChild(modal);
-    document.body.style.overflow = 'hidden';
-    modal.addEventListener('click', function(e) {
-        if (e.target === this) {
-            this.remove();
-            document.body.style.overflow = '';
-        }
-    });
-}
-
-function deleteUserEssay(index) {
-    const essay = filteredEssays[index];
-    if (!essay) return;
-    if (confirm(`Sigurado ka bang gusto mong burahin ang "${essay.title || 'Walang Pamagat'}"?`)) {
-        const id = essay.id;
-        allUserEssays = allUserEssays.filter(e => e.id !== id);
-        let history = getHistory();
-        history = history.filter(h => h.id !== id);
-        localStorage.setItem('essayHistory', JSON.stringify(history));
-        applyFiltersAndRender();
-        showToast('Na-bura na ang sanaysay.', 'success', 'Burahin');
-    }
-}
-
-// ============================================================
-// SEARCH, SORT, FILTER FUNCTIONS
-// ============================================================
-
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('essaySearchInput');
-    if (searchInput) {
-        searchInput.addEventListener('input', function() {
+    // ============================================================
+    // SEARCH, SORT, FILTER FUNCTIONS
+    // ============================================================
+    const essaySearchInput = document.getElementById('essaySearchInput');
+    if (essaySearchInput) {
+        essaySearchInput.addEventListener('input', function() {
             currentSearch = this.value;
             applyFiltersAndRender();
         });
     }
-    const sortSelect = document.getElementById('essaySortSelect');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
+    
+    const essaySortSelect = document.getElementById('essaySortSelect');
+    if (essaySortSelect) {
+        essaySortSelect.addEventListener('change', function() {
             currentSort = this.value;
             applyFiltersAndRender();
         });
     }
-});
 
-function filterByStars(rating) {
-    currentStarFilter = rating;
-    document.querySelectorAll('.star-filter').forEach(el => {
-        el.classList.toggle('active', parseInt(el.dataset.rating) === rating);
-    });
-    applyFiltersAndRender();
-}
+    window.filterByStars = function(rating) {
+        currentStarFilter = rating;
+        document.querySelectorAll('.star-filter').forEach(el => {
+            el.classList.toggle('active', parseInt(el.dataset.rating) === rating);
+        });
+        applyFiltersAndRender();
+    };
 
-document.addEventListener('DOMContentLoaded', function() {
-    const refreshBtn = document.getElementById('refreshEssaysBtn');
-    if (refreshBtn) {
-        refreshBtn.addEventListener('click', function() {
+    const refreshEssaysBtn = document.getElementById('refreshEssaysBtn');
+    if (refreshEssaysBtn) {
+        refreshEssaysBtn.addEventListener('click', function() {
             this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Nagre-refresh...';
             this.disabled = true;
             loadUserEssays().then(() => {
@@ -1871,224 +1909,54 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-});
 
-// ============================================================
-// ENHANCED HISTORY
-// ============================================================
+    // ============================================================
+    // ENHANCED HISTORY
+    // ============================================================
+    let historyPage = 1;
+    const historyPerPage = 5;
 
-let historyPage = 1;
-const historyPerPage = 5;
+    window.resetHistoryFilters = function() {
+        document.getElementById('historySearchInput').value = '';
+        document.getElementById('historyFilterSelect').value = 'all';
+        document.getElementById('historySortSelect').value = 'newest';
+        historyPage = 1;
+        renderHistory('');
+    };
 
-function resetHistoryFilters() {
-    document.getElementById('historySearchInput').value = '';
-    document.getElementById('historyFilterSelect').value = 'all';
-    document.getElementById('historySortSelect').value = 'newest';
-    historyPage = 1;
-    renderHistory('');
-}
+    window.changeHistoryPage = function(page) {
+        const filtered = getHistory();
+        const totalPages = Math.ceil(filtered.length / historyPerPage);
+        if (page < 1 || page > totalPages) return;
+        historyPage = page;
+        renderHistory(document.getElementById('historySearchInput')?.value || '');
+    };
 
-window.renderHistory = function(filter = '') {
-    const container = document.getElementById('historyContainer');
-    if (!container) return;
-    const history = getHistory();
-    let filtered = history;
-    if (filter && filter.trim()) {
-        const search = filter.toLowerCase().trim();
-        const filterType = document.getElementById('historyFilterSelect')?.value || 'all';
-        filtered = history.filter(item => {
-            if (filterType === 'title') return item.title && item.title.toLowerCase().includes(search);
-            if (filterType === 'name') return item.name && item.name.toLowerCase().includes(search);
-            if (filterType === 'email') return item.email && item.email.toLowerCase().includes(search);
-            return (item.title && item.title.toLowerCase().includes(search)) ||
-                   (item.name && item.name.toLowerCase().includes(search)) ||
-                   (item.email && item.email.toLowerCase().includes(search));
-        });
-    }
-    const sortType = document.getElementById('historySortSelect')?.value || 'newest';
-    switch(sortType) {
-        case 'newest': filtered.sort((a, b) => b.timestamp - a.timestamp); break;
-        case 'oldest': filtered.sort((a, b) => a.timestamp - b.timestamp); break;
-        case 'score-high': filtered.sort((a, b) => (b.score || 0) - (a.score || 0)); break;
-        case 'score-low': filtered.sort((a, b) => (a.score || 0) - (b.score || 0)); break;
-        case 'title-az': filtered.sort((a, b) => (a.title || '').localeCompare(b.title || '')); break;
-        default: break;
-    }
-    updateHistoryStats(filtered);
-    const totalPages = Math.ceil(filtered.length / historyPerPage);
-    if (historyPage > totalPages) historyPage = 1;
-    const start = (historyPage - 1) * historyPerPage;
-    const end = start + historyPerPage;
-    const pageItems = filtered.slice(start, end);
-    if (filtered.length === 0) {
-        container.innerHTML = `<p style="color: var(--text-light); text-align: center; padding: 2rem;">
-            <i class="fas fa-inbox"></i> Walang naitalang sanaysay.
-        </p>`;
-        document.getElementById('historyPagination').innerHTML = '';
-        return;
-    }
-    container.innerHTML = pageItems.map(item => `
-        <div class="history-item" data-id="${item.id}">
-            <div class="history-info">
-                <div class="history-title">${escapeHtml(item.title)}</div>
-                <div class="history-meta">
-                    <span><i class="fas fa-user"></i> ${escapeHtml(item.name)}</span>
-                    <span><i class="fas fa-envelope"></i> ${escapeHtml(item.email)}</span>
-                    <span><i class="fas fa-calendar"></i> ${new Date(item.date).toLocaleDateString('tl-PH')}</span>
-                    ${item.score > 0 ? `<span><i class="fas fa-star" style="color: var(--primary);"></i> ${item.score}/100</span>` : ''}
-                </div>
-            </div>
-            <div class="history-actions">
-                <button class="view-btn" onclick="viewHistoryItem(${item.id})"><i class="fas fa-eye"></i> Tingnan</button>
-                <button class="delete-btn" onclick="deleteHistoryItemUI(${item.id})"><i class="fas fa-trash"></i></button>
-            </div>
-        </div>
-    `).join('');
-    renderHistoryPagination(totalPages);
-};
-
-function renderHistoryPagination(totalPages) {
-    const container = document.getElementById('historyPagination');
-    if (!container) return;
-    if (totalPages <= 1) { container.innerHTML = ''; return; }
-    let html = `
-        <button onclick="changeHistoryPage(${historyPage - 1})" ${historyPage <= 1 ? 'disabled' : ''}>
-            <i class="fas fa-chevron-left"></i>
-        </button>
-    `;
-    for (let i = 1; i <= totalPages; i++) {
-        if (i === 1 || i === totalPages || Math.abs(i - historyPage) <= 2) {
-            html += `<button onclick="changeHistoryPage(${i})" class="${i === historyPage ? 'active' : ''}">${i}</button>`;
-        } else if (i === historyPage - 3 || i === historyPage + 3) {
-            html += `<span>...</span>`;
-        }
-    }
-    html += `
-        <button onclick="changeHistoryPage(${historyPage + 1})" ${historyPage >= totalPages ? 'disabled' : ''}>
-            <i class="fas fa-chevron-right"></i>
-        </button>
-        <span class="page-info">Pahina ${historyPage} ng ${totalPages}</span>
-    `;
-    container.innerHTML = html;
-}
-
-function changeHistoryPage(page) {
-    const filtered = getHistory();
-    const totalPages = Math.ceil(filtered.length / historyPerPage);
-    if (page < 1 || page > totalPages) return;
-    historyPage = page;
-    renderHistory(document.getElementById('historySearchInput')?.value || '');
-}
-
-function updateHistoryStats(filtered) {
-    document.getElementById('totalEssays').textContent = filtered.length;
-    const uniqueAuthors = new Set(filtered.map(item => item.email));
-    document.getElementById('totalAuthors').textContent = uniqueAuthors.size;
-    const avgScore = filtered.length > 0 ? Math.round(filtered.reduce((sum, item) => sum + (item.score || 0), 0) / filtered.length) : 0;
-    document.getElementById('avgScore').textContent = avgScore;
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const historySearchInput = document.getElementById('historySearchInput');
-    if (historySearchInput) {
-        historySearchInput.addEventListener('input', function() {
-            historyPage = 1;
-            renderHistory(this.value);
-        });
-    }
-    const historyFilterSelect = document.getElementById('historyFilterSelect');
-    if (historyFilterSelect) {
-        historyFilterSelect.addEventListener('change', function() {
-            historyPage = 1;
-            renderHistory(document.getElementById('historySearchInput')?.value || '');
-        });
-    }
-    const historySortSelect = document.getElementById('historySortSelect');
-    if (historySortSelect) {
-        historySortSelect.addEventListener('change', function() {
-            historyPage = 1;
-            renderHistory(document.getElementById('historySearchInput')?.value || '');
-        });
-    }
-});
-
-window.exportHistory = function(format) {
-    const history = getHistory();
-    if (history.length === 0) {
-        showToast('Walang naitalang sanaysay na i-export.', 'warning', 'Export');
-        return;
-    }
-    let content = '', filename = '', mimeType = '';
-    switch(format) {
-        case 'txt':
-            content = history.map(item => 
-                `PAMAGAT: ${item.title}\nPANGALAN: ${item.name}\nEMAIL: ${item.email}\nPETSA: ${new Date(item.date).toLocaleDateString('tl-PH')}\nSCORE: ${item.score}/100\n\n${item.original}\n\n---\n`
-            ).join('\n');
-            filename = `sanaysay_history_${new Date().toISOString().slice(0,10)}.txt`;
-            mimeType = 'text/plain';
-            break;
-        case 'json':
-            content = JSON.stringify(history, null, 2);
-            filename = `sanaysay_history_${new Date().toISOString().slice(0,10)}.json`;
-            mimeType = 'application/json';
-            break;
-        case 'csv':
-            const headers = 'Pamagat,Pangalan,Email,Petsa,Iskor\n';
-            const rows = history.map(item => 
-                `"${item.title}","${item.name}","${item.email}","${new Date(item.date).toLocaleDateString('tl-PH')}",${item.score || 0}`
-            ).join('\n');
-            content = headers + rows;
-            filename = `sanaysay_history_${new Date().toISOString().slice(0,10)}.csv`;
-            mimeType = 'text/csv';
-            break;
-        default: return;
-    }
-    const blob = new Blob([content], { type: mimeType });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    showToast(`Na-export ang ${history.length} na sanaysay.`, 'success', 'Export');
-};
-
-// Make functions globally accessible
-window.changePage = changePage;
-window.filterByStars = filterByStars;
-window.viewUserEssay = viewUserEssay;
-window.deleteUserEssay = deleteUserEssay;
-window.resetHistoryFilters = resetHistoryFilters;
-window.changeHistoryPage = changeHistoryPage;
-
-// ============================================================
-// SAVE CURRENT SECTION ON REFRESH
-// ============================================================
-
-document.addEventListener('DOMContentLoaded', function() {
+    // ============================================================
+    // SAVE CURRENT SECTION ON REFRESH
+    // ============================================================
     const savedSection = sessionStorage.getItem('activeSection');
     if (savedSection) {
         const targetLink = document.querySelector(`.learn-nav ul li a[data-section="${savedSection}"]`);
         if (targetLink) {
-            targetLink.click();
+            setTimeout(() => targetLink.click(), 100);
         }
     }
+    
     document.querySelectorAll('.learn-nav ul li a').forEach(link => {
         link.addEventListener('click', function() {
             const sectionId = this.getAttribute('data-section');
             sessionStorage.setItem('activeSection', sectionId);
         });
     });
+
+    // ============================================================
+    // INITIALIZE
+    // ============================================================
+    renderSanggunian();
+    loadUserEssays();
+    renderHistory();
+
+    console.log('📚 All enhancements loaded: Sanggunian, User Essays, Pagination, Search, Sort!');
+    console.log('📊 History with search, sort, pagination enabled!');
 });
-
-// ============================================================
-// INITIALIZE ENHANCEMENTS
-// ============================================================
-
-renderSanggunian();
-loadUserEssays();
-
-console.log('📚 All enhancements loaded: Sanggunian, User Essays, Pagination, Search, Sort!');
-console.log('📊 History with search, sort, pagination and CSV export enabled!');
