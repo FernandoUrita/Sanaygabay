@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
             get: `${API_BASE}/get-essays`
         }
     };
+    
 
     // ============================================================
     // EMAILJS CONFIGURATION

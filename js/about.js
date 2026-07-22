@@ -75,6 +75,42 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ============================================================
+    // MOBILE NAVIGATION TOGGLE (FIXED)
+    // ============================================================
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.querySelector('.nav-links');
+
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('open');
+            const icon = this.querySelector('i');
+            if (navLinks.classList.contains('open')) {
+                icon.className = 'fas fa-times';
+            } else {
+                icon.className = 'fas fa-bars';
+            }
+        });
+
+        // Close nav when clicking a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                const icon = navToggle.querySelector('i');
+                if (icon) icon.className = 'fas fa-bars';
+            });
+        });
+
+        // Close nav when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-container')) {
+                navLinks.classList.remove('open');
+                const icon = navToggle.querySelector('i');
+                if (icon) icon.className = 'fas fa-bars';
+            }
+        });
+    }
+
+    // ============================================================
     // DARK MODE
     // ============================================================
     const darkModeToggle = document.getElementById('aboutDarkModeToggle');
@@ -156,5 +192,5 @@ document.addEventListener('DOMContentLoaded', function() {
         showToast('Maligayang pagdating sa About page ng Sanaysay Learning System 2026!', 'info', '👥 Tungkol sa Amin');
     }, 800);
 
-    console.log('👥 About page loaded with enhancements!');
+    console.log('👥 About page loaded with mobile navigation!');
 });
