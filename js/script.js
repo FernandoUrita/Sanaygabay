@@ -1957,4 +1957,21 @@ ${translated || 'Walang translation na ginawa.'}
 
     console.log('📚 All enhancements loaded: Sanggunian, User Essays, Pagination, Search, Sort!');
     console.log('📊 History with search, sort, pagination enabled!');
+
+    // ============================================================
+    // GLOBAL FUNCTION DECLARATIONS
+    // ============================================================
+    window.changePage = changePage;
+    window.filterByStars = filterByStars;
+    window.viewUserEssay = viewUserEssay;
+    window.deleteUserEssay = deleteUserEssay;
+    window.resetHistoryFilters = resetHistoryFilters;
+    window.changeHistoryPage = changeHistoryPage;
+    window.exportHistory = exportHistory;
+    window.renderHistory = renderHistory;
+    window.viewHistoryItem = viewHistoryItem;
+    window.deleteHistoryItemUI = deleteHistoryItemUI;
+    window.exportCurrentEssay = exportCurrentEssay;
+    
+    console.log('🌐 All functions are now globally accessible!');
 });
