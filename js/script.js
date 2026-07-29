@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // EMAILJS CONFIGURATION
     // ============================================================
     const EMAILJS_CONFIG = {
-        publicKey: '9ij51SpdkUbjW348o',
+        publicKey: 'tVFJnGuSC1Ikn5BIU',
         serviceID: 'service_f4ln0k7',
         templateIDStudent: 'template_at2sx1b',
         templateIDSystem: 'template_v3otl38',
