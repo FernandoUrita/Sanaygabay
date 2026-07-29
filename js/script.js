@@ -1,6 +1,6 @@
 // ============================================================
 // LEARN PAGE - SANAYSAY LEARNING SYSTEM 2026
-// WITH SUPABASE BACKEND INTEGRATION - COMPLETE
+// WITH SUPABASE BACKEND INTEGRATION - FINAL FIXED VERSION
 // ============================================================
 
 // ============================================================
@@ -14,7 +14,7 @@ function escapeHtml(str) {
 }
 
 // ============================================================
-// SANGGUNIAN / REFERENCES DATA
+// SANGGUNIAN / REFERENCES DATA - GLOBAL PARA MA ACCESS NG LAHAT
 // ============================================================
 const sanggunianData = [
     { type: 'Website', title: 'Kahirapan sa Pilipinas', author: 'Cheane DV', url: 'https://medium.com/@cheanedv/kahirapan-sa-pilipinas-65994ff19e30' },
@@ -43,7 +43,7 @@ function renderSanggunian() {
 }
 
 // ============================================================
-// LOCAL HISTORY FUNCTIONS
+// LOCAL HISTORY FUNCTIONS - GLOBAL PARA MAGAMIT NG LAHAT
 // ============================================================
 function getHistory() {
     return JSON.parse(localStorage.getItem('essayHistory') || '[]');
@@ -74,334 +74,6 @@ function deleteHistoryItem(id) {
 }
 
 // ============================================================
-// DEEP TAGALOG WORDS DATABASE - ULTIMATE EDITION (1000+ WORDS)
-// ============================================================
-const deepTagalogWords = {
-    // ============================================================
-    // SECTION 1: ADJECTIVES (PANG-URI)
-    // ============================================================
-    'maganda': 'marikit', 'ganda': 'kariktan', 'beautiful': 'marikit',
-    'gwapo': 'makisig', 'handsome': 'makisig', 'guwapo': 'makisig',
-    'matalino': 'marunong', 'smart': 'marunong', 'intelligent': 'matalas ang isip',
-    'mabait': 'mapagbigay', 'kind': 'mapagbigay', 'nice': 'kaaya-aya',
-    'mabuti': 'marangal', 'good': 'marangal', 'great': 'dakila', 'excellent': 'pambihira',
-    'masaya': 'maligaya', 'happy': 'maligaya', 'joyful': 'nagagalak', 'cheerful': 'masayahin',
-    'malungkot': 'mapaglungkot', 'sad': 'mapaglungkot', 'melancholy': 'mapanglaw', 'gloomy': 'madilim',
-    'galit': 'nagagalit', 'angry': 'nagagalit', 'furious': 'nag-aalab', 'mad': 'baliw',
-    'takot': 'pangamba', 'afraid': 'pangamba', 'fearful': 'natatakot', 'scared': 'natatakot',
-    'matapang': 'bayanihan', 'brave': 'bayanihan', 'courageous': 'matapang ang loob',
-    'malakas': 'makapangyarihan', 'strong': 'makapangyarihan', 'powerful': 'mabagsik',
-    'mahina': 'manghihina', 'weak': 'manghihina', 'fragile': 'marupok',
-    'mayaman': 'marangya', 'rich': 'marangya', 'wealthy': 'masagana', 'affluent': 'maykaya',
-    'mahirap': 'mapaghamon', 'poor': 'mapaghamon', 'destitute': 'naghihikahos', 'needy': 'nangangailangan',
-    'bata': 'musmos', 'young': 'musmos', 'youthful': 'kabataan', 'juvenile': 'bata pa',
-    'matanda': 'nakatatanda', 'old': 'nakatatanda', 'elderly': 'matatanda', 'aged': 'may edad',
-    'bago': 'makabago', 'new': 'makabago', 'fresh': 'sariwa', 'novel': 'bago',
-    'luma': 'sinauna', 'old (thing)': 'sinauna', 'ancient': 'sinauna', 'antique': 'antigo',
-    'malaki': 'malawak', 'big': 'malawak', 'large': 'napakalaki', 'huge': 'napakalawak',
-    'maliit': 'makitid', 'small': 'makitid', 'tiny': 'munti', 'petite': 'maliit',
-    'mabilis': 'mabilis', 'fast': 'mabilis', 'swift': 'matulin', 'rapid': 'mabilis',
-    'mabagal': 'mabagal', 'slow': 'mabagal', 'sluggish': 'makupad', 'lethargic': 'tamad',
-    'mainit': 'maalab', 'hot': 'maalab', 'warm': 'maaraw', 'scorching': 'napakainit',
-    'malamig': 'manlamig', 'cold': 'manlamig', 'chilly': 'maginaw', 'freezing': 'napakalamig',
-    'maliwanag': 'maliwanag', 'bright': 'maliwanag', 'clear': 'malinaw', 'radiant': 'nagniningning',
-    'madilim': 'madilim', 'dark': 'madilim', 'dim': 'dilim', 'obscure': 'malabo',
-    'malinaw': 'malinaw', 'transparent': 'liwanag', 'lucid': 'maliwanag',
-    'maulap': 'maulap', 'cloudy': 'maulap', 'overcast': 'maulap',
-    'maulan': 'maulan', 'rainy': 'maulan', 'wet': 'basa',
-    'maaraw': 'maaraw', 'sunny': 'maaraw', 'bright': 'maliwanag',
-    'mahangin': 'mahangin', 'windy': 'mahangin', 'breezy': 'mahangin',
-    'mabaho': 'mabaho', 'stinky': 'mabaho', 'foul': 'mabaho',
-    'mabango': 'mabango', 'fragrant': 'mabango', 'aromatic': 'mabango',
-    'masarap': 'masarap', 'delicious': 'masarap', 'tasty': 'malinamnam',
-    'mapait': 'mapait', 'bitter': 'mapait', 'acrid': 'mapait',
-    'matamis': 'matamis', 'sweet': 'matamis', 'sugary': 'matamis',
-    'maalat': 'maalat', 'salty': 'maalat', 'briny': 'maalat',
-    'maasim': 'maasim', 'sour': 'maasim', 'tart': 'maasim',
-    'maanghang': 'maanghang', 'spicy': 'maanghang', 'pungent': 'maanghang',
-    'masipag': 'masipag', 'diligent': 'masipag', 'industrious': 'masipag',
-    'tamad': 'tamad', 'lazy': 'tamad', 'idle': 'tamad',
-    'matiyaga': 'matiyaga', 'patient': 'matiyaga', 'persevering': 'matiyaga',
-    'mapagmahal': 'mapagmahal', 'loving': 'mapagmahal', 'affectionate': 'mapagmahal',
-    'mapagbigay': 'mapagbigay', 'generous': 'mapagbigay', 'charitable': 'mapagbigay',
-    'mapagkumbaba': 'mapagkumbaba', 'humble': 'mapagkumbaba', 'modest': 'mapagkumbaba',
-    'mapagmataas': 'mapagmataas', 'proud': 'mapagmataas', 'arrogant': 'mapagmataas',
-
-    // ============================================================
-    // SECTION 2: NOUNS (PANGNGALAN)
-    // ============================================================
-    'buhay': 'pamumuhay', 'life': 'pamumuhay', 'living': 'pamumuhay', 'existence': 'pag-iral',
-    'tao': 'katauhan', 'person': 'katauhan', 'human': 'nilalang', 'individual': 'indibidwal',
-    'bahay': 'tahanan', 'home': 'tahanan', 'house': 'tahanan', 'residence': 'tirahan',
-    'pamilya': 'mag-anak', 'family': 'mag-anak', 'kin': 'kamag-anak', 'relatives': 'kamag-anak',
-    'kaibigan': 'kasamahan', 'friend': 'kasamahan', 'companion': 'kasama', 'buddy': 'kaibigan',
-    'araw': 'sikat ng araw', 'sun': 'sikat ng araw', 'day': 'araw', 'daylight': 'liwanag ng araw',
-    'gabi': 'dapit-hapon', 'night': 'dapit-hapon', 'evening': 'takipsilim', 'dusk': 'dapithapon',
-    'lupa': 'kalupaan', 'earth': 'kalupaan', 'land': 'lupain', 'ground': 'lupa',
-    'tubig': 'katubigan', 'water': 'katubigan', 'ocean': 'karagatan', 'sea': 'karagatan',
-    'hangin': 'hanging', 'wind': 'hanging', 'air': 'himpapawid', 'breeze': 'simoy ng hangin',
-    'apoy': 'ningas', 'fire': 'ningas', 'flame': 'liyab', 'blaze': 'ningas',
-    'pag-ibig': 'pagsinta', 'love': 'pagsinta', 'affection': 'pagmamahal', 'devotion': 'debosyon',
-    'pagtulong': 'pagtangkilik', 'help': 'pagtangkilik', 'assistance': 'tulong', 'aid': 'tulong',
-    'kasiyahan': 'ligaya', 'happiness': 'ligaya', 'joy': 'kagalakan', 'delight': 'kasiyahan',
-    'kalungkutan': 'pighati', 'sadness': 'pighati', 'grief': 'lumbay', 'sorrow': 'dalamhati',
-    'takot': 'pangamba', 'fear': 'pangamba', 'dread': 'sindak', 'terror': 'katatakutan',
-    'lakas': 'lakas-loob', 'strength': 'lakas-loob', 'power': 'kapangyarihan', 'might': 'lakas',
-    'tiwala': 'pananalig', 'trust': 'pananalig', 'faith': 'pananampalataya', 'confidence': 'kumpiyansa',
-    'pag-asa': 'pag-asa', 'hope': 'pag-asa', 'aspiration': 'mithiin',
-    'pangarap': 'panaginip', 'dream': 'panaginip', 'ambition': 'ambisyon',
-    'edukasyon': 'pag-aaral', 'education': 'pag-aaral', 'learning': 'karunungan', 'schooling': 'edukasyon',
-    'kaalaman': 'karunungan', 'knowledge': 'karunungan', 'wisdom': 'karunungan', 'intelligence': 'katalinuhan',
-    'karanasan': 'karanasan', 'experience': 'karanasan',
-    'pagbabago': 'pagbabagong-buhay', 'change': 'pagbabagong-buhay', 'transformation': 'pagbabago',
-    'pag-unlad': 'pagsulong', 'progress': 'pagsulong', 'development': 'kaunlaran', 'advancement': 'pagsulong',
-    'kapayapaan': 'payapang pamumuhay', 'peace': 'payapang pamumuhay', 'tranquility': 'katahimikan',
-    'katarungan': 'katuwiran', 'justice': 'katuwiran', 'fairness': 'katarungan', 'equity': 'pagkakapantay',
-    'pagkakaisa': 'pagtutulungan', 'unity': 'pagtutulungan', 'solidarity': 'pagkakaisa',
-    'kalayaan': 'pagsasarili', 'freedom': 'pagsasarili', 'independence': 'kalayaan', 'liberty': 'kalayaan',
-    'dangal': 'karangalan', 'honor': 'karangalan', 'dignity': 'dangal', 'prestige': 'dangal',
-    'purihin': 'papurihan', 'praise': 'papurihan', 'commend': 'papuri', 'applaud': 'palakpakan',
-    'guro': 'tagapagturo', 'teacher': 'tagapagturo', 'mentor': 'gabay', 'educator': 'edukador',
-    'mag-aaral': 'disipulo', 'student': 'disipulo', 'learner': 'mag-aaral', 'pupil': 'estudyante',
-    'klase': 'silid-aralan', 'class': 'silid-aralan', 'classroom': 'silid', 'lecture': 'lektura',
-    'paaralan': 'institusyon', 'school': 'institusyon', 'academy': 'akademya',
-    'libro': 'aklat', 'book': 'aklat', 'volume': 'tomo',
-    'kwento': 'salaysay', 'story': 'salaysay', 'tale': 'kuwento', 'narrative': 'salaysay',
-    'sulat': 'liham', 'letter': 'liham', 'message': 'mensahe', 'correspondence': 'sulat',
-    'tula': 'awit', 'poem': 'awit', 'verse': 'tugma', 'poetry': 'panulaan',
-    'awit': 'himig', 'song': 'himig', 'melody': 'tunog', 'music': 'musika',
-    'sayaw': 'indak', 'dance': 'indak', 'rhythm': 'ritmo',
-    'musika': 'tunog', 'sound': 'tunog', 'harmony': 'harmoniya',
-    'sining': 'sining', 'art': 'sining', 'craft': 'sining',
-    'kultura': 'kalinangan', 'culture': 'kalinangan', 'civilization': 'kabihasnan',
-    'tradisyon': 'kaugalian', 'tradition': 'kaugalian', 'custom': 'ugali', 'practice': 'gawain',
-    'paniniwala': 'pananampalataya', 'belief': 'pananampalataya', 'conviction': 'paninindigan',
-    'relihiyon': 'pananampalataya', 'religion': 'pananampalataya', 'faith': 'pananampalataya',
-    'kalikasan': 'kapaligiran', 'nature': 'kapaligiran', 'environment': 'kalikasan',
-    'kapaligiran': 'kalikasan', 'surroundings': 'kapaligiran',
-    'hayop': 'nilalang', 'animal': 'nilalang', 'creature': 'kinapal', 'beast': 'halimaw',
-    'halaman': 'tanim', 'plant': 'tanim', 'vegetation': 'halaman',
-    'bulaklak': 'rosas', 'flower': 'rosas', 'bloom': 'bulaklak',
-    'prutas': 'bunga', 'fruit': 'bunga', 'harvest': 'ani',
-    'gulay': 'sariwa', 'vegetable': 'sariwa', 'produce': 'ani',
-    'karne': 'laman', 'meat': 'laman', 'flesh': 'laman',
-    'isda': 'laman-dagat', 'fish': 'laman-dagat', 'seafood': 'pagkaing-dagat',
-    'manok': 'ibon', 'chicken': 'ibon', 'poultry': 'manok',
-    'ibon': 'may-pakpak', 'bird': 'may-pakpak', 'feathered': 'may balahibo',
-    'aso': 'alaga', 'dog': 'alaga', 'canine': 'aso',
-    'pusa': 'kuting', 'cat': 'kuting', 'feline': 'pusa',
-    'kalsada': 'daan', 'road': 'daan', 'street': 'kalye', 'highway': 'lansangan',
-    'daan': 'landas', 'path': 'landas', 'way': 'paraan', 'route': 'ruta',
-    'bundok': 'kabuwanan', 'mountain': 'kabuwanan', 'hill': 'burol', 'peak': 'tuktok',
-    'dagat': 'karagatan', 'sea': 'karagatan', 'ocean': 'karagatan', 'deep': 'kalaliman',
-    'ilog': 'agos', 'river': 'agos', 'stream': 'batis', 'creek': 'sapa',
-    'lawa': 'lawa', 'lake': 'lawa', 'pond': 'lawa',
-    'ulan': 'patak', 'rain': 'patak', 'drop': 'tulo', 'raindrop': 'patak ng ulan',
-    'bagyo': 'sigwa', 'storm': 'sigwa', 'typhoon': 'bagyo', 'hurricane': 'bagyo',
-    'lindol': 'pagyanig', 'earthquake': 'pagyanig', 'tremor': 'pagyanig',
-    'baha': 'pagbaha', 'flood': 'pagbaha', 'inundation': 'baha',
-    'sunog': 'ningas', 'fire': 'ningas', 'conflagration': 'sunog',
-    'sakuna': 'disgrasya', 'disaster': 'disgrasya', 'catastrophe': 'kapahamakan',
-    'kalamidad': 'sakuna', 'calamity': 'sakuna', 'misfortune': 'kasawian',
-    'pandemya': 'salot', 'pandemic': 'salot', 'epidemic': 'epidemya',
-    'sakit': 'karamdaman', 'illness': 'karamdaman', 'disease': 'sakit', 'ailment': 'karamdaman',
-    'gamot': 'lunas', 'medicine': 'lunas', 'cure': 'gamot', 'remedy': 'lunas',
-    'doktor': 'manggagamot', 'doctor': 'manggagamot', 'physician': 'manggagamot',
-    'nars': 'tagapag-alaga', 'nurse': 'tagapag-alaga', 'caregiver': 'tagapag-alaga',
-    'ospital': 'pagamutan', 'hospital': 'pagamutan', 'clinic': 'klinika',
-    'parmasya': 'botika', 'pharmacy': 'botika', 'drugstore': 'botika',
-    'pagkain': 'pagkain', 'food': 'pagkain', 'meal': 'kainan', 'nourishment': 'pagkain',
-    'inumin': 'inom', 'drink': 'inom', 'beverage': 'inumin', 'refreshment': 'pampalamig',
-    'kape': 'kapeng', 'coffee': 'kapeng', 'brew': 'kape',
-    'tsokolate': 'kakaw', 'chocolate': 'kakaw', 'cocoa': 'kakaw',
-    'tinapay': 'kakanin', 'bread': 'kakanin', 'pastry': 'kakanin',
-    'kanin': 'bigas', 'rice': 'bigas', 'grain': 'butil',
-    'ulam': 'sabaw', 'dish': 'sabaw', 'viand': 'ulam',
-    'sabaw': 'sabaw', 'soup': 'sabaw', 'broth': 'sabaw',
-
-    // ============================================================
-    // SECTION 3: VERBS (PANDIWA)
-    // ============================================================
-    'kumain': 'kumain', 'eat': 'kumain', 'dine': 'kumain', 'feast': 'kainan',
-    'uminom': 'uminom', 'drink': 'uminom', 'sip': 'sumimsim',
-    'matulog': 'matulog', 'sleep': 'matulog', 'rest': 'magpahinga', 'slumber': 'idlip',
-    'mag-aral': 'mag-aral', 'study': 'mag-aral', 'learn': 'matuto',
-    'magturo': 'magturo', 'teach': 'magturo', 'instruct': 'magturo',
-    'magsulat': 'magsulat', 'write': 'magsulat', 'compose': 'sumulat',
-    'magbasa': 'magbasa', 'read': 'magbasa', 'peruse': 'bumabasa',
-    'maglakad': 'maglakad', 'walk': 'maglakad', 'stroll': 'maglakad-lakad',
-    'tumakbo': 'tumakbo', 'run': 'tumakbo', 'sprint': 'tumakbo',
-    'lumangoy': 'lumangoy', 'swim': 'lumangoy', 'float': 'lumutang',
-    'lumipad': 'lumipad', 'fly': 'lumipad', 'soar': 'lumipad',
-    'kumanta': 'kumanta', 'sing': 'kumanta', 'chant': 'umawit',
-    'sumayaw': 'sumayaw', 'dance': 'sumayaw', 'sway': 'umindak',
-    'magmahal': 'magmahal', 'love': 'magmahal', 'cherish': 'pahalagahan',
-    'mangarap': 'mangarap', 'dream': 'mangarap', 'aspire': 'maghangad',
-    'sumaya': 'sumaya', 'rejoice': 'sumaya', 'celebrate': 'magdiwang',
-    'lumungkot': 'lumungkot', 'grieve': 'lumungkot', 'mourn': 'magluksa',
-    'matakot': 'matakot', 'fear': 'matakot', 'dread': 'matakot',
-    'lumaban': 'lumaban', 'fight': 'lumaban', 'resist': 'lumaban',
-    'tumulong': 'tumulong', 'help': 'tumulong', 'assist': 'tumulong',
-    'magbigay': 'magbigay', 'give': 'magbigay', 'donate': 'magbigay',
-    'kumuha': 'kumuha', 'take': 'kumuha', 'obtain': 'kumuha',
-    'magdala': 'magdala', 'bring': 'magdala', 'carry': 'magdala',
-    'pumunta': 'pumunta', 'go': 'pumunta', 'proceed': 'pumunta',
-    'dumating': 'dumating', 'arrive': 'dumating', 'come': 'dumating',
-    'umalis': 'umalis', 'leave': 'umalis', 'depart': 'umalis',
-    'bumalik': 'bumalik', 'return': 'bumalik', 'come back': 'bumalik',
-    'tumingin': 'tumingin', 'look': 'tumingin', 'gaze': 'tumingin',
-    'makita': 'makita', 'see': 'makita', 'perceive': 'makita',
-    'marinig': 'marinig', 'hear': 'marinig', 'listen': 'makinig',
-    'maramdaman': 'maramdaman', 'feel': 'maramdaman', 'sense': 'maramdaman',
-    'isipin': 'isipin', 'think': 'isipin', 'ponder': 'mag-isip',
-    'maniwala': 'maniwala', 'believe': 'maniwala', 'trust': 'magtiwala',
-    'umasa': 'umasa', 'hope': 'umasa', 'expect': 'umasa',
-    'magtiwala': 'magtiwala', 'trust': 'magtiwala', 'rely': 'umasa',
-
-    // ============================================================
-    // SECTION 4: PRONOUNS, CONJUNCTIONS, PREPOSITIONS
-    // ============================================================
-    'ako': 'ako', 'i': 'ako', 'me': 'ako', 'myself': 'aking sarili',
-    'ikaw': 'ikaw', 'you': 'ikaw', 'yourself': 'iyong sarili',
-    'siya': 'siya', 'he': 'siya', 'she': 'siya', 'him': 'kanya', 'her': 'kanya',
-    'tayo': 'tayo', 'we': 'tayo', 'us': 'tayo', 'our': 'atin',
-    'kayo': 'kayo', 'you (plural)': 'kayo', 'yourselves': 'inyong sarili',
-    'sila': 'sila', 'they': 'sila', 'them': 'kanila', 'their': 'kanila',
-    'atin': 'atin', 'our': 'atin', 'ours': 'atin',
-    'inyo': 'inyo', 'your': 'inyo', 'yours': 'inyo',
-    'kanila': 'kanila', 'their': 'kanila', 'theirs': 'kanila',
-    'at': 'at', 'and': 'at', 'plus': 'at',
-    'o': 'o', 'or': 'o', 'either': 'alinman',
-    'ngunit': 'ngunit', 'but': 'ngunit', 'however': 'gayunpaman',
-    'dahil': 'dahil', 'because': 'dahil', 'since': 'mula nang',
-    'kung': 'kung', 'if': 'kung', 'whether': 'kung',
-    'kapag': 'kapag', 'when': 'kapag', 'whenever': 'sa tuwing',
-    'habang': 'habang', 'while': 'habang', 'as': 'habang',
-    'upang': 'upang', 'to': 'upang', 'in order to': 'upang',
-    'para': 'para', 'for': 'para', 'so that': 'nang sa gayon',
-    'sa': 'sa', 'in': 'sa', 'on': 'sa', 'at': 'sa', 'to': 'sa',
-    'ng': 'ng', 'of': 'ng', 'by': 'ng',
-    'ang': 'ang', 'the': 'ang',
-
-    // ============================================================
-    // SECTION 5: PHRASES AND COMMON EXPRESSIONS
-    // ============================================================
-    'my life': 'ang aking pamumuhay',
-    'our country': 'ang ating bayan',
-    'the world': 'ang daigdig',
-    'humanity': 'sangkatauhan',
-    'future generation': 'susunod na henerasyon',
-    'our children': 'ating mga anak',
-    'the youth': 'kabataan',
-    'our nation': 'ating bansa',
-    'our people': 'ating mga kababayan',
-    'the poor': 'mga mahihirap',
-    'the rich': 'mga mayayaman',
-    'ordinary people': 'karaniwang tao',
-    'every day': 'araw-araw',
-    'every night': 'gabi-gabi',
-    'in the morning': 'sa umaga',
-    'in the afternoon': 'sa hapon',
-    'in the evening': 'sa gabi',
-    'at night': 'sa gabi',
-    'today': 'ngayon',
-    'tomorrow': 'bukas',
-    'yesterday': 'kahapon',
-    'now': 'ngayon',
-    'later': 'mamaya',
-    'soon': 'malapit na',
-    'always': 'palagi',
-    'never': 'hindi kailanman',
-    'sometimes': 'minsan',
-    'often': 'madalas',
-    'rarely': 'bihira',
-    'finally': 'sa wakas',
-    'suddenly': 'bigla',
-    'immediately': 'kaagad',
-    'slowly': 'dahan-dahan',
-    'quickly': 'mabilis',
-    'carefully': 'maingat',
-    'happily': 'masaya',
-    'sadly': 'malungkot',
-    'peacefully': 'payapa',
-    'bravely': 'matapang',
-    'kindly': 'mabait',
-    'gratefully': 'nagpapasalamat',
-    'thank you': 'salamat',
-    'you\'re welcome': 'walang anuman',
-    'please': 'pakiusap',
-    'sorry': 'paumanhin',
-    'good morning': 'magandang umaga',
-    'good afternoon': 'magandang hapon',
-    'good evening': 'magandang gabi',
-    'good night': 'magandang gabi',
-    'hello': 'kumusta',
-    'goodbye': 'paalam',
-    'see you later': 'hanggang sa muli',
-    'take care': 'ingat',
-    'congratulations': 'pagbati',
-    'happy birthday': 'maligayang kaarawan',
-    'merry christmas': 'maligayang pasko',
-    'happy new year': 'manigong bagong taon',
-
-    // ============================================================
-    // SECTION 6: ADVANCED/POETIC TAGALOG WORDS
-    // ============================================================
-    'liwanag': 'liwanag', 'light': 'liwanag',
-    'dilim': 'kadiliman', 'darkness': 'kadiliman',
-    'lansangan': 'lansangan', 'street': 'lansangan',
-    'bayani': 'bayani', 'hero': 'bayani',
-    'kasaysayan': 'kasaysayan', 'history': 'kasaysayan',
-    'kinabukasan': 'kinabukasan', 'future': 'kinabukasan',
-    'karunungan': 'karunungan', 'wisdom': 'karunungan',
-    'kagitingan': 'kagitingan', 'valor': 'kagitingan',
-    'kagandahan': 'kariktan', 'beauty': 'kariktan',
-    'kabaitan': 'kabaitan', 'goodness': 'kabaitan',
-    'katalinuhan': 'katalinuhan', 'intelligence': 'katalinuhan',
-    'kasipagan': 'kasipagan', 'diligence': 'kasipagan',
-    'katiyagaan': 'katiyagaan', 'perseverance': 'katiyagaan',
-    'katapatan': 'katapatan', 'loyalty': 'katapatan',
-    'kabutihan': 'kabutihan', 'virtue': 'kabutihan',
-    'kasamaan': 'kasamaan', 'evil': 'kasamaan',
-    'kagalakan': 'kagalakan', 'joy': 'kagalakan',
-    'kaligayahan': 'kaligayahan', 'happiness': 'kaligayahan',
-    'kapanatagan': 'kapanatagan', 'serenity': 'kapanatagan',
-    'kabanalan': 'kabanalan', 'holiness': 'kabanalan',
-    'kadakilaan': 'kadakilaan', 'greatness': 'kadakilaan',
-    'kababaang-loob': 'kababaang-loob', 'humility': 'kababaang-loob',
-    'kagitingan': 'kagitingan', 'courage': 'kagitingan',
-    'kagandahang-loob': 'kagandahang-loob', 'kindness': 'kagandahang-loob',
-    'katalagahan': 'katalagahan', 'destiny': 'katalagahan',
-    'kabanalan': 'kabanalan', 'sanctity': 'kabanalan',
-    'kadakilaan': 'kadakilaan', 'majesty': 'kadakilaan',
-    'kaluluwa': 'kaluluwa', 'soul': 'kaluluwa',
-    'diwa': 'diwa', 'spirit': 'diwa',
-    'budhi': 'budhi', 'conscience': 'budhi',
-    'isip': 'isip', 'mind': 'isip',
-    'puso': 'puso', 'heart': 'puso',
-    'dibdib': 'dibdib', 'chest': 'dibdib',
-    'mukha': 'mukha', 'face': 'mukha',
-    'mata': 'mata', 'eyes': 'mata',
-    'tainga': 'tainga', 'ears': 'tainga',
-    'ilong': 'ilong', 'nose': 'ilong',
-    'bibig': 'bibig', 'mouth': 'bibig',
-    'kamay': 'kamay', 'hands': 'kamay',
-    'paa': 'paa', 'feet': 'paa',
-    'balat': 'balat', 'skin': 'balat',
-    'buto': 'buto', 'bone': 'buto',
-    'dugo': 'dugo', 'blood': 'dugo',
-    'hininga': 'hininga', 'breath': 'hininga',
-    'init': 'init', 'heat': 'init',
-    'lamig': 'lamig', 'cold': 'lamig',
-    'saya': 'saya', 'happiness': 'saya',
-    'lumbay': 'lumbay', 'sadness': 'lumbay',
-    'gulo': 'gulo', 'chaos': 'gulo',
-    'ayos': 'ayos', 'order': 'ayos',
-    'buhay': 'buhay', 'life': 'buhay',
-    'kamatayan': 'kamatayan', 'death': 'kamatayan'
-};
-
-// ============================================================
 // DOMContentLoaded - MAIN
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
@@ -417,12 +89,13 @@ document.addEventListener('DOMContentLoaded', function() {
             get: `${API_BASE}/get-essays`
         }
     };
+    
 
     // ============================================================
     // EMAILJS CONFIGURATION
     // ============================================================
     const EMAILJS_CONFIG = {
-        publicKey: '9ij51SpdkUbjW348o',
+        publicKey: 'tVFJnGuSC1Ikn5BIU',
         serviceID: 'service_f4ln0k7',
         templateIDStudent: 'template_at2sx1b',
         templateIDSystem: 'template_v3otl38',
@@ -434,6 +107,47 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ============================================================
+    // DEEP TAGALOG WORDS DATABASE
+    // ============================================================
+    const deepTagalogWords = {
+        'maganda': 'marikit', 'ganda': 'kariktan', 'buhay': 'pamumuhay',
+        'tao': 'katauhan', 'bahay': 'tahanan', 'araw': 'sikat ng araw',
+        'gabi': 'dapit-hapon', 'lupa': 'kalupaan', 'tubig': 'katubigan',
+        'hangin': 'hanging', 'apoy': 'ningas', 'pamilya': 'mag-anak',
+        'kaibigan': 'kasamahan', 'pag-ibig': 'pagsinta', 'pagtulong': 'pagtangkilik',
+        'kasiyahan': 'ligaya', 'kalungkutan': 'pighati', 'takot': 'pangamba',
+        'lakas': 'lakas-loob', 'tiwala': 'pananalig', 'pag-asa': 'pag-asa',
+        'pangarap': 'panaginip', 'edukasyon': 'pag-aaral', 'kaalaman': 'karunungan',
+        'karanasan': 'karanasan', 'pagbabago': 'pagbabagong-buhay', 'pag-unlad': 'pagsulong',
+        'kapayapaan': 'payapang pamumuhay', 'katarungan': 'katuwiran', 'pagkakaisa': 'pagtutulungan',
+        'kalayaan': 'pagsasarili', 'dangal': 'karangalan', 'purihin': 'papurihan',
+        'mabuti': 'marangal', 'masaya': 'maligaya', 'malungkot': 'mapaglungkot',
+        'mahalaga': 'makabuluhan', 'mahirap': 'mapaghamon', 'madali': 'magaan',
+        'bago': 'makabago', 'luma': 'sinauna', 'malaki': 'malawak',
+        'maliit': 'makitid', 'mabilis': 'mabilis', 'mabagal': 'mabagal',
+        'mainit': 'maalab', 'malamig': 'manlamig', 'guro': 'tagapagturo',
+        'mag-aaral': 'disipulo', 'klase': 'silid-aralan', 'paaralan': 'institusyon',
+        'libro': 'aklat', 'kwento': 'salaysay', 'sulat': 'liham',
+        'tula': 'awit', 'awit': 'himig', 'sayaw': 'indak',
+        'musika': 'tunog', 'sining': 'sining', 'kultura': 'kalinangan',
+        'tradisyon': 'kaugalian', 'paniniwala': 'pananampalataya', 'relihiyon': 'pananampalataya',
+        'kalikasan': 'kapaligiran', 'kapaligiran': 'kalikasan', 'hayop': 'nilalang',
+        'halaman': 'tanim', 'bulaklak': 'rosas', 'prutas': 'bunga',
+        'gulay': 'sariwa', 'karne': 'laman', 'isda': 'laman-dagat',
+        'manok': 'ibon', 'ibon': 'may-pakpak', 'aso': 'alaga',
+        'pusa': 'kuting', 'kalsada': 'daan', 'daan': 'landas',
+        'bundok': 'kabuwanan', 'dagat': 'karagatan', 'ilog': 'agos',
+        'lawa': 'lawa', 'ulan': 'patak', 'bagyo': 'sigwa',
+        'lindol': 'pagyanig', 'baha': 'pagbaha', 'sunog': 'ningas',
+        'sakuna': 'disgrasya', 'kalamidad': 'sakuna', 'pandemya': 'salot',
+        'sakit': 'karamdaman', 'gamot': 'lunas', 'doktor': 'manggagamot',
+        'nars': 'tagapag-alaga', 'ospital': 'pagamutan', 'parmasya': 'botika',
+        'pagkain': 'pagkain', 'inumin': 'inom', 'kape': 'kapeng',
+        'tsokolate': 'kakaw', 'tinapay': 'kakanin', 'kanin': 'bigas',
+        'ulam': 'sabaw', 'sabaw': 'sabaw'
+    };
+
+    // ============================================================
     // DOM ELEMENTS
     // ============================================================
     const navLinks = document.querySelectorAll('.learn-nav ul li a');
@@ -441,40 +155,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressBar = document.getElementById('progressBar');
     const scrollTopBtn = document.getElementById('scrollTopBtn');
     const darkModeToggle = document.getElementById('darkModeToggle');
-
-    // ============================================================
-    // MOBILE NAVIGATION
-    // ============================================================
-    const navToggle = document.getElementById('navToggle');
-    const navLinksMobile = document.querySelector('.nav-links');
-
-    if (navToggle && navLinksMobile) {
-        navToggle.addEventListener('click', function() {
-            navLinksMobile.classList.toggle('open');
-            const icon = this.querySelector('i');
-            if (navLinksMobile.classList.contains('open')) {
-                icon.className = 'fas fa-times';
-            } else {
-                icon.className = 'fas fa-bars';
-            }
-        });
-
-        navLinksMobile.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navLinksMobile.classList.remove('open');
-                const icon = navToggle.querySelector('i');
-                if (icon) icon.className = 'fas fa-bars';
-            });
-        });
-
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.nav-container')) {
-                navLinksMobile.classList.remove('open');
-                const icon = navToggle.querySelector('i');
-                if (icon) icon.className = 'fas fa-bars';
-            }
-        });
-    }
 
     // ============================================================
     // SCROLL PROGRESS BAR
@@ -791,7 +471,6 @@ document.addEventListener('DOMContentLoaded', function() {
         counter.innerHTML = `
             <span><i class="fas fa-words"></i> Mga Salita: <span class="count-number" id="wordCount">0</span></span>
             <span><i class="fas fa-font"></i> Mga Karakter: <span class="count-number" id="charCount">0</span></span>
-            <span><i class="fas fa-clock"></i> Oras ng Pagbasa: <span class="count-number" id="readTime">0</span> min</span>
         `;
         container.appendChild(counter);
         
@@ -1094,64 +773,26 @@ document.addEventListener('DOMContentLoaded', function() {
         
         words.forEach(word => {
             const cleanWord = word.replace(/[^a-zA-ZñÑáéíóú]/g, '');
-            if (!cleanWord) return;
-            
-            let matched = false;
-            let deepWord = null;
-            
-            // Check exact match
-            if (deepTagalogWords[cleanWord]) {
-                deepWord = deepTagalogWords[cleanWord];
-                matched = true;
-            } else {
-                // Check if word contains any key or key contains word
-                for (let key in deepTagalogWords) {
-                    if (cleanWord.includes(key) || key.includes(cleanWord)) {
-                        deepWord = deepTagalogWords[key];
-                        matched = true;
-                        break;
-                    }
-                }
-            }
-            
-            if (matched && deepWord && !uniqueWords.has(cleanWord)) {
+            if (deepTagalogWords[cleanWord] && !uniqueWords.has(cleanWord)) {
                 uniqueWords.add(cleanWord);
                 found.push({
                     original: cleanWord,
-                    deep: deepWord
+                    deep: deepTagalogWords[cleanWord]
                 });
             }
         });
-        
         return found;
     }
 
     function translateToDeepTagalog(text) {
         let sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
-        
         let translatedSentences = sentences.map(sentence => {
             let words = sentence.trim().split(/\s+/);
             let translatedWords = words.map(word => {
                 let cleanWord = word.replace(/[^a-zA-ZñÑáéíóú]/g, '').toLowerCase();
                 let punctuation = word.match(/[^a-zA-ZñÑáéíóú]/g) || [];
-                
-                let foundWord = null;
-                
-                // Check exact match
                 if (deepTagalogWords[cleanWord]) {
-                    foundWord = deepTagalogWords[cleanWord];
-                } else {
-                    // Check if word contains any key or key contains word
-                    for (let key in deepTagalogWords) {
-                        if (cleanWord.includes(key) || key.includes(cleanWord)) {
-                            foundWord = deepTagalogWords[key];
-                            break;
-                        }
-                    }
-                }
-                
-                if (foundWord) {
-                    let newWord = foundWord;
+                    let newWord = deepTagalogWords[cleanWord];
                     if (word[0] === word[0].toUpperCase()) {
                         newWord = newWord.charAt(0).toUpperCase() + newWord.slice(1);
                     }
@@ -1161,12 +802,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             return translatedWords.join(' ');
         });
-        
         return translatedSentences.join('. ') + '.';
     }
 
     // ============================================================
-    // ESSAY MODULE
+    // ESSAY MODULE - DECLARE VARIABLES FIRST!
     // ============================================================
     const essayTitle = document.getElementById('essayTitle');
     const essayInput = document.getElementById('essayInput');
@@ -1186,7 +826,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const newEssayDifferentUserBtn = document.getElementById('newEssayDifferentUserBtn');
 
     // ============================================================
-    // ESSAY TIMER - EVENT LISTENERS
+    // ESSAY TIMER - EVENT LISTENERS (after variables are declared)
     // ============================================================
     if (essayTitle) {
         essayTitle.addEventListener('input', function() {
@@ -1225,9 +865,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================================
     async function saveEssayToSupabase(essayData) {
         try {
+            // Check if we're on Netlify or localhost
             const isNetlify = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
             
             if (!isNetlify) {
+                // If on localhost, save to localStorage only
                 console.log('📝 Localhost detected - saving to localStorage only');
                 saveToLocalHistory(
                     essayData.name,
@@ -1253,6 +895,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return await response.json();
         } catch (error) {
             console.error('Error saving essay:', error);
+            // Fallback to localStorage
+            console.log('📝 Saving to localStorage as fallback');
             saveToLocalHistory(
                 essayData.name,
                 essayData.email,
@@ -1839,7 +1483,6 @@ ${translated || 'Walang translation na ginawa.'}
                 </div>
                 <div class="history-actions">
                     <button class="view-btn" onclick="viewHistoryItem(${item.id})"><i class="fas fa-eye"></i> Tingnan</button>
-                    <button class="delete-btn" onclick="deleteHistoryItemUI(${item.id})"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         `).join('');
@@ -2087,14 +1730,7 @@ ${translated || 'Walang translation na ginawa.'}
             default: break;
         }
         filteredEssays = filtered;
-        
-        const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
-        if (currentPage > totalPages && totalPages > 0) {
-            currentPage = totalPages;
-        } else if (totalPages === 0) {
-            currentPage = 1;
-        }
-        
+        currentPage = 1;
         renderUserEssays();
     }
 
@@ -2120,6 +1756,7 @@ ${translated || 'Walang translation na ginawa.'}
         }
         
         container.innerHTML = pageEssays.map((essay, pageIndex) => {
+            // ✅ CORRECT: Get the actual index in filteredEssays
             const actualIndex = start + pageIndex;
             
             const displayDate = essay.created_at || essay.date || new Date().toISOString();
@@ -2149,7 +1786,6 @@ ${translated || 'Walang translation na ginawa.'}
                 </div>
                 <div class="essay-actions">
                     <button class="view-essay-btn" onclick="viewUserEssay(${actualIndex})"><i class="fas fa-eye"></i> Tingnan</button>
-                    <button class="delete-essay-btn" onclick="deleteUserEssay(${actualIndex})"><i class="fas fa-trash"></i> Burahin</button>
                 </div>
             </div>
             `;
@@ -2213,18 +1849,17 @@ ${translated || 'Walang translation na ginawa.'}
         const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
         if (page < 1 || page > totalPages) return;
         currentPage = page;
+        
+        // Save current page to sessionStorage
         sessionStorage.setItem('essayPage', currentPage);
+        
         renderUserEssays();
         document.getElementById('user-essays').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    function viewUserEssay(actualIndex) {
-        const essay = filteredEssays[actualIndex];
-        if (!essay) {
-            showToast('Hindi mahanap ang sanaysay.', 'error', 'Error');
-            return;
-        }
-        
+    function viewUserEssay(index) {
+        const essay = filteredEssays[index];
+        if (!essay) return;
         const modal = document.createElement('div');
         modal.className = 'modal-overlay active';
         modal.style.display = 'flex';
@@ -2265,17 +1900,14 @@ ${translated || 'Walang translation na ginawa.'}
         });
     }
 
-    function deleteUserEssay(actualIndex) {
-        const essay = filteredEssays[actualIndex];
-        if (!essay) {
-            showToast('Hindi mahanap ang sanaysay.', 'error', 'Error');
-            return;
-        }
-        
+    function deleteUserEssay(index) {
+        const essay = filteredEssays[index];
+        if (!essay) return;
         if (confirm(`Sigurado ka bang gusto mong burahin ang "${essay.title || 'Walang Pamagat'}"?`)) {
-            allUserEssays = allUserEssays.filter(e => e.id !== essay.id);
+            const id = essay.id;
+            allUserEssays = allUserEssays.filter(e => e.id !== id);
             let history = getHistory();
-            history = history.filter(h => h.id !== essay.id);
+            history = history.filter(h => h.id !== id);
             localStorage.setItem('essayHistory', JSON.stringify(history));
             applyFiltersAndRender();
             showToast('Na-bura na ang sanaysay.', 'success', 'Burahin');
@@ -2373,6 +2005,16 @@ ${translated || 'Walang translation na ginawa.'}
     });
 
     // ============================================================
+    // INITIALIZE
+    // ============================================================
+    renderSanggunian();
+    loadUserEssays();
+    renderHistory();
+
+    console.log('📚 All enhancements loaded: Sanggunian, User Essays, Pagination, Search, Sort!');
+    console.log('📊 History with search, sort, pagination enabled!');
+
+    // ============================================================
     // GLOBAL FUNCTION DECLARATIONS
     // ============================================================
     window.changePage = changePage;
@@ -2386,15 +2028,6 @@ ${translated || 'Walang translation na ginawa.'}
     window.viewHistoryItem = viewHistoryItem;
     window.deleteHistoryItemUI = deleteHistoryItemUI;
     window.exportCurrentEssay = exportCurrentEssay;
-
-    // ============================================================
-    // INITIALIZE ENHANCEMENTS
-    // ============================================================
-    renderSanggunian();
-    loadUserEssays();
-    renderHistory();
-
-    console.log('📚 All enhancements loaded: Sanggunian, User Essays, Pagination, Search, Sort!');
-    console.log('📊 History with search, sort, pagination enabled!');
+    
     console.log('🌐 All functions are now globally accessible!');
 });
