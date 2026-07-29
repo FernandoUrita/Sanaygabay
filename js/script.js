@@ -1738,10 +1738,12 @@ ${translated || 'Walang translation na ginawa.'}
         const container = document.getElementById('userEssaysContainer');
         const paginationContainer = document.getElementById('essayPagination');
         if (!container) return;
+        
         const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
         const start = (currentPage - 1) * essaysPerPage;
         const end = start + essaysPerPage;
         const pageEssays = filteredEssays.slice(start, end);
+        
         if (filteredEssays.length === 0) {
             container.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-light);">
@@ -1752,15 +1754,20 @@ ${translated || 'Walang translation na ginawa.'}
             if (paginationContainer) paginationContainer.innerHTML = '';
             return;
         }
-        container.innerHTML = pageEssays.map((essay, index) => {
+        
+        container.innerHTML = pageEssays.map((essay, pageIndex) => {
+            // ✅ CORRECT: Get the actual index in filteredEssays
+            const actualIndex = start + pageIndex;
+            
             const displayDate = essay.created_at || essay.date || new Date().toISOString();
             const score = essay.score || 0;
             const stars = getStarRating(score);
             const wordCount = (essay.original || '').split(/\s+/).filter(w => w.length > 0).length;
             const readTime = Math.ceil(wordCount / 200);
             const timeAgo = getTimeAgo(displayDate);
+            
             return `
-            <div class="essay-module-card" data-id="${essay.id || index}">
+            <div class="essay-module-card" data-id="${essay.id || actualIndex}">
                 <div class="essay-title">${escapeHtml(essay.title || 'Walang Pamagat')}</div>
                 <div class="essay-meta">
                     <span><i class="fas fa-user"></i> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</span>
@@ -1778,11 +1785,12 @@ ${translated || 'Walang translation na ginawa.'}
                     <span><i class="fas fa-star" style="color: #f5b342;"></i> ${stars} (${score}%)</span>
                 </div>
                 <div class="essay-actions">
-                    <button class="view-essay-btn" onclick="viewUserEssay(${index})"><i class="fas fa-eye"></i> Tingnan</button>
+                    <button class="view-essay-btn" onclick="viewUserEssay(${actualIndex})"><i class="fas fa-eye"></i> Tingnan</button>
                 </div>
             </div>
             `;
         }).join('');
+        
         if (paginationContainer) {
             renderPagination(paginationContainer, totalPages);
         }
