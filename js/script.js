@@ -1661,7 +1661,41 @@ ${translated || 'Walang translation na ginawa.'}
                 if (!exists) merged.push(local);
             });
             allUserEssays = merged;
+            
+            // Restore saved filters and page
+            const savedSearch = sessionStorage.getItem('essaySearch') || '';
+            const savedSort = sessionStorage.getItem('essaySort') || 'newest';
+            const savedStarFilter = parseInt(sessionStorage.getItem('essayStarFilter')) || 0;
+            const savedPage = parseInt(sessionStorage.getItem('essayPage')) || 1;
+            
+            if (savedSearch) {
+                const searchInput = document.getElementById('essaySearchInput');
+                if (searchInput) searchInput.value = savedSearch;
+            }
+            if (savedSort) {
+                const sortSelect = document.getElementById('essaySortSelect');
+                if (sortSelect) sortSelect.value = savedSort;
+            }
+            
+            currentSearch = savedSearch;
+            currentSort = savedSort;
+            currentStarFilter = savedStarFilter;
+            
+            // Update star filter UI
+            document.querySelectorAll('.star-filter').forEach(el => {
+                el.classList.toggle('active', parseInt(el.dataset.rating) === savedStarFilter);
+            });
+            
             applyFiltersAndRender();
+            
+            // Restore page after render
+            if (savedPage > 1) {
+                const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
+                if (savedPage <= totalPages) {
+                    currentPage = savedPage;
+                    renderUserEssays();
+                }
+            }
         } catch (error) {
             console.error('Error loading user essays:', error);
             allUserEssays = getHistory();
@@ -1807,6 +1841,10 @@ ${translated || 'Walang translation na ginawa.'}
         const totalPages = Math.ceil(filteredEssays.length / essaysPerPage);
         if (page < 1 || page > totalPages) return;
         currentPage = page;
+        
+        // Save current page to sessionStorage
+        sessionStorage.setItem('essayPage', currentPage);
+        
         renderUserEssays();
         document.getElementById('user-essays').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -1875,6 +1913,9 @@ ${translated || 'Walang translation na ginawa.'}
     if (essaySearchInput) {
         essaySearchInput.addEventListener('input', function() {
             currentSearch = this.value;
+            currentPage = 1;
+            sessionStorage.setItem('essaySearch', currentSearch);
+            sessionStorage.setItem('essayPage', 1);
             applyFiltersAndRender();
         });
     }
@@ -1883,12 +1924,19 @@ ${translated || 'Walang translation na ginawa.'}
     if (essaySortSelect) {
         essaySortSelect.addEventListener('change', function() {
             currentSort = this.value;
+            currentPage = 1;
+            sessionStorage.setItem('essaySort', currentSort);
+            sessionStorage.setItem('essayPage', 1);
             applyFiltersAndRender();
         });
     }
 
     window.filterByStars = function(rating) {
         currentStarFilter = rating;
+        currentPage = 1;
+        sessionStorage.setItem('essayStarFilter', rating);
+        sessionStorage.setItem('essayPage', 1);
+        
         document.querySelectorAll('.star-filter').forEach(el => {
             el.classList.toggle('active', parseInt(el.dataset.rating) === rating);
         });
