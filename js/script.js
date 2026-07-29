@@ -1786,6 +1786,7 @@ ${translated || 'Walang translation na ginawa.'}
                 </div>
                 <div class="essay-actions">
                     <button class="view-essay-btn" onclick="viewUserEssay(${actualIndex})"><i class="fas fa-eye"></i> Tingnan</button>
+                    <button class="delete-essay-btn" onclick="deleteUserEssay(${actualIndex})"><i class="fas fa-trash"></i> Burahin</button>
                 </div>
             </div>
             `;
