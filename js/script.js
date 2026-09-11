@@ -1113,7 +1113,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             
             <div>
-                <h2 class="section-title">🌿 Malalim na Tagalog (AI-Translated)</h2>
+                <h2 class="section-title">🌿 Malalim na Pahayag (AI-Translated)</h2>
                 <div class="content-box translated essay-content">${escapeHtml(cleanTranslated)}</div>
             </div>
             
