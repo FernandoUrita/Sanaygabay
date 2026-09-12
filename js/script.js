@@ -1544,33 +1544,85 @@ ${translated || 'Walang translation na ginawa.'}
                 }
                 
                 // Send emails if EmailJS is available
-                if (typeof emailjs !== 'undefined') {
+                 if (typeof emailjs !== 'undefined') {
                     try {
+                        const baseScore = score.overall + score.pastePenalty;
+                        const hasPenalty = score.pastePenalty > 0;
+                        const scoreDisplay = hasPenalty 
+                            ? `${score.overall}% (Base: ${baseScore}% - Penalty: ${score.pastePenalty}%)`
+                            : `${score.overall}%`;
+                        
+                        // ✅ Conditional penalty HTML para sa email
+                        const penaltyHtml = hasPenalty
+                            ? `<div style="background: #f8d7da; padding: 10px 15px; border-radius: 6px; border-left: 4px solid #dc3545; margin-top: 10px;">
+                                 <p style="margin: 0; color: #721c24; font-size: 0.9rem;">
+                                   <strong>⚠️ Paste Penalty:</strong> ${score.pastePenalty} puntos (${pasteCount} paste events)
+                                 </p>
+                               </div>`
+                            : `<div style="background: #d4edda; padding: 10px 15px; border-radius: 6px; border-left: 4px solid #28a745; margin-top: 10px;">
+                                 <p style="margin: 0; color: #155724; font-size: 0.9rem;">
+                                   <strong>✅ Walang Paste Penalty - Orihinal na Gawa!</strong>
+                                 </p>
+                               </div>`;
+                        
+                        const penaltyText = hasPenalty
+                            ? `⚠️ Paste Penalty: ${score.pastePenalty} puntos (${pasteCount} paste events)`
+                            : `✅ Walang paste penalty - orihinal na gawa!`;
+                        
                         const studentParams = {
                             to_name: userInfo.name,
                             to_email: userInfo.email,
+                            text_type: userInfo.textType,
                             title: title,
                             original: original,
                             translated: translated || 'Walang translation na ginawa.',
                             date: dateStr,
                             time: timeStr,
+                            timer: essayTimer,
+                            score: score.overall,
+                            base_score: baseScore,
+                            paste_count: pasteCount,
+                            paste_penalty: score.pastePenalty,
+                            has_penalty: hasPenalty,
+                            score_display: scoreDisplay,
+                            grade: score.grammar,
+                            vocabulary: score.vocabulary,
+                            coherence: score.coherence,
+                            word_count: score.wordCount,
+                            penalty_html: penaltyHtml,
+                            penalty_text: penaltyText,
                             message: 'Ito ang iyong isinumiteng sanaysay.'
                         };
                         
                         const systemParams = {
                             student_name: userInfo.name,
                             student_email: userInfo.email,
+                            text_type: userInfo.textType,
                             title: title,
                             original: original,
                             translated: translated || 'Walang translation na ginawa.',
                             date: dateStr,
                             time: timeStr,
+                            timer: essayTimer,
+                            score: score.overall,
+                            base_score: baseScore,
+                            paste_count: pasteCount,
+                            paste_penalty: score.pastePenalty,
+                            has_penalty: hasPenalty,
+                            score_display: scoreDisplay,
+                            grade: score.grammar,
+                            vocabulary: score.vocabulary,
+                            coherence: score.coherence,
+                            word_count: score.wordCount,
+                            penalty_html: penaltyHtml,
+                            penalty_text: penaltyText,
                             message: 'May bagong sanaysay na naipasa mula kay ' + userInfo.name
                         };
                         
                         await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateIDStudent, studentParams);
                         await emailjs.send(EMAILJS_CONFIG.serviceID, EMAILJS_CONFIG.templateIDSystem, systemParams);
                         console.log('✅ Emails sent successfully');
+                        console.log('📧 Score sent:', scoreDisplay);
                     } catch (emailError) {
                         console.warn('Email sending failed:', emailError);
                     }
