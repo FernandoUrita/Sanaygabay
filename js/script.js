@@ -49,7 +49,7 @@ function getHistory() {
     return JSON.parse(localStorage.getItem('essayHistory') || '[]');
 }
 
-function saveToLocalHistory(name, email, title, original, translated, score) {
+function saveToLocalHistory(name, email, title, original, translated, score, timer) {
     const history = getHistory();
     history.push({
         id: Date.now(),
@@ -59,6 +59,7 @@ function saveToLocalHistory(name, email, title, original, translated, score) {
         original: original,
         translated: translated || '',
         score: score || 0,
+        timer: timer || '00:00',
         date: new Date().toISOString(),
         timestamp: Date.now()
     });
@@ -565,7 +566,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ============================================================
-    // ESSAY TIMER
+    // ESSAY TIMER - FIXED VERSION
     // ============================================================
     let essayTimerInterval = null;
     let essayTimerSeconds = 0;
@@ -573,6 +574,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function initEssayTimer() {
         resetEssayTimer();
+        // Simulan ang timer kapag may laman na ang title o content
+        if (essayTitle && essayInput) {
+            const title = essayTitle.value.trim();
+            const content = essayInput.value.trim();
+            if (title.length > 0 || content.length > 0) {
+                startEssayTimer();
+            }
+        }
     }
 
     function startEssayTimer() {
@@ -877,7 +886,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     essayData.title,
                     essayData.original,
                     essayData.translated,
-                    essayData.score
+                    essayData.score,
+                    essayData.timer
                 );
                 return { success: true, local: true };
             }
@@ -903,7 +913,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 essayData.title,
                 essayData.original,
                 essayData.translated,
-                essayData.score
+                essayData.score,
+                essayData.timer
             );
             return { success: true, local: true };
         }
@@ -1343,7 +1354,7 @@ ${translated || 'Walang translation na ginawa.'}
     };
 
     // ============================================================
-    // SUBMIT ESSAY
+    // SUBMIT ESSAY - FIXED VERSION
     // ============================================================
     if (submitBtn) {
         submitBtn.addEventListener('click', async function() {
@@ -1368,7 +1379,10 @@ ${translated || 'Walang translation na ginawa.'}
             });
             
             const score = scoreEssay(original);
-            stopEssayTimer();
+            stopEssayTimer(); // Itigil ang timer bago i-save
+            
+            // Kunin ang tamang oras ng paggawa
+            const essayTimer = formatEssayTime(essayTimerSeconds);
             
             try {
                 const essayData = {
@@ -1380,7 +1394,7 @@ ${translated || 'Walang translation na ginawa.'}
                     score: score.overall,
                     date: dateStr,
                     time: timeStr,
-                    timer: formatEssayTime(essayTimerSeconds)
+                    timer: essayTimer
                 };
                 
                 await saveEssayToSupabase(essayData);
@@ -1432,11 +1446,14 @@ ${translated || 'Walang translation na ginawa.'}
                 document.getElementById('successEmail').textContent = userInfo.email;
                 document.getElementById('successTitle').textContent = title;
                 document.getElementById('successDate').textContent = `${dateStr} | ${timeStr}`;
-                document.getElementById('successTimer').textContent = formatEssayTime(essayTimerSeconds);
+                document.getElementById('successTimer').textContent = essayTimer;
 
                 successModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
                 showToast('Matagumpay na naipasa ang sanaysay!', 'success', 'Tagumpay');
+                
+                // I-reset ang timer pagkatapos i-save
+                resetEssayTimer();
                 
             } catch (error) {
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Ipasa ang Sanaysay';
@@ -1478,6 +1495,7 @@ ${translated || 'Walang translation na ginawa.'}
                         <span><i class="fas fa-user"></i> ${escapeHtml(item.name)}</span>
                         <span><i class="fas fa-envelope"></i> ${escapeHtml(item.email)}</span>
                         <span><i class="fas fa-calendar"></i> ${new Date(item.date).toLocaleDateString('tl-PH')}</span>
+                        ${item.timer ? `<span><i class="fas fa-clock"></i> ${item.timer}</span>` : ''}
                         ${item.score > 0 ? `<span><i class="fas fa-star" style="color: var(--primary);"></i> ${item.score}/100</span>` : ''}
                     </div>
                 </div>
@@ -1502,6 +1520,7 @@ ${translated || 'Walang translation na ginawa.'}
             document.getElementById('historyModalOriginal').textContent = item.original;
             document.getElementById('historyModalTranslated').textContent = item.translated || 'Walang translation.';
             document.getElementById('historyModalScore').textContent = item.score > 0 ? `${item.score}/100` : 'Walang iskor';
+            document.getElementById('historyModalWordCount').textContent = (item.original || '').split(/\s+/).filter(w => w.length > 0).length + ' salita';
             modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1525,7 +1544,7 @@ ${translated || 'Walang translation na ginawa.'}
         switch(format) {
             case 'txt':
                 content = history.map(item => 
-                    `PAMAGAT: ${item.title}\nPANGALAN: ${item.name}\nEMAIL: ${item.email}\nPETSA: ${new Date(item.date).toLocaleDateString('tl-PH')}\nSCORE: ${item.score}/100\n\n${item.original}\n\n---\n`
+                    `PAMAGAT: ${item.title}\nPANGALAN: ${item.name}\nEMAIL: ${item.email}\nPETSA: ${new Date(item.date).toLocaleDateString('tl-PH')}\nORAS: ${item.timer || '00:00'}\nSCORE: ${item.score}/100\n\n${item.original}\n\n---\n`
                 ).join('\n');
                 filename = `sanaysay_history_${new Date().toISOString().slice(0,10)}.txt`;
                 mimeType = 'text/plain';
@@ -1551,7 +1570,7 @@ ${translated || 'Walang translation na ginawa.'}
     };
 
     // ============================================================
-    // SUCCESS MODAL
+    // SUCCESS MODAL - FIXED VERSION
     // ============================================================
     if (closeSuccessBtn) {
         closeSuccessBtn.addEventListener('click', function() {
@@ -1571,6 +1590,7 @@ ${translated || 'Walang translation na ginawa.'}
             deepTranslateSection.style.display = 'none';
             const scoreContainer = document.querySelector('.score-container');
             if (scoreContainer) scoreContainer.remove();
+            resetEssayTimer(); // I-reset ang timer
             userInfoDisplay.style.display = 'block';
             essayTitle.focus();
             essayWritingArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1589,6 +1609,7 @@ ${translated || 'Walang translation na ginawa.'}
             deepTranslateSection.style.display = 'none';
             const scoreContainer = document.querySelector('.score-container');
             if (scoreContainer) scoreContainer.remove();
+            resetEssayTimer(); // I-reset ang timer
             userInfo.name = '';
             userInfo.email = '';
             localStorage.removeItem('essayUserInfo');
@@ -1776,9 +1797,7 @@ ${translated || 'Walang translation na ginawa.'}
                     <span><i class="fas fa-clock"></i> ${timeAgo}</span>
                     <span><i class="fas fa-words"></i> ${wordCount} salita</span>
                     <span><i class="fas fa-hourglass-half"></i> ${readTime} min</span>
-                </div>
-                <div class="essay-timer">
-                    <i class="fas fa-stopwatch"></i> Oras ng Pagbasa: ${readTime} minuto
+                    ${essay.timer ? `<span><i class="fas fa-stopwatch"></i> ${essay.timer}</span>` : ''}
                 </div>
                 <div class="essay-preview">${escapeHtml((essay.original || '').substring(0, 200))}${(essay.original || '').length > 200 ? '...' : ''}</div>
                 <div class="essay-meta" style="margin-top: 0.5rem;">
@@ -1873,6 +1892,7 @@ ${translated || 'Walang translation na ginawa.'}
                     <p><strong>👤 May-akda:</strong> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</p>
                     <p><strong>📧 Email:</strong> ${escapeHtml(essay.email || 'Walang Email')}</p>
                     <p><strong>📅 Petsa:</strong> ${formatDate2(essay.created_at || essay.date)}</p>
+                    ${essay.timer ? `<p><strong>⏱️ Oras ng Paggawa:</strong> ${essay.timer}</p>` : ''}
                     <p><strong>⭐ Iskor:</strong> ${essay.score || 0}% ${getStarRating(essay.score || 0)}</p>
                     <div style="margin-top: 1rem;">
                         <h4 style="color: var(--primary-dark);">📄 Orihinal na Sanaysay</h4>
@@ -2013,7 +2033,7 @@ ${translated || 'Walang translation na ginawa.'}
 
     console.log('📚 All enhancements loaded: Sanggunian, User Essays, Pagination, Search, Sort!');
     console.log('📊 History with search, sort, pagination enabled!');
-
+    
     // ============================================================
     // GLOBAL FUNCTION DECLARATIONS
     // ============================================================
@@ -2030,4 +2050,5 @@ ${translated || 'Walang translation na ginawa.'}
     window.exportCurrentEssay = exportCurrentEssay;
     
     console.log('🌐 All functions are now globally accessible!');
+    console.log('⏱️ Essay timer fixed - per essay timing enabled!');
 });
