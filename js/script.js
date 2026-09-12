@@ -1933,7 +1933,7 @@ ${translated || 'Walang translation na ginawa.'}
             const textType = essay.text_type || 'Hindi tinukoy';
             
             return `
-            <div class="essay-module-card" data-id="${essay.id || Index}">
+            <div class="essay-module-card" data-id="${essay.id || actualIndex}">
                 <div class="essay-title">${escapeHtml(essay.title || 'Walang Pamagat')}</div>
                 <div class="essay-type-badge">
                     <i class="fas fa-layer-group"></i> ${escapeHtml(textType)}
@@ -1953,7 +1953,7 @@ ${translated || 'Walang translation na ginawa.'}
                     ${pasteCount > 0 ? `<span class="paste-badge has-paste"><i class="fas fa-clipboard"></i> ${pasteCount} paste (-${pastePenalty}pts)</span>` : ''}
                 </div>
                 <div class="essay-actions">
-                    <button class="view-essay-btn" onclick="viewUserEssay(${index})"><i class="fas fa-eye"></i> Tingnan</button>
+                    <button class="view-essay-btn" onclick="viewUserEssay(${actualIndex})"><i class="fas fa-eye"></i> Tingnan</button>
                 </div>
             </div>
             `;
