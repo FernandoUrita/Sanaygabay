@@ -3279,3 +3279,115 @@ footer {
         font-size: 0.95rem;
     }
 }
+
+/* ============================================================ */
+/* COPY-PASTE DETECTOR - Warning Banner                        */
+/* ============================================================ */
+
+.paste-warning-banner {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #fff3cd, #ffe8a1);
+    border: 2px solid #ffc107;
+    border-left: 5px solid #dc3545;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    animation: slideDown 0.4s ease;
+    align-items: flex-start;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.paste-warning-icon {
+    font-size: 1.8rem;
+    color: #dc3545;
+    flex-shrink: 0;
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.paste-warning-content {
+    flex: 1;
+}
+
+.paste-warning-content strong {
+    display: block;
+    color: #721c24;
+    font-size: 1rem;
+    margin-bottom: 0.3rem;
+}
+
+.paste-warning-content p {
+    color: #856404;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0.2rem 0;
+}
+
+.paste-warning-count {
+    font-size: 0.85rem !important;
+    margin-top: 0.5rem !important;
+    padding-top: 0.5rem;
+    border-top: 1px dashed #ffc107;
+}
+
+.paste-warning-count strong {
+    display: inline !important;
+    color: #dc3545;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Paste count badge sa essay card */
+.paste-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: #fff3cd;
+    color: #856404;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid #ffc107;
+}
+
+.paste-badge.has-paste {
+    background: #f8d7da;
+    color: #721c24;
+    border-color: #dc3545;
+}
+
+/* Paste warning sa score container */
+.paste-score-warning {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #dc3545;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.paste-score-warning i {
+    font-size: 1.2rem;
+    color: #dc3545;
+}

@@ -644,6 +644,18 @@
 
                     <div class="essay-input-area">
                         <label for="essayInput"><strong>✍️ Isulat ang Iyong Sanaysay:</strong></label>
+                        <!-- Copy-Paste Warning Banner -->
+                        <div id="pasteWarningBanner" class="paste-warning-banner" style="display: none;">
+                            <div class="paste-warning-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="paste-warning-content">
+                                <strong>⚠️ Babala: Nakita ang Pag-paste!</strong>
+                                <p>Ang pag-copy-paste ng teksto ay hindi pinapayagan. Mangyaring isulat ang iyong sanaysay sa sariling salita.</p>
+                                <p class="paste-warning-count">Bilang ng paste: <strong id="pasteCountDisplay">0</strong></p>
+                            </div>
+                        </div>
+                        
                         <textarea id="essayInput" rows="10" placeholder="Isulat ang iyong sanaysay dito..."></textarea>
                         
                         <!-- ⏱️ Timer Display -->

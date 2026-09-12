@@ -652,7 +652,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================================
     // ESSAY SCORING SYSTEM
     // ============================================================
-    function scoreEssay(text) {
+    function scoreEssay(text, pasteCount = 0) {
         if (!text || text.trim().length < 10) {
             return {
                 score: 0, grammar: 0, vocabulary: 0, coherence: 0, overall: 0,
@@ -712,11 +712,22 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (overall >= 60) feedback.push('💪 May potensyal! Ipagpatuloy ang pagsasanay.');
         else feedback.push('📖 Kailangan pang magsanay. Basahin ang mga aralin at subukang muli.');
         
+        // Paste penalty
+        let pastePenalty = 0;
+        if (pasteCount > 0) {
+            pastePenalty = Math.min(20, pasteCount * 5); // Max 20 points penalty
+            feedback.push(`⚠️ Nakita ang ${pasteCount} paste event(s). Bawas ${pastePenalty} puntos.`);
+        }
+        
+        const finalScore = Math.max(0, overall - pastePenalty);
+        
         return {
-            score: overall, grammar: grammarScore, vocabulary: vocabScore,
-            coherence: coherenceScore, overall: overall, feedback: feedback,
+            score: finalScore, grammar: grammarScore, vocabulary: vocabScore,
+            coherence: coherenceScore, overall: finalScore, 
+            feedback: feedback,
             wordCount: wordCount, sentenceCount: sentenceCount,
-            deepWordCount: deepWordCount, uniqueWords: uniqueWords.size
+            deepWordCount: deepWordCount, uniqueWords: uniqueWords.size,
+            pasteCount: pasteCount, pastePenalty: pastePenalty
         };
     }
 
@@ -768,6 +779,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 <span style="margin-left: 1rem;"><i class="fas fa-book"></i> ${score.uniqueWords} natatanging salita</span>
                 <span style="margin-left: 1rem;"><i class="fas fa-star" style="color: var(--primary);"></i> ${score.deepWordCount} malalim na salita</span>
             </div>
+            ${score.pasteCount > 0 ? `
+            <div class="paste-score-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>⚠️ Nakita ang Pag-paste!</strong>
+                    <p style="margin: 0.2rem 0; font-size: 0.85rem;">
+                        May ${score.pasteCount} paste event(s) na nakita. Bawas ${score.pastePenalty} puntos sa iyong iskor.
+                    </p>
+                </div>
+            </div>
+            ` : ''}
         `;
         analysisResult.appendChild(container);
     }
@@ -864,6 +886,98 @@ document.addEventListener('DOMContentLoaded', function() {
         addWordCounter(essayInput);
     }
 
+    // ============================================================
+    // COPY-PASTE DETECTOR
+    // ============================================================
+    let pasteCount = 0;
+    let pastedChars = 0;
+    const pasteWarningBanner = document.getElementById('pasteWarningBanner');
+    const pasteCountDisplay = document.getElementById('pasteCountDisplay');
+
+    function showPasteWarning(count) {
+        if (pasteWarningBanner) {
+            pasteWarningBanner.style.display = 'flex';
+            if (pasteCountDisplay) {
+                pasteCountDisplay.textContent = count;
+            }
+            
+            // Auto-hide after 8 seconds
+            clearTimeout(window._pasteWarningTimeout);
+            window._pasteWarningTimeout = setTimeout(() => {
+                if (pasteWarningBanner) {
+                    pasteWarningBanner.style.display = 'none';
+                }
+            }, 8000);
+        }
+    }
+
+    function resetPasteCounter() {
+        pasteCount = 0;
+        pastedChars = 0;
+        if (pasteWarningBanner) {
+            pasteWarningBanner.style.display = 'none';
+        }
+        if (pasteCountDisplay) {
+            pasteCountDisplay.textContent = '0';
+        }
+    }
+
+    if (essayInput) {
+        // Detect paste event
+        essayInput.addEventListener('paste', function(e) {
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const textLength = pastedText.length;
+            
+            // Only count if more than 20 characters (para hindi kasama ang maliit na paste)
+            if (textLength > 20) {
+                pasteCount++;
+                pastedChars += textLength;
+                
+                showPasteWarning(pasteCount);
+                
+                // Show toast notification
+                showToast(
+                    `Nakita ang pag-paste ng ${textLength} karakter! (Bilang: ${pasteCount})`,
+                    'warning',
+                    '⚠️ Babala'
+                );
+                
+                // Optional: Log sa console
+                console.warn(`📋 Paste detected: ${textLength} chars (Total: ${pasteCount} pastes, ${pastedChars} chars)`);
+            }
+        });
+
+        // Detect copy event (para malaman kung may kinopya)
+        essayInput.addEventListener('copy', function(e) {
+            console.log('📋 Copy detected sa essay textarea');
+        });
+
+        // Detect cut event
+        essayInput.addEventListener('cut', function(e) {
+            console.log('✂️ Cut detected sa essay textarea');
+        });
+    }
+
+    // I-reset ang paste counter kapag binuksan ang clear button
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            resetPasteCounter();
+        });
+    }
+
+    // I-reset kapag nagsimula ng bagong essay
+    if (newEssaySameUserBtn) {
+        newEssaySameUserBtn.addEventListener('click', function() {
+            resetPasteCounter();
+        });
+    }
+
+    if (newEssayDifferentUserBtn) {
+        newEssayDifferentUserBtn.addEventListener('click', function() {
+            resetPasteCounter();
+        });
+    }
+
     // Setup auto-save
     if (essayTitle && essayInput) {
         setupAutoSave(essayTitle, essayInput, 'essayDraft');
@@ -938,7 +1052,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const translatableWords = detectTranslatableWords(text);
-            const score = scoreEssay(text);
+            const score = scoreEssay(text, pasteCount);
             displayScore(score);
             aiResult.style.display = 'block';
             comparisonView.style.display = 'none';
@@ -1378,8 +1492,17 @@ ${translated || 'Walang translation na ginawa.'}
                 hour: '2-digit', minute: '2-digit'
             });
             
-            const score = scoreEssay(original);
-            stopEssayTimer(); // Itigil ang timer bago i-save
+            const score = scoreEssay(original, pasteCount);
+            stopEssayTimer();
+            
+            // I-warning kung may paste
+            if (pasteCount > 0) {
+                showToast(
+                    `May ${pasteCount} paste event(s) na nakita sa essay mo. Bawas ${score.pastePenalty} puntos.`,
+                    'warning',
+                    '⚠️ Babala'
+                );
+            }
             
             // Kunin ang tamang oras ng paggawa
             const essayTimer = formatEssayTime(essayTimerSeconds);
@@ -1394,7 +1517,9 @@ ${translated || 'Walang translation na ginawa.'}
                     score: score.overall,
                     date: dateStr,
                     time: timeStr,
-                    timer: essayTimer
+                    timer: essayTimer,
+                    paste_count: pasteCount,
+                    paste_penalty: score.pastePenalty
                 };
                 
                 await saveEssayToSupabase(essayData);
