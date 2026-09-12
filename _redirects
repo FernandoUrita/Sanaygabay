@@ -1,7 +1,5 @@
-# I-redirect lahat ng pages sa maintenance.html
 /*    /maintenance.html    200
 
-# Pero hayaan ang assets (css, js, images) na ma-access pa rin
 /assets/*    /assets/:splat    200
 /css/*       /css/:splat       200
 /js/*        /js/:splat        200
