@@ -156,6 +156,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressBar = document.getElementById('progressBar');
     const scrollTopBtn = document.getElementById('scrollTopBtn');
     const darkModeToggle = document.getElementById('darkModeToggle');
+    const userTextTypeInput = document.getElementById('userTextType');
+    const displayTextType = document.getElementById('displayTextType');
 
     // ============================================================
     // SCROLL PROGRESS BAR
@@ -366,7 +368,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // ============================================================
     let userInfo = {
         name: '',
-        email: ''
+        email: '',
+        textType: ''
     };
 
     const userInfoModal = document.getElementById('userInfoModal');
@@ -388,6 +391,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 userInfo = JSON.parse(saved);
                 displayName.textContent = userInfo.name;
                 displayEmail.textContent = userInfo.email;
+                displayTextType.textContent = userInfo.textType || 'Hindi tinukoy';
                 userInfoDisplay.style.display = 'block';
                 essayWritingArea.style.display = 'block';
                 const btn = document.querySelector('#userInfoContainer .quiz-intro .primary-btn');
@@ -405,9 +409,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (userInfo.name) {
                 userNameInput.value = userInfo.name;
                 userEmailInput.value = userInfo.email;
+                userTextTypeInput.value = userInfo.textType || '';
             } else {
                 userNameInput.value = '';
                 userEmailInput.value = '';
+                userTextTypeInput.value = '';
             }
             userInfoModal.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -427,19 +433,22 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const name = userNameInput.value.trim();
             const email = userEmailInput.value.trim();
+            const textType = userTextTypeInput.value;
             
-            if (!name || !email) {
-                showToast('Mangyaring ilagay ang iyong pangalan at email.', 'warning', 'Kinakailangan');
+            if (!name || !email || !textType) {
+                showToast('Mangyaring kumpletuhin ang lahat ng field.', 'warning', 'Kinakailangan');
                 return;
             }
             
             userInfo.name = name;
             userInfo.email = email;
+            userInfo.textType = textType;
             
             localStorage.setItem('essayUserInfo', JSON.stringify(userInfo));
             
             displayName.textContent = name;
             displayEmail.textContent = email;
+            displayTextType.textContent = textType;
             userInfoDisplay.style.display = 'block';
             essayWritingArea.style.display = 'block';
             const btn = document.querySelector('#userInfoContainer .quiz-intro .primary-btn');
@@ -457,6 +466,7 @@ document.addEventListener('DOMContentLoaded', function() {
         editUserInfoBtn.addEventListener('click', function() {
             userNameInput.value = userInfo.name;
             userEmailInput.value = userInfo.email;
+            userTextTypeInput.value = userInfo.textType || '';
             userInfoModal.classList.add('active');
             document.body.style.overflow = 'hidden';
         });
@@ -1511,10 +1521,12 @@ ${translated || 'Walang translation na ginawa.'}
                 const essayData = {
                     name: userInfo.name,
                     email: userInfo.email,
+                    text_type: userInfo.textType,
                     title: title,
                     original: original,
                     translated: translated || 'Walang translation na ginawa.',
                     score: score.overall,
+                    base_score: score.overall + score.pastePenalty,
                     date: dateStr,
                     time: timeStr,
                     timer: essayTimer,
@@ -1569,9 +1581,12 @@ ${translated || 'Walang translation na ginawa.'}
                 
                 document.getElementById('successName').textContent = userInfo.name;
                 document.getElementById('successEmail').textContent = userInfo.email;
+                document.getElementById('successTextType').textContent = userInfo.textType;
                 document.getElementById('successTitle').textContent = title;
                 document.getElementById('successDate').textContent = `${dateStr} | ${timeStr}`;
                 document.getElementById('successTimer').textContent = essayTimer;
+                document.getElementById('successScore').textContent = `${score.overall}%` + 
+                    (score.pastePenalty > 0 ? ` (Base: ${score.overall + score.pastePenalty}% - Penalty: ${score.pastePenalty}%)` : '');
 
                 successModal.classList.add('active');
                 document.body.style.overflow = 'hidden';
@@ -1912,9 +1927,17 @@ ${translated || 'Walang translation na ginawa.'}
             const readTime = Math.ceil(wordCount / 200);
             const timeAgo = getTimeAgo(displayDate);
             
+            const baseScore = essay.base_score || score;
+            const pasteCount = essay.paste_count || 0;
+            const pastePenalty = essay.paste_penalty || 0;
+            const textType = essay.text_type || 'Hindi tinukoy';
+            
             return `
             <div class="essay-module-card" data-id="${essay.id || actualIndex}">
                 <div class="essay-title">${escapeHtml(essay.title || 'Walang Pamagat')}</div>
+                <div class="essay-type-badge">
+                    <i class="fas fa-layer-group"></i> ${escapeHtml(textType)}
+                </div>
                 <div class="essay-meta">
                     <span><i class="fas fa-user"></i> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</span>
                     <span><i class="fas fa-envelope"></i> ${escapeHtml(essay.email || 'Walang Email')}</span>
@@ -1927,9 +1950,10 @@ ${translated || 'Walang translation na ginawa.'}
                 <div class="essay-preview">${escapeHtml((essay.original || '').substring(0, 200))}${(essay.original || '').length > 200 ? '...' : ''}</div>
                 <div class="essay-meta" style="margin-top: 0.5rem;">
                     <span><i class="fas fa-star" style="color: #f5b342;"></i> ${stars} (${score}%)</span>
+                    ${pasteCount > 0 ? `<span class="paste-badge has-paste"><i class="fas fa-clipboard"></i> ${pasteCount} paste (-${pastePenalty}pts)</span>` : ''}
                 </div>
                 <div class="essay-actions">
-                    <button class="view-essay-btn" onclick="viewUserEssay(${actualIndex})"><i class="fas fa-eye"></i> Tingnan</button>
+                    <button class="view-essay-btn" onclick="viewUserEssay(${index})"><i class="fas fa-eye"></i> Tingnan</button>
                 </div>
             </div>
             `;
@@ -2013,12 +2037,17 @@ ${translated || 'Walang translation na ginawa.'}
                     <h2><i class="fas fa-file-alt" style="color: var(--primary);"></i> ${escapeHtml(essay.title || 'Walang Pamagat')}</h2>
                     <button class="modal-close" onclick="this.closest('.modal-overlay').remove(); document.body.style.overflow = '';">&times;</button>
                 </div>
-                <div class="modal-body">
+               <div class="modal-body">
                     <p><strong>👤 May-akda:</strong> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</p>
+                    <p><strong>📚 Uri ng Teksto:</strong> ${escapeHtml(essay.text_type || 'Hindi tinukoy')}</p>
                     <p><strong>📧 Email:</strong> ${escapeHtml(essay.email || 'Walang Email')}</p>
                     <p><strong>📅 Petsa:</strong> ${formatDate2(essay.created_at || essay.date)}</p>
                     ${essay.timer ? `<p><strong>⏱️ Oras ng Paggawa:</strong> ${essay.timer}</p>` : ''}
-                    <p><strong>⭐ Iskor:</strong> ${essay.score || 0}% ${getStarRating(essay.score || 0)}</p>
+                    <p><strong>⭐ Actual Score:</strong> ${essay.score || 0}% ${getStarRating(essay.score || 0)}</p>
+                    ${essay.base_score && essay.base_score !== essay.score ? `
+                        <p><strong>📊 Base Score:</strong> ${essay.base_score}%</p>
+                        <p><strong>⚠️ Paste Penalty:</strong> -${essay.paste_penalty || 0}% (${essay.paste_count || 0} paste${(essay.paste_count || 0) > 1 ? 's' : ''})</p>
+                    ` : ''}
                     <div style="margin-top: 1rem;">
                         <h4 style="color: var(--primary-dark);">📄 Orihinal na Sanaysay</h4>
                         <div class="essay-display" style="max-height: 200px; overflow-y: auto; background: var(--bg-light); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-light); white-space: pre-wrap;">${escapeHtml(essay.original || 'Walang nilalaman.')}</div>

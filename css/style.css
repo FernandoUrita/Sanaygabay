@@ -3391,3 +3391,45 @@ footer {
     font-size: 1.2rem;
     color: #dc3545;
 }
+
+/* ============================================================ */
+/* ESSAY TEXT TYPE BADGE                                        */
+/* ============================================================ */
+
+.essay-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: linear-gradient(135deg, #d4a373, #b36722);
+    color: white;
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    align-self: flex-start;
+    box-shadow: 0 2px 8px rgba(179, 103, 34, 0.3);
+}
+
+.essay-type-badge i {
+    font-size: 0.7rem;
+}
+
+/* Select styling */
+#userTextType {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid var(--border-light);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    transition: var(--transition);
+    font-family: var(--font);
+    cursor: pointer;
+}
+
+#userTextType:focus {
+    outline: none;
+    border-color: var(--primary);
+}

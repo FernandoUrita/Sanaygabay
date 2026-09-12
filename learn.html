@@ -629,6 +629,7 @@
                     </div>
                     <div id="userInfoDisplay" style="display: none; background: var(--bg-light); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--primary);">
                         <p><strong>👤 Pangalan:</strong> <span id="displayName"></span></p>
+                        <p><strong>📚 Uri ng Teksto:</strong> <span id="displayTextType"></span></p>
                         <p><strong>📧 Email:</strong> <span id="displayEmail"></span></p>
                         <button id="editUserInfoBtn" class="secondary-btn" style="margin-top: 0.5rem;"><i class="fas fa-edit"></i> Baguhin</button>
                     </div>
@@ -773,15 +774,32 @@
             </div>
             <div class="modal-body">
                 <p>Mangyaring ilagay ang iyong pangalan at email upang makapagsimula sa pagsusulit.</p>
-                <form id="userInfoForm">
+                                <form id="userInfoForm">
                     <div class="form-group">
                         <label for="userName"><i class="fas fa-user"></i> Buong Pangalan:</label>
                         <input type="text" id="userName" placeholder="Hal. Juan Dela Cruz" required />
                     </div>
+                    
+                    <div class="form-group">
+                        <label for="userTextType"><i class="fas fa-layer-group"></i> Uri ng Teksto:</label>
+                        <select id="userTextType" required>
+                            <option value="">-- Pumili ng Uri ng Teksto --</option>
+                            <option value="Naratibo">📖 Naratibo (Pasalaysay)</option>
+                            <option value="Deskriptibo">🎨 Deskriptibo (Paglalarawan)</option>
+                            <option value="Persuweysib">🤝 Persuweysib (Panghihikayat)</option>
+                            <option value="Argumentatibo">⚖️ Argumentatibo (Pangangatwiran)</option>
+                            <option value="Prosidyural">📋 Prosidyural (Hakbang-hakbang)</option>
+                            <option value="Impormatibo">ℹ️ Impormatibo (Pagbibigay-impormasyon)</option>
+                            <option value="Pormal na Sanaysay">🎓 Pormal na Sanaysay</option>
+                            <option value="Di-pormal na Sanaysay">💬 Di-pormal na Sanaysay</option>
+                        </select>
+                    </div>
+                    
                     <div class="form-group">
                         <label for="userEmail"><i class="fas fa-envelope"></i> Email Address:</label>
                         <input type="email" id="userEmail" placeholder="Hal. juan@email.com" required />
                     </div>
+                    
                     <button type="submit" class="primary-btn" style="width: 100%; justify-content: center;">
                         <i class="fas fa-check"></i> Simulan ang Pagsusulit
                     </button>
@@ -813,10 +831,12 @@
                 
                 <div class="success-details">
                     <p><strong>👤 Pangalan:</strong> <span id="successName"></span></p>
+                    <p><strong>📚 Uri ng Teksto:</strong> <span id="successTextType"></span></p>
                     <p><strong>📧 Email:</strong> <span id="successEmail"></span></p>
                     <p><strong>📝 Pamagat:</strong> <span id="successTitle"></span></p>
                     <p><strong>📅 Petsa:</strong> <span id="successDate"></span></p>
                     <p><strong>⏱️ Oras ng Paggawa:</strong> <span id="successTimer">00:00</span></p>
+                    <p><strong>⭐ Actual Score:</strong> <span id="successScore"></span></p>
                 </div>
                 
                 <div class="success-actions">
