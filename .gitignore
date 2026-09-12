@@ -12,4 +12,7 @@ Thumbs.db
 
 # Logs
 *.log
-npm-debug.log*
+npm-debug.log*index-backup.html
+index-backup.html
+learn-backup.html
+about-backup.html
