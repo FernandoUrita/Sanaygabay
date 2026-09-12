@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Under Maintenance - Talagabay</title>
+    
+    <link rel="icon" type="image/png" href="assets/logo.png" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #5a3310 0%, #b36722 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            color: #fff;
+            text-align: center;
+        }
+        
+        .maintenance-container {
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .maintenance-icon {
+            font-size: 5rem;
+            color: #d4a373;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.85; }
+        }
+        
+        .maintenance-container h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        .maintenance-container h1 span {
+            color: #d4a373;
+        }
+        
+        .maintenance-container p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 0.8rem;
+        }
+        
+        .maintenance-badge {
+            display: inline-block;
+            background: rgba(212, 163, 115, 0.2);
+            border: 1px solid rgba(212, 163, 115, 0.4);
+            color: #d4a373;
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            margin: 2rem 0 1rem;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #d4a373, #fff);
+            border-radius: 10px;
+            width: 0%;
+            animation: progressAnim 4s ease-in-out infinite;
+        }
+        
+        @keyframes progressAnim {
+            0% { width: 0%; }
+            50% { width: 75%; }
+            100% { width: 100%; }
+        }
+        
+        .maintenance-footer {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .maintenance-footer i {
+            color: #d4a373;
+        }
+        
+        @media (max-width: 480px) {
+            .maintenance-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .maintenance-icon {
+                font-size: 3.5rem;
+            }
+            
+            .maintenance-container h1 {
+                font-size: 1.6rem;
+            }
+            
+            .maintenance-container p {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="maintenance-container">
+        <div class="maintenance-icon">
+            <i class="fas fa-tools"></i>
+        </div>
+        
+        <div class="maintenance-badge">
+            🚧 UNDER MAINTENANCE
+        </div>
+        
+        <h1>Sandali lang po <span>📚</span></h1>
+        
+        <p>Kasalukuyang inaayos ang <strong>Talagabay</strong> upang mas mapabuti pa ang serbisyo para sa inyo.</p>
+        
+        <p>Mangyaring bumalik na lang po pagkatapos ng ilang minuto.</p>
+        
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill"></div>
+        </div>
+        
+        <div class="maintenance-footer">
+            <p><i class="fas fa-heart"></i> Salamat sa inyong pasensya at pag-unawa!</p>
+            <p style="margin-top: 0.5rem;">&copy; 2026 Sanaysay: Sistema ng Makabagong Pagkatuto</p>
+        </div>
+    </div>
+</body>
+</html>
