@@ -19,7 +19,7 @@
 # ============================================================
 # MAINTENANCE MODE REDIRECTS
 # ============================================================
-# IMPORTANTE: Ang order ay mahalaga! 
+# IMPORTANTE: Ang order ay mahalaga!
 # Mga assets muna, tapos catch-all sa huli.
 
 # Hayaan ang assets (CSS, JS, images) na ma-access
@@ -48,12 +48,6 @@
 [[redirects]]
   from = "/favicon.ico"
   to = "/favicon.ico"
-  status = 200
-
-# Hayaan ang Netlify functions at iba pang Netlify internals
-[[redirects]]
-  from = "/.netlify/*"
-  to = "/.netlify/:splat"
   status = 200
 
 # ============================================================
