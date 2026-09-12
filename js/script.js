@@ -1933,7 +1933,7 @@ ${translated || 'Walang translation na ginawa.'}
             const textType = essay.text_type || 'Hindi tinukoy';
             
             return `
-            <div class="essay-module-card" data-id="${essay.id || actualIndex}">
+            <div class="essay-module-card" data-id="${essay.id || Index}">
                 <div class="essay-title">${escapeHtml(essay.title || 'Walang Pamagat')}</div>
                 <div class="essay-type-badge">
                     <i class="fas fa-layer-group"></i> ${escapeHtml(textType)}
