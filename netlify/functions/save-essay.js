@@ -26,7 +26,7 @@ exports.handler = async function(event, context) {
             process.env.SUPABASE_ANON_KEY
         );
 
-        const { name, email, title, original, translated, score, date, time } = JSON.parse(event.body);
+        const { name, email, title, original, translated, score, date, time, timer } = JSON.parse(event.body);
 
         // Validation
         if (!name || !email || !title || !original) {
@@ -50,6 +50,7 @@ exports.handler = async function(event, context) {
                     score: score || 0,
                     date: date || new Date().toLocaleDateString('tl-PH'),
                     time: time || new Date().toLocaleTimeString('tl-PH'),
+                    timer: timer || '00:00',
                     created_at: new Date().toISOString()
                 }
             ]);
