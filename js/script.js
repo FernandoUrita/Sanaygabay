@@ -14,6 +14,28 @@ function escapeHtml(str) {
 }
 
 // ============================================================
+// EMAIL MASKING FUNCTION - Para sa privacy
+// ============================================================
+function maskEmail(email) {
+    if (!email || !email.includes('@')) return email || 'Walang Email';
+    
+    const [localPart, domain] = email.split('@');
+    
+    // Kung masyadong maikli ang local part (1-2 chars), i-mask lahat
+    if (localPart.length <= 2) {
+        return `${localPart[0]}*@${domain}`;
+    }
+    
+    // I-mask ang lahat maliban sa unang at huling character
+    const firstChar = localPart[0];
+    const lastChar = localPart[localPart.length - 1];
+    const maskedLength = localPart.length - 2;
+    const masked = '*'.repeat(maskedLength);
+    
+    return `${firstChar}${masked}${lastChar}@${domain}`;
+}
+
+// ============================================================
 // SANGGUNIAN / REFERENCES DATA - GLOBAL PARA MA ACCESS NG LAHAT
 // ============================================================
 const sanggunianData = [
@@ -1683,13 +1705,10 @@ ${translated || 'Walang translation na ginawa.'}
             <div class="history-item" data-id="${item.id}">
                 <div class="history-info">
                     <div class="history-title">${escapeHtml(item.title)}</div>
-                    <div class="history-meta">
+                   <div class="history-meta">
                         <span><i class="fas fa-user"></i> ${escapeHtml(item.name)}</span>
-                        <span><i class="fas fa-envelope"></i> ${escapeHtml(item.email)}</span>
+                        <span><i class="fas fa-envelope"></i> ${escapeHtml(maskEmail(item.email))}</span>
                         <span><i class="fas fa-calendar"></i> ${new Date(item.date).toLocaleDateString('tl-PH')}</span>
-                        ${item.timer ? `<span><i class="fas fa-clock"></i> ${item.timer}</span>` : ''}
-                        ${item.score > 0 ? `<span><i class="fas fa-star" style="color: var(--primary);"></i> ${item.score}/100</span>` : ''}
-                    </div>
                 </div>
                 <div class="history-actions">
                     <button class="view-btn" onclick="viewHistoryItem(${item.id})"><i class="fas fa-eye"></i> Tingnan</button>
@@ -1705,7 +1724,7 @@ ${translated || 'Walang translation na ginawa.'}
         const modal = document.getElementById('historyModal');
         if (modal) {
             document.getElementById('historyModalTitle').textContent = item.title;
-            document.getElementById('historyModalAuthor').textContent = `${item.name} (${item.email})`;
+             document.getElementById('historyModalAuthor').textContent = `${item.name} (${maskEmail(item.email)})`;
             document.getElementById('historyModalDate').textContent = new Date(item.date).toLocaleDateString('tl-PH', {
                 year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
             });
@@ -1990,9 +2009,9 @@ ${translated || 'Walang translation na ginawa.'}
                 <div class="essay-type-badge">
                     <i class="fas fa-layer-group"></i> ${escapeHtml(textType)}
                 </div>
-                <div class="essay-meta">
+               <div class="essay-meta">
                     <span><i class="fas fa-user"></i> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</span>
-                    <span><i class="fas fa-envelope"></i> ${escapeHtml(essay.email || 'Walang Email')}</span>
+                    <span><i class="fas fa-envelope"></i> ${escapeHtml(maskEmail(essay.email))}</span>
                     <span><i class="fas fa-calendar"></i> ${formatDate2(displayDate)}</span>
                     <span><i class="fas fa-clock"></i> ${timeAgo}</span>
                     <span><i class="fas fa-words"></i> ${wordCount} salita</span>
@@ -2092,7 +2111,7 @@ ${translated || 'Walang translation na ginawa.'}
                <div class="modal-body">
                     <p><strong>👤 May-akda:</strong> ${escapeHtml(essay.name || 'Hindi Nakapangalan')}</p>
                     <p><strong>📚 Uri ng Teksto:</strong> ${escapeHtml(essay.text_type || 'Hindi tinukoy')}</p>
-                    <p><strong>📧 Email:</strong> ${escapeHtml(essay.email || 'Walang Email')}</p>
+                    <p><strong>📧 Email:</strong> ${escapeHtml(maskEmail(essay.email))}</p>
                     <p><strong>📅 Petsa:</strong> ${formatDate2(essay.created_at || essay.date)}</p>
                     ${essay.timer ? `<p><strong>⏱️ Oras ng Paggawa:</strong> ${essay.timer}</p>` : ''}
                     <p><strong>⭐ Actual Score:</strong> ${essay.score || 0}% ${getStarRating(essay.score || 0)}</p>
