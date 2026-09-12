@@ -944,11 +944,11 @@ document.addEventListener('DOMContentLoaded', function() {
             comparisonView.style.display = 'none';
             
             if (translatableWords.length > 0) {
-                let message = '🔍 Natagpuan ang mga sumusunod na salita na maaaring isalin sa mas malalim na Tagalog:<br><br>';
+                let message = '🔍 Natagpuan ang mga sumusunod na salita na maaaring isalin sa mas Malalim na Pahayag:<br><br>';
                 translatableWords.forEach(item => {
                     message += `<span class="highlight-word">${item.original}</span> → <strong>${item.deep}</strong><br>`;
                 });
-                message += '<br>💡 I-click ang "Isalin sa Mas Malalim na Tagalog" upang makita ang pinalalim na bersyon ng iyong sanaysay.';
+                message += '<br>💡 I-click ang "Isalin sa Mas Malalim na Pahayag" upang makita ang pinalalim na bersyon ng iyong sanaysay.';
                 analysisMessage.innerHTML = message;
                 deepTranslateSection.style.display = 'block';
                 window._originalEssayText = text;
@@ -977,7 +977,7 @@ document.addEventListener('DOMContentLoaded', function() {
             deepTagalogDisplay.textContent = translated;
             comparisonView.style.display = 'block';
             comparisonView.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            showToast('Na-translate na ang sanaysay sa mas malalim na Tagalog.', 'success', 'Pagsasalin');
+            showToast('Na-translate na ang sanaysay sa mas Malalim na Pahayag.', 'success', 'Pagsasalin');
         });
     }
 
@@ -1274,7 +1274,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             
             <div class="section">
-                <h2>🌿 Malalim na Tagalog (AI-Translated)</h2>
+                <h2>🌿 Malalim na Pahayag (AI-Translated)</h2>
                 <div class="content translated">${escapeHtml(translated || 'Walang translation na ginawa.')}</div>
             </div>
             
@@ -1335,7 +1335,7 @@ Petsa: ${dateStr} | ${timeStr}
 --- ORIHINAL NA SANAYSAY ---
 ${original}
 
---- MALALIM NA TAGALOG (AI-TRANSLATED) ---
+--- Malalim na Pahayag (AI-TRANSLATED) ---
 ${translated || 'Walang translation na ginawa.'}
 
 © 2026 Sanaysay Learning System | Para sa asignaturang Filipino`;
@@ -1900,7 +1900,7 @@ ${translated || 'Walang translation na ginawa.'}
                     </div>
                     ${essay.translated ? `
                     <div style="margin-top: 1rem;">
-                        <h4 style="color: var(--primary-dark);">🌿 Malalim na Tagalog</h4>
+                        <h4 style="color: var(--primary-dark);">🌿 Malalim na Pahayag</h4>
                         <div class="essay-display improved" style="max-height: 200px; overflow-y: auto;">${escapeHtml(essay.translated)}</div>
                     </div>
                     ` : ''}
